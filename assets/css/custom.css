@@ -1,0 +1,11 @@
+.my_form{
+    margin-top:15%;
+}
+
+.Subscriber_list{
+    max-height: 450px;
+    overflow: auto;
+}
+.label {
+    padding: 0.2em 0.2em 0.3em !important;
+}
