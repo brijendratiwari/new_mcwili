@@ -48,10 +48,10 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'mw-dev-db-id.ccgvfggzvr8z.ap-southeast-2.rds.amazonaws.com';
-$db['default']['username'] = 'mw_dev_db_user';
-$db['default']['password'] = 'Pi]uHE5XWD3_B';
-$db['default']['database'] = 'MDB_CI_DEV';
+$db['default']['hostname'] = 'localhost';
+$db['default']['username'] = 'root';
+$db['default']['password'] = '';
+$db['default']['database'] = 'mdb_new';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
