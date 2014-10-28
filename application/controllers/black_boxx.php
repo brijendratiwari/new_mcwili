@@ -108,5 +108,8 @@ class Black_boxx extends CI_Controller {
         $response = curl_exec($handle);
         return $response;
     }
-
+public function signin($data){
+    $res = $this->getListByCurl("sessions/",$data);
+        return $res;
+}
 }
