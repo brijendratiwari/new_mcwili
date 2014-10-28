@@ -4,11 +4,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Brand's Laira</title>
 <link rel="stylesheet" href="http://image.s6.exacttarget.com/lib/fe9212727767057b7c/m/1/laira-style-new.css" type="text/css" />
-<script type="text/javascript">
+<!--<script type="text/javascript">
 window.setTimeout(function(){
-        window.location.href = "http://pages.s6.exacttarget.com/brandslaira/signup/";
+        window.location.href = "<?= base_url()?>index.php/login/signup/";
     }, 5000);
-</script>
+</script>-->
 
 <style type="text/css">
 #footer-social-icons {
