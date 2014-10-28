@@ -85,7 +85,7 @@ class Et_model extends CI_Model {
             $rel_data = array();
             foreach ($data as $key => $val) {
                 $this->db->insert('master_subscriber', $val);
-                $rel_data[$key]['subscriber_id'] = $this->db->insert_id();
+                $rel_data[$key]['subscriber_id'] = $this->db->insert_id(); 
                 $rel_data[$key]['store_id'] = '2';
             }
             $this->db->insert_batch('ms_to_store_rel', $rel_data);
