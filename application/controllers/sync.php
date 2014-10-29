@@ -45,7 +45,7 @@ class Sync extends CI_Controller {
         $str_id = $this->sync_model->delTempSync($storeid);
     }
 
-    public function ExactTargetSync($id, $type, $storeid) {
+    public function ExactTargetSync($id, $type, $storeid, $flag = FALSE) {
 
         $controller_et = new Exact_target();
         $data = array();
@@ -132,10 +132,10 @@ class Sync extends CI_Controller {
             $old_unsub = $this->et_model->get_count('all_unsubscriber', $storeid);    // counting the old sub data
 //            $this->et_model->blank_tab('all_unsubscriber');
             $this->et_model->insert_all_unsubscriber($arr);
-            if(count($arr)> 0){
-            $data['UnSubscribedCount'] = count($arr) - $old_unsub;
-            }else{
-                $data['UnSubscribedCount']=0;
+            if (count($arr) > 0) {
+                $data['UnSubscribedCount'] = count($arr) - $old_unsub;
+            } else {
+                $data['UnSubscribedCount'] = 0;
             }
             $data['type'] = $type;
             $data['SyncTime'] = date('Y-m-d h:m:s', time());
@@ -150,9 +150,12 @@ class Sync extends CI_Controller {
             echo 'stop';
             die;
         }
-
-        echo json_encode($data);
-        die;
+        if ($flag) {
+            return $data;
+        } else {
+            echo json_encode($data);
+            die;
+        }
     }
 
     public function BBSync() {
@@ -162,7 +165,7 @@ class Sync extends CI_Controller {
         $this->BlackBoxxSync($str_id, $type, $storeid);
     }
 
-    public function BlackBoxxSync($id, $type, $storeid) {
+    public function BlackBoxxSync($id, $type, $storeid, $flag = FALSE) {
 
         $bb = new Black_boxx();
         $controller_et = new Exact_target();
@@ -175,6 +178,7 @@ class Sync extends CI_Controller {
             $count = count($data_val);
             $new_count = count($user);
             $this->bb_model->update_bb($user);
+            $this->bb_model->update_mdb($user);
 
             $sub_diff = $new_count - $count;
             if ($sub_diff > 0) {
@@ -241,11 +245,51 @@ class Sync extends CI_Controller {
             $this->sync_model->delTempSync($storeid);
             $this->sync_model->insert_sync_updates($data);
             $data['SyncTime'] = date('h:ma', time());
-            echo json_encode($data);
-            die;
+            if ($flag) {
+                return $data;
+            } else {
+                echo json_encode($data);
+                die;
+            }
         } else {
 //            $type->sync_model->delTempSync($id);
             echo 'stop';
+            die;
+        }
+    }
+
+    // syncing for MDB 
+    public function mdbSync() {
+        $subs = $this->sync_model->get_master_subscriber();
+        $unsubs = $this->sync_model->get_master_unsubscriber();
+        $storeid = $this->input->post('sync');
+        $type = $this->input->post('type');
+        $str_id = $this->sync_model->setTempSync(2);
+        $response = $this->BlackBoxxSync($str_id, $type, $storeid, $flag = 1);
+        if ($response) {
+            $storeid = $this->input->post('sync');
+            $str_id = $this->sync_model->setTempSync(1);
+            $et_response = $this->ExactTargetSync($str_id, $type, $storeid, $flag = 1);
+            if ($et_response) {
+                $new_subs = $this->sync_model->get_master_subscriber();
+                $new_unsubs = $this->sync_model->get_master_unsubscriber();
+                $sub_diff = $new_subs - $subs;
+                if ($sub_diff > 0) {
+                    $data['SubscribedCount'] = $sub_diff;
+                } else {
+                    $data['SubscribedCount'] = 0;
+                }
+              
+                $data['SyncTime'] = date('h:ma', time());
+                $data['UnSubscribedCount'] = $new_unsubs - $unsubs;
+                $data['type'] = $type;
+                $data['SyncTime'] = date('Y-m-d h:m:s', time());
+                $data['store_id'] = $storeid;
+                  $this->sync_model->delTempSync($storeid);
+                $this->sync_model->insert_sync_updates($data);
+                $data['SyncTime'] = date('h:ma', time());
+            }
+            echo json_encode($data);
             die;
         }
     }

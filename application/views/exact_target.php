@@ -345,7 +345,7 @@
           <table id="table-exact-target" class="table table-striped table-bordered">
             <thead>
               <tr>
-                <th style="width: 8%">UID</th>
+                <!--<th style="width: 8%">UID</th>-->
                 <th style="width: 15%">First Name</th>
                 <th style="width: 15%">Last Name</th>
                 <th style="width: 20%">Email</th>
@@ -360,7 +360,7 @@
                     foreach ($Subscriber as $key => $value) {
                         ?>
                 <tr>
-                            <td style="width: 8%"><?php echo $value['ID']?></td>
+                            <!--<td style="width: 8%"><?php echo $value['ID']?></td>-->
                             <td style="width: 15%"><?php echo $value['FirstName']?></td>
                             <td style="width: 15%"><?php echo $value['LastName']?></td>
                             <td style="width: 20%"><?php echo $value['EmailAddress']?></td>
@@ -374,7 +374,7 @@
             </tbody>
             <tfoot>
               <tr>
-                <th style="width: 8%">UID</th>
+                <!--<th style="width: 8%">UID</th>-->
                 <th style="width: 15%">First Name</th>
                 <th style="width: 15%">Last Name</th>
                 <th style="width: 20%">Email</th>
@@ -400,7 +400,7 @@
           <table id="unSubscriber" class="table table-striped table-bordered">
             <thead>
               <tr>
-                <th style="width: 8%">UID</th>
+                <!--<th style="width: 8%">UID</th>-->
                 <th style="width: 15%">First Name</th>
                 <th style="width: 15%">Last Name</th>
                 <th style="width: 20%">Email</th>
@@ -415,7 +415,7 @@
                     foreach ($UnSubscriber as $key => $value) {
                         ?>
                 <tr>
-                            <td style="width: 8%"><?php echo $value['id']?></td>
+                            <!--<td style="width: 8%"><?php echo $value['id']?></td>-->
                             <td style="width: 15%"><?php echo $value['firstname']?></td>
                             <td style="width: 15%"><?php echo $value['lastname']?></td>
                             <td style="width: 20%"><?php echo $value['email']?></td>
@@ -429,7 +429,7 @@
             </tbody>
             <tfoot>
               <tr>
-                 <th style="width: 8%">UID</th>
+                 <!--<th style="width: 8%">UID</th>-->
                 <th style="width: 15%">First Name</th>
                 <th style="width: 15%">Last Name</th>
                 <th style="width: 20%">Email</th>

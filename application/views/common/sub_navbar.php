@@ -68,27 +68,28 @@
         
 
 
-<!--          <li class="dropdown ">
+          <li class="dropdown ">
 
             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
-            Extras
+            Forms
             <i class="mainnav-caret"></i>
             </a>
 
             <ul class="dropdown-menu" role="menu">
               <li>
-                <a href="./page-notifications.html">
-                <i class="fa fa-bell"></i> 
-                &nbsp;&nbsp;Notifications
+                <a href="#">
+                &nbsp;&nbsp;iPad-Brands Laira
                 </a>
               </li>			
 
               <li>
-                <a href="./extras-icons.html">
-                <i class="fa fa-smile-o"></i> 
-                &nbsp;&nbsp;Font Icons
+                <a href="#">
+                &nbsp;&nbsp;iPad-McWilliam
                 </a>
-              </li> 
+              </li>
+              </ul>
+              </li>
+              <!--
 
               <li class="dropdown-submenu">
                 <a tabindex="-1" href="#">

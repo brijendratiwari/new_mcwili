@@ -33,12 +33,19 @@ class Home extends CI_Controller {
     public function sync() {
         if ($this->session->userdata('logged_in')) {
             $data['autosync'] = $this->sync_model->checkautosync();
+            $data['Subscriber'] = $this->mdb_model->get_mdbSubscriber();
+            $data['bbCustomer'] = $this->sync_model->get_bb_customer();
+            $data['etSubscriber'] = $this->sync_model->get_etSubscriber();
+            $data['bpSubscriber'] = $this->sync_model->get_bpSubscriber();
+            $data['mdbSubscriber'] = $this->sync_model->get_mdbSubscriber();
             $data['getLastSystemSyncsub'] = $this->sync_model->getLastSystemSyncsub('ET');
             $data['bbSyncsub'] = $this->sync_model->getLastSystemSyncsub('BB');
-             $data['UnSubscriber'] = $this->sync_model->get_UnSubscriber();
-             $data['AllUnSubscriber'] = $this->sync_model->get_AllUnSubscriber();
-             $data['getAutoSyncUpdate'] = $this->sync_model->get_getAutoSyncUpdate();
-//            var_dump($data['getAutoSyncUpdate']);die;
+            $data['mdbSyncsub'] = $this->sync_model->getLastSystemSyncsub('MDB');
+//            var_dump($data['Subscriber']);die;
+            
+            $data['UnSubscriber'] = $this->sync_model->get_UnSubscriber();
+            $data['AllUnSubscriber'] = $this->sync_model->get_AllUnSubscriber();
+            $data['getAutoSyncUpdate'] = $this->sync_model->get_getAutoSyncUpdate();
             $this->load->view('/common/header.php');
             $this->load->view('/common/navbar.php');
             $this->load->view('/common/sub_navbar.php');

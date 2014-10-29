@@ -41,10 +41,10 @@ class Sync_model extends CI_Model {
         $user = $this->session->userdata('logged_in');
         $res = $this->db->get_where('temp_sync_check', array('store_id' => $store_id));
         if ($res->num_rows() == 0) {
-            $this->db->insert('temp_sync_check', array('store_id' => $store_id, 'status' => 1,'user_id'=>$user['id']));
+            $this->db->insert('temp_sync_check', array('store_id' => $store_id, 'status' => 1, 'user_id' => $user['id']));
             return $this->db->insert_id();
         } else {
-            $this->db->update('temp_sync_check', array('status' => 1), array('store_id' => $store_id,'user_id'=>$user['id']));
+            $this->db->update('temp_sync_check', array('status' => 1), array('store_id' => $store_id, 'user_id' => $user['id']));
             $data = $res->result_array();
             return $data[0]['id'];
         }
@@ -52,15 +52,16 @@ class Sync_model extends CI_Model {
 
     public function delTempSync($id) {
         $user = $this->session->userdata('logged_in');
-        $this->db->delete('temp_sync_check', array('store_id' => $id,'user_id'=>$user['id']));
+        $this->db->delete('temp_sync_check', array('store_id' => $id, 'user_id' => $user['id']));
     }
 
     public function check($id) {
-        $res = $this->db->get_where('temp_sync_check', array('id' => $id,'status' => 1));
+        $res = $this->db->get_where('temp_sync_check', array('id' => $id, 'status' => 1));
         if ($res->num_rows > 0) {
             $data = $res->result_array();
             return $data[0]['status'];
-        } else
+        }
+        else
             return 0;
     }
 
@@ -70,7 +71,7 @@ class Sync_model extends CI_Model {
 
     public function getLastSystemSyncsub($name) {
         $query = "select max(sync_updates.id) as latest_sync from  (`store`) 
-                        join `sync_updates` on `store`.`id` = `sync_updates`.`store_id` where `store`.`name` = '".$name."' ";
+                        join `sync_updates` on `store`.`id` = `sync_updates`.`store_id` where `store`.`name` = '" . $name . "' ";
         $res = $this->db->query($query);
         if ($res->num_rows() > 0) {
             $data = $res->result_array();
@@ -119,7 +120,7 @@ class Sync_model extends CI_Model {
             return FALSE;
         }
     }
-    
+
     public function get_AllUnSubscriber() {
         $res = $this->db->get("all_unsubscriber");
         if ($res->num_rows() > 0) {
@@ -129,4 +130,79 @@ class Sync_model extends CI_Model {
         }
     }
 
+    public function get_bb_customer() {
+        $this->db->select('email');
+        $res = $this->db->get('bb_customer');
+        if ($res->num_rows() > 0) {
+        foreach ($res->result_array() as $key => $value) {
+            foreach ($value as $email) {
+                $data['email'][] = $email;
+            }
+        }
+        $data['email'] = implode(",", $data['email']);
+        return $data;
+    }else{
+        return NULL;
+    }
+    }
+
+    public function get_etSubscriber() {
+        $this->db->select('EmailAddress');
+        $res = $this->db->get('et_subscriber');
+        if ($res->num_rows() > 0) {
+           foreach ($res->result_array() as $key => $value) {
+            foreach ($value as $email) {
+                $data['email'][] = $email;
+            }
+        }
+        $data['email'] = implode(",", $data['email']);
+        return $data;
+        } else {
+            return NULL;
+        }
+    }
+    public function get_mdbSubscriber() {
+        $this->db->select('email');
+        $this->db->where('status',1);
+        $res = $this->db->get('master_subscriber');
+        if ($res->num_rows() > 0) {
+           foreach ($res->result_array() as $key => $value) {
+            foreach ($value as $email) {
+                $data['email'][] = $email;
+            }
+        }
+        $data['email'] = implode(",", $data['email']);
+        return $data;
+        } else {
+            return NULL;
+        }
+    }
+    public function get_bpSubscriber(){
+        $this->db->select('et_subscriber.EmailAddress');
+        $this->db->group_by('`et_subscriber_list_rel`.`SubscriberID`');
+        $this->db->where_in('ListID', array('352396'));
+        $this->db->from('et_subscriber_list_rel');
+        $this->db->join('et_subscriber','et_subscriber.SubscriberID=et_subscriber_list_rel.SubscriberID');
+        $res = $this->db->get();
+        if ($res->num_rows() > 0) {
+                       foreach ($res->result_array() as $key => $value) {
+            foreach ($value as $email) {
+                $data['email'][] = $email;
+            }
+        }
+        $data['email'] = implode(",", $data['email']);
+        return $data;
+        } else {
+            return NULL;
+        }
+    }
+    
+    public function get_master_subscriber(){
+        $res=$this->db->get_where('master_subscriber',array('status'=>1));
+        return $res->num_rows();
+    }
+    public function get_master_unsubscriber(){
+        $res=$this->db->get_where('master_subscriber',array('status'=>0));
+        return $res->num_rows();
+    }
 }
