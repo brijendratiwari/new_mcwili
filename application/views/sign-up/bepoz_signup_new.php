@@ -250,7 +250,7 @@
         <div class="bg-red">
             <div class="body body-m">	
 
-                <form id="sky-form" class="sky-form" action="<?php echo base_url(); ?>index.php/login/createbb" method="post">
+                <form id="sky-form" class="sky-form" action="<?php echo base_url(); ?>index.php/login/createbpoz" method="post">
                     <header>New User</header>
 
                     <fieldset>					
@@ -334,26 +334,26 @@
                         <div class="row">
                             <section class="col col-6">
                                 <label class="checkbox">
-                                    <input class="checked" id="_subscribed_listslist_id_69" name="pref[]" type="checkbox" value="351486">
+                                    <input class="checked" id="_subscribed_listslist_id_69" name="pref[]" type="checkbox" <?php if($form == 'Evans'){?> checked <?php } ?> value="351486">
                                     <i></i>Evans &amp; Tate
                                 </label>
                             </section>
                             <section class="col col-6">
                                 <label class="checkbox">
-                                    <input class="checked" id="_subscribed_listslist_id_74" name="pref[]" type="checkbox" value="351488">
+                                    <input class="checked" id="_subscribed_listslist_id_74" name="pref[]" type="checkbox" <?php if($form == 'Mount'){?> checked <?php } ?> value="351488">
                                     <i></i>Mount Pleasant
                                 </label>
                             </section>
 
                             <section class="col col-6">
                                 <label class="checkbox">
-                                    <input class="checked" id="_subscribed_listslist_id_94" name="pref[]" type="checkbox" value="351487">
+                                    <input class="checked" id="_subscribed_listslist_id_94" name="pref[]" type="checkbox" <?php if($form == 'McWilliam'){?> checked <?php } ?> value="351487">
                                     <i></i>McWilliam's Wines
                                 </label>
                             </section>
                             <section class="col col-6">
                                 <label class="checkbox">
-                                    <input class="checked" id="_subscribed_listslist_id_68" name="pref[]" type="checkbox" value="351484">
+                                    <input class="checked" id="_subscribed_listslist_id_68" name="pref[]" type="checkbox" <?php if($form == 'Brands'){?> checked <?php } ?> value="351484">
                                     <i></i>Brand's Laira
                                 </label>
                             </section>

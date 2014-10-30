@@ -216,7 +216,7 @@ class Bb_model extends CI_Model {
                 $now['firstname'] = $val['first_name'];
                 $now['lastname'] = $val['last_name'];
                 $now['merchant_id'] = $val['merchant_id'];
-                $now['customer_id'] = $val['id'];
+                $now['BB_UID'] = $val['id'];
                 $now['bb_id'] = 2;
                 $now['Status'] = 'Active';
 
@@ -233,7 +233,8 @@ class Bb_model extends CI_Model {
      
             $res = $this->db->get_where('master_subscriber', array('email' => $val['email']));
             if ($res->num_rows() > 0) {
-                
+                $this->db->where(array('email' => $val['email']));
+                $this->db->update('master_subscriber', array('BB_UID'=>$val['id']));
             } else {
 
                 $now['CreatedDate'] = $val['created_at'];
@@ -241,6 +242,7 @@ class Bb_model extends CI_Model {
                 $now['firstname'] = $val['first_name'];
                 $now['lastname'] = $val['last_name'];
                 $now['Status'] = '1';
+                $now['BB_UID'] = $val['id'];
 
                 $this->db->insert('master_subscriber', $now);
             }
@@ -308,5 +310,30 @@ class Bb_model extends CI_Model {
         $data['previous_thirty'] = $res4->num_rows();
         $data['today'] = $res5->num_rows();
         return $data;
+    }
+    
+     public function bb_mdb_update(){
+        $res = $this->db->query('SELECT firstname,lastName,email,created as CreatedDate,BB_UID,1 as status FROM bb_customer WHERE bb_customer.BB_UID NOT IN (SELECT BB_UID FROM master_subscriber)');
+
+        if ($res->num_rows() > 0) {
+            $data = $res->result_array();
+
+            $rel_data = array();
+            foreach ($data as $key => $val) {
+                $msres =  $this->db->get_where('master_subscriber', array('email'=>$val['email']));
+                if($msres->num_rows() > 0 )
+                {
+                    $this->db->where(array('email'=>$val['email']));
+                    $this->db->update('master_subscriber', $val);
+                }
+                else
+                {
+                    $this->db->insert('master_subscriber', $val);
+                }
+                $rel_data[$key]['subscriber_id'] = $this->db->insert_id(); 
+                $rel_data[$key]['store_id'] = '2';
+            }
+            $this->db->insert_batch('ms_to_store_rel', $rel_data);
+        }
     }
 }

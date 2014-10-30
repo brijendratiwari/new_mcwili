@@ -4,7 +4,7 @@ require 'application/libraries/ET_Client.php';
 
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
-    
+
 class Exact_target extends CI_Controller {
 
     /**
@@ -433,10 +433,10 @@ class Exact_target extends CI_Controller {
 //        print_r($response);   
 //        echo '</pre>';
 
- $myclient = new ET_Client(false);
+        $myclient = new ET_Client(false);
         $list = new ET_List();
         $list->authStub = $myclient;
-        $list->filter = array('Property' => 'CustomerKey','SimpleOperator' => 'equals','Value' => 'BP_LIST_EXT');
+        $list->filter = array('Property' => 'CustomerKey', 'SimpleOperator' => 'equals', 'Value' => 'BP_LIST_EXT');
         $response = $list->get();
 
 //        $arr = array();
@@ -459,8 +459,6 @@ class Exact_target extends CI_Controller {
 //        }
 //
 //        return $arr;
-        
-        
 //         $myclient = new ET_Client(false);
 //        $postContent = new ET_List();
 //        $postContent->authStub = $myclient;
@@ -474,6 +472,41 @@ class Exact_target extends CI_Controller {
 //        
         echo '<pre>';
         print_r($response);
+        echo '</pre>';
+    }
+
+    public function syncBepoz() {
+         $myclient = new ET_Client(false);
+        $getList = new ET_List_Subscriber();
+        $getList->authStub = $myclient;
+        $getList->filter = array('Property' => 'ListID', 'SimpleOperator' => 'equals', 'Value' => '352396');
+        $getList->props = array("ObjectID", "SubscriberKey", "CreatedDate", "Client.ID", "Client.PartnerClientKey", "ListID", "Status");
+        $getResponse = $getList->get();
+        print_r('Get Status: ' . ($getResponse->status ? 'true' : 'false') . "\n");
+        print 'Code: ' . $getResponse->code . "\n";
+        print 'Message: ' . $getResponse->message . "\n";
+        print_r('More Results: ' . ($getResponse->moreResults ? 'true' : 'false') . "\n");
+        print 'Results Length: ' . count($getResponse->results) . "\n";
+        print 'Results: ' . "\n";
+        echo '<pre>';
+        print_r($getResponse->results);
+        echo '</pre>';
+        
+        
+        $retSub = new ET_Subscriber();
+        $retSub->authStub = $myclient;
+        $retSub->filter = array('Property' => 'Status', 'SimpleOperator' => 'equals', 'Value' => 'Active');
+        $retSub->filter = array('Property' => 'SubscriberKey', 'SimpleOperator' => 'equals', 'Value' => array('1413897271','1414496885','1414505268','1414575660'));
+
+//        if ($next != FALSE)
+//            $retSub->filter = array('Property' => 'ID', 'SimpleOperator' => 'greaterThan', 'Value' => $next);
+//
+//        if ($arr == FALSE)
+//            $arr = array();
+
+        $response = $retSub->get();
+        echo '<pre>';
+        print_r($response->results);
         echo '</pre>';
     }
 

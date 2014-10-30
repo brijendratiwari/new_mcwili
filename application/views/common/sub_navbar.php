@@ -77,17 +77,31 @@
 
             <ul class="dropdown-menu" role="menu">
               <li>
-                <a href="#">
-                &nbsp;&nbsp;iPad-Brands Laira
-                </a>
-              </li>			
-
-              <li>
-                <a href="#">
-                &nbsp;&nbsp;iPad-McWilliam
+                  <a href="<?= base_url(); ?>index.php/login/sign_up/">
+                &nbsp;&nbsp;CellarDoor - Web
                 </a>
               </li>
-              </ul>
+              <li>
+                <a href="<?= base_url(); ?>index.php/login/bepoz_sign_up/McWilliam">
+                &nbsp;&nbsp;McWilliams - iPad
+                </a>
+              </li>
+              <li>
+                  <a href="<?= base_url(); ?>index.php/login/bepoz_sign_up/Brands">
+                &nbsp;&nbsp;Brands Laira - iPad
+                </a>
+              </li>
+              <li>
+                  <a href="<?= base_url(); ?>index.php/login/bepoz_sign_up/Evans">
+                &nbsp;&nbsp;Evans & Tate - iPad
+                </a>
+              </li>			
+              <li>
+                  <a href="<?= base_url(); ?>index.php/login/bepoz_sign_up/Mount">
+                &nbsp;&nbsp;Mount Pleasant - iPad
+                </a>
+              </li>			
+             </ul>
               </li>
               <!--
 

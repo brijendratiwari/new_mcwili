@@ -77,16 +77,25 @@ class Et_model extends CI_Model {
     }
 
     public function update_mdb() {
-        $res = $this->db->query('SELECT FirstName,LastName,EmailAddress as email,DOB,CreatedDate,1 as status FROM et_subscriber WHERE et_subscriber.EmailAddress NOT IN (SELECT email FROM master_subscriber)');
+        $res = $this->db->query('SELECT FirstName,LastName,EmailAddress as email,DOB,CreatedDate,SubscriberID as ET_UID,1 as status FROM et_subscriber WHERE et_subscriber.SubscriberID NOT IN (SELECT ET_UID FROM master_subscriber)');
 
         if ($res->num_rows() > 0) {
             $data = $res->result_array();
 
             $rel_data = array();
             foreach ($data as $key => $val) {
-                $this->db->insert('master_subscriber', $val);
+                $msres =  $this->db->get_where('master_subscriber', array('email'=>$val['email']));
+                if($msres->num_rows() > 0 )
+                {
+                    $this->db->where(array('email'=>$val['email']));
+                    $this->db->update('master_subscriber', $val);
+                }
+                else
+                {
+                    $this->db->insert('master_subscriber', $val);
+                }
                 $rel_data[$key]['subscriber_id'] = $this->db->insert_id(); 
-                $rel_data[$key]['store_id'] = '2';
+                $rel_data[$key]['store_id'] = '1';
             }
             $this->db->insert_batch('ms_to_store_rel', $rel_data);
         }

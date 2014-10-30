@@ -181,7 +181,7 @@
                                 It's free to join and we will keep you up to date with the latest news, wine offers and events from Brand's Laira.</p>
                         </div>
                         <div id="reg-form-fields">
-                            <form name="form" action="<?php echo base_url();?>index.php/login/createbb" method="post" onsubmit="return CheckDetails()" >
+                            <form name="form" action="<?php echo base_url();?>index.php/login/createbpoz" method="post" onsubmit="return CheckDetails()" >
                                 <div id="reg-form-fields-wrap">
                                     <input type="hidden" name="requiredAge" id="requiredAge" value="18">
                                         <table width="440" border="0" cellspacing="0" cellpadding="0">

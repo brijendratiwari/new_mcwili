@@ -12,6 +12,7 @@ class Login extends CI_Controller {
         parent::__construct();
         $this->load->model('login_model');
         $this->load->model('bb_model');
+        $this->load->model('bp_model');
 		$this->load->model('mdb_model');
         require_once('black_boxx.php');
         require_once('exact_target.php');
@@ -85,8 +86,8 @@ class Login extends CI_Controller {
 //        $this->load->view('sign-up/bepoz_signup_new.php');
 //    }
 
-    public function bepoz_sign_up() {
-        $this->load->view('sign-up/bepoz_signup_new.php');
+    public function bepoz_sign_up($formfor = FALSE) {
+        $this->load->view('sign-up/bepoz_signup_new.php',array('form' => $formfor));
     }
 
     public function thank_you() {
@@ -127,7 +128,7 @@ class Login extends CI_Controller {
             $user_data = json_decode($response, TRUE);
 //            var_dump($user_data);
             $bb_customer = array(
-                "customer_id" => $user_data["id"],
+                "BB_UID" => $user_data["id"],
                 "firstname" => $user_data["first_name"],
                 "lastname" => $user_data["last_name"],
                 "merchant_id" => $user_data["merchant_id"],
@@ -175,7 +176,7 @@ class Login extends CI_Controller {
         redirect('login/thank_you');
     }
 
-    public function createbb() {
+    public function createbpoz() {
 //        var_dump($_POST);
 //        die;
         $exact_target = new Exact_target();
@@ -185,26 +186,106 @@ class Login extends CI_Controller {
         } else {
             $_POST['pref'] = array('352396');
         }
-        $res1 = $this->et_model->get_et_subscriber($_POST["email"]);
-        if ($res1) {
-            $data = array("EmailAddress" => $_POST['email'], "SubscriberKey" => $res1[0]['SubscriberID']);
-            $response = $exact_target->add_email_list($_POST['pref'], $data);
-            if ($response[0]->StatusCode == "OK") {
-                $this->et_model->add_etsubscriber_rel($_POST['pref'], $res1[0]['SubscriberID']);
+        
+        $res = $this->bp_model->get_where('bp_customer', array("email" => $_POST['email']));
+        if ($res) {
+            
+            $this->session->set_flashdata('msg', "Email has already been taken");
+            redirect('login/bepoz_sign_up');
+            //update subscriber if exist in BB..
+
+//            $data = array("firstname" => $_POST['firstname'], "lastname" => $_POST['lastname'], "dob" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "mobile_number" => $_POST['mobile_number']);
+//            $update_info = $this->bb_model->update_bb_customer($_POST['email'], $data);
+//            //*********************************
+//            if ($update_info) {
+//                $signin = array('email' => $_POST['email'],);
+//                $black_boxx->signin($signin);
+////                redirect('login/thank_you');
+//            }
+
+            $data = array("firstname" => $_POST['firstname'], "lastname" => $_POST['lastname'], "dob" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "mobile_number" => $_POST['mobile_number']);
+            $update_info = $this->bp_model->update_bp_customer($_POST['email'], $data);
+            //*********************************
+            if ($update_info) {
+                redirect('login/thank_you');
             }
+
         } else {
-            $subkey = time();
-            $subs[] = array("EmailAddress" => $_POST['email'], "SubscriberKey" => $subkey, "Attributes" => array(array("Name" => "First Name", "Value" => $_POST['firstname']), array("Name" => "Last Name", "Value" => $_POST['lastname'])));
-            $response = $exact_target->add_email_list($_POST['pref'], $subs);
-//			var_dump($response);die;
-            if ($response[0]->StatusCode == "OK") {
-                $data = array("FirstName" => $_POST['firstname'], "LastName" => $_POST['lastname'], "DOB" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "SubscriberID" => $subkey, "EmailAddress" => $_POST['email'], "Status" => "Active", "CreatedDate" => date("Y-m-d h:m:s", time()));
-                $this->et_model->add_etsubscriber($data);
-                $this->et_model->add_etsubscriber_rel($_POST['pref'], $subkey);
-                $this->createCSV();
+            // add customer in BP .....
+            $data = array("first_name" => $_POST['firstname'], "last_name" => $_POST['lastname'], "date_of_birth" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "email" => $_POST['email'], "phone_number" => "", "mobile_number" => $_POST['mobile_number']);
+            $bp_uid = time();
+//            $response = $black_boxx->add_user($data);
+            //********************** 
+//            $user_data = json_decode($response, TRUE);
+//            var_dump($user_data);
+            $bp_user_created = date('Y:m:d h:m:s',time());
+            $bp_customer = array(
+                "BP_UID" =>$bp_uid ,
+                "firstname" => $_POST['firstname'],
+                "lastname" => $_POST['lastname'],
+                "email" => $_POST["email"],
+                "dob" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'],
+                "mobile_number" => $_POST['mobile_number'],
+                "created" => $bp_user_created,
+                "Status" => "Active"
+            );
+            $res = $this->bp_model->insert_bp_customer($bp_customer);
+            if ($res) {
+//                $this->et_model->insert_mastersubscriber(array("email"=>$_POST["email"],"firstname"=>$_POST["firstname"],"lastname"=>$_POST["lastname"],"DOB" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'],"status"=>1,"CreatedDate" => $user_data["updated_at"]),$user_data["email"]);
+                $this->bp_model->insert_bp_customer_rel($_POST['pref'], $_POST["email"],$bp_uid);
+                // add subscriber in ET...... if exist then upadate status to "Active"
+                $res1 = $this->et_model->get_et_subscriber($_POST["email"]);
+                if ($res1) {
+                    $data = array("EmailAddress" => $_POST['email'], "SubscriberKey" => $res1[0]['SubscriberID']);
+                    $response = $exact_target->add_email_list($_POST['pref'], $data);
+                    if ($response[0]->StatusCode == "OK") {
+                        $this->et_model->add_etsubscriber_rel($_POST['pref'], $res1[0]['SubscriberID']);
+                    }
+                } else {
+//                    $subkey = time();
+                    $subs[] = array("EmailAddress" => $_POST['email'], "SubscriberKey" => $bp_uid, "Attributes" => array(array("Name" => "First Name", "Value" => $_POST['firstname']), array("Name" => "Last Name", "Value" => $_POST['lastname'])));
+                    $response = $exact_target->add_email_list($_POST['pref'], $subs);
+//                    var_dump($response);die;
+                    if ($response[0]->StatusCode == "OK") {
+                        $data = array("FirstName" => $_POST['firstname'], "LastName" => $_POST['lastname'], "DOB" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "SubscriberID" => $bp_uid, "EmailAddress" => $_POST['email'], "Status" => "Active", "CreatedDate" => $bp_user_created);
+                        $this->et_model->add_etsubscriber($data);
+                        $this->et_model->add_etsubscriber_rel($_POST['pref'], $bp_uid);
+                        $this->createCSV();
+                    }
+                }
             }
         }
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+        $signin = array('email' => $_POST['email'], 'password' => $_POST['password'], 'ip_address' => $ip);
+//        $black_boxx->signin($signin);
         redirect('login/thank_you');
+        
+//        $res1 = $this->et_model->get_et_subscriber($_POST["email"]);
+//        if ($res1) {
+//            $data = array("EmailAddress" => $_POST['email'], "SubscriberKey" => $res1[0]['SubscriberID']);
+//            $response = $exact_target->add_email_list($_POST['pref'], $data);
+//            if ($response[0]->StatusCode == "OK") {
+//                $this->et_model->add_etsubscriber_rel($_POST['pref'], $res1[0]['SubscriberID']);
+//            }
+//        } else {
+//            $subkey = time();
+//            $subs[] = array("EmailAddress" => $_POST['email'], "SubscriberKey" => $subkey, "Attributes" => array(array("Name" => "First Name", "Value" => $_POST['firstname']), array("Name" => "Last Name", "Value" => $_POST['lastname'])));
+//            $response = $exact_target->add_email_list($_POST['pref'], $subs);
+////			var_dump($response);die;
+//            if ($response[0]->StatusCode == "OK") {
+//                $data = array("FirstName" => $_POST['firstname'], "LastName" => $_POST['lastname'], "DOB" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "SubscriberID" => $subkey, "EmailAddress" => $_POST['email'], "Status" => "Active", "CreatedDate" => date("Y-m-d h:m:s", time()));
+//                $this->et_model->add_etsubscriber($data);
+//                $this->et_model->add_etsubscriber_rel($_POST['pref'], $subkey);
+//                $this->createCSV();
+//            }
+//        }
+//        redirect('login/thank_you');
     }
 
 

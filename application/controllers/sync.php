@@ -104,6 +104,7 @@ class Sync extends CI_Controller {
 
                     $arr[$key]['unsubscribed_date'] = $value->UnsubscribedDate;
                     $arr1[$key]['status'] = 0;
+                    $arr1[$key]['ET_UID'] = $value->SubscriberKey;
                     $arr[$key]['unsubscriber_from'] = $this->et_model->checkstore($value->ID);
                     $arr[$key]['SubscriberID'] = $value->SubscriberKey;
 
@@ -180,6 +181,14 @@ class Sync extends CI_Controller {
             $this->bb_model->update_bb($user);
             $this->bb_model->update_mdb($user);
 
+            $bbUI = array();
+            if ($user != NULL) {
+
+                foreach ($user as $val) {
+                    $bbUI[$val['email']] = $val['id'];
+                }
+            }
+            
             $sub_diff = $new_count - $count;
             if ($sub_diff > 0) {
                 $data['SubscribedCount'] = $sub_diff;
@@ -203,6 +212,9 @@ class Sync extends CI_Controller {
 
                     $arr[$key]['email'] = $value->EmailAddress;
                     $arr1[$key]['email'] = $value->EmailAddress;
+                    $arr1[$key]['ET_UID'] = $value->SubscriberKey;
+                    if(isset($bbUI[$value->EmailAddress]))
+                    $arr1[$key]['BB_UID'] = $bbUI[$value->EmailAddress];
 
                     $arr[$key]['unsubscribed_date'] = $value->UnsubscribedDate;
                     $arr1[$key]['status'] = 0;
@@ -236,6 +248,7 @@ class Sync extends CI_Controller {
 
 
             $this->et_model->insert_all_unsubscriber($arr);
+            $this->bb_model->bb_mdb_update();
             $new_unsub = $this->et_model->get_count('all_unsubscriber', $storeid);
             $data['UnSubscribedCount'] = $new_unsub - $old_unsub;
             $data['type'] = $type;
@@ -279,13 +292,13 @@ class Sync extends CI_Controller {
                 } else {
                     $data['SubscribedCount'] = 0;
                 }
-              
+
                 $data['SyncTime'] = date('h:ma', time());
                 $data['UnSubscribedCount'] = $new_unsubs - $unsubs;
                 $data['type'] = $type;
                 $data['SyncTime'] = date('Y-m-d h:m:s', time());
                 $data['store_id'] = $storeid;
-                  $this->sync_model->delTempSync($storeid);
+                $this->sync_model->delTempSync($storeid);
                 $this->sync_model->insert_sync_updates($data);
                 $data['SyncTime'] = date('h:ma', time());
             }

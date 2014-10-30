@@ -18,26 +18,36 @@ class Black_boxx extends CI_Controller {
         $this->et_model->checkstore(0000002);
     }
 
-    public function get_user_list() {
-        $data = array();
-        $res = $this->getListByCurl("users/");
-        $data = json_decode($res, TRUE);
-        $customer_data = array();
-        if (!empty($data)) {
-            foreach ($data as $key => $value) {
-                $bb_id = 2;
-                $customer_data[] = array(
-                    "bb_id" => $bb_id,
-                    "email" => $value['email'],
-                    "firstname" => $value['first_name'],
-                    "lastname" => $value['last_name'],
-                    "created" => $value['created_at'],
-                    "merchant_id" => $value['merchant_id'],
-                );
-            }
-//            $this->bb_model->insert_customer($customer_data);
+    public function get_user_list($data=FALSE,$page=1) {
+        if($data==FALSE)
+           $data=array(); 
+//        $res = $this->getListByCurl("users/");
+        
+         $headers = array(
+            'Authorization: Basic ' . BB_API_KEY
+        );
+
+        $params_str = array();
+        $url = BB_URL ."/users" ;
+        $url .= '?' . http_build_query(array('page'=>$page,'per_page'=>20));
+        $handle = curl_init();
+        curl_setopt($handle, CURLOPT_URL, $url);
+        curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($handle, CURLOPT_RETURNTRANSFER, 1);
+        $response = curl_exec($handle);
+        $bb_user_list = json_decode($response, TRUE);
+//        var_dump($bb_user_list);die;
+        foreach ($bb_user_list as $val){
+            $data[]=$val;
+        }
+//        array_push($data,$bb_user_list);
+          if (count($data) == 20 * $page) {
+            return $this->get_user_list($data, $page + 1);
+        } else {
             return $data;
         }
+        
     }
 
     public function get_merchant_list() {
