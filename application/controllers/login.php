@@ -8,19 +8,48 @@
 
 class Login extends CI_Controller {
 
-    public function __construct() { 
+    public function __construct() {
         parent::__construct();
         $this->load->model('login_model');
         $this->load->model('bb_model');
         $this->load->model('bp_model');
-		$this->load->model('mdb_model');
+        $this->load->model('mdb_model');
         require_once('black_boxx.php');
         require_once('exact_target.php');
     }
 
-    public function test(){
+    private function new_csv_upload() {       // New code for uploading the file.
+
+        $csv_data = $this->mdb_model->get_mdbSubscriber();
+
+        $list = array();
+        $i = 1;
+        $list[0] = array("AccountID", "AccNumber", "CardNumber", "AccountGroupID", "AccountGroupName", "Title", "FirstName", "LastName", "Status", "OtherName_1", "OtherName_2", "Street_1", "Street_2", "Street_3", "City", "State", "Country", "PCode", "PhoneHome", "PhoneWork", "Fax", "Mobile", "Email1st", "Email2nd", "PostalStreet_1", "PostalStreet_2", "PostalStreet_3", "PostalCity", "PostalState", "PostalCountry", "PostalPCode", "Comment", "DateJoined", "DateNextRenewal", "DateLastRenewal", "DateExpiry", "MembershipID", "RenewalID", "DateBirth", "Gender", "DoNotPost", "DoNotEmail", "DoNotSMS", "DoNotPhone", "ExportCode_1", "ExportCode_2", "CreditLimit", "DiscountLimit", "StopCredit", "CashOnly", "PointsEarnOK", "PointsRedeemOK", "PointsPercent", "UseCALinkPnts", "AccountType", "AllowedVenueID", "AllowedOperatorID", "PriceNumber", "PricingMode", "PricingSortType", "PricingPercent", "DiscNumber", "UseGroupSettings", "StatemtComment", "OrderNumReqd", "CustomFlag_1", "CustomFlag_2", "CustomFlag_3", "CustomFlag_4", "CustomFlag_5", "CustomFlag_6", "CustomFlag_7", "CustomFlag_8", "CustomFlag_9", "CustomFlag_10", "CustomNum_1", "CustomNum_2", "CustomNum_3", "CustomNum_4", "CustomNum_5", "CustomDate_1", "CustomDate_2", "CustomDate_3", "CustomDate_4", "CustomDate_5", "CustomText_1", "CustomText_2", "CustomText_3", "CustomText_4", "CustomText_5", "CustomText_6", "CustomText_7", "CustomText_8", "CustomText_9", "CustomText_10", "CustomText_11", "CustomText_12", "CustomText_13", "CustomText_14", "CustomText_15", "CustomText_16", "CustomText_17", "CustomText_18", "CustomText_19", "CustomText_20", "Account Balance", "GrossTurnover", "NettTurnover", "PointsEarned", "PointsRedeemed", "Joining Fees Paid", "Renewals Paid", "Count of Visits", "DateLastTrans");
+        foreach ($csv_data as $record) {
+            $list[$i] = array("", "", "", "", "", "", $record["firstname"], $record["lastname"], $record["status"], "", "", "", "", "", "", "", "", "", "", "", "", "", $record["email"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", $record["DOB"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", $record["CreatedDate"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+            $i++;
+        }
+
+        $request = curl_init('http://mcwilliams.dev-iis.com/api.php');
+
+// send a file
+        curl_setopt($request, CURLOPT_POST, true);
+        curl_setopt(
+                $request, CURLOPT_POSTFIELDS, array(
+            'data' => json_encode($list)
+        ));
+
+// output the response
+        curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
+        echo curl_exec($request);
+
+// close the session
+        curl_close($request);
+    }
+
+    public function test() {
         $black_boxx = new Black_boxx();
-         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
             $ip = $_SERVER['HTTP_CLIENT_IP'];
         } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -32,7 +61,9 @@ class Login extends CI_Controller {
         var_dump($res);
     }
 
-        public function index() {
+
+
+    public function index() {
 
 
         $this->form_validation->set_rules('email_address', 'Email', 'trim|required|xss_clean');
@@ -87,11 +118,14 @@ class Login extends CI_Controller {
 //    }
 
     public function bepoz_sign_up($formfor = FALSE) {
-        $this->load->view('sign-up/bepoz_signup_new.php',array('form' => $formfor));
+        $this->load->view('sign-up/bepoz_signup_new.php', array('form' => $formfor));
     }
 
     public function thank_you() {
         $this->load->view('sign-up/thankyou.php');
+    }
+    public function bepoz_thank() {
+        $this->load->view('sign-up/thankyou_new.php');   
     }
 
     public function createuser() {
@@ -99,11 +133,10 @@ class Login extends CI_Controller {
         $exact_target = new Exact_target();
         $res = $this->bb_model->get_where('bb_customer', array("email" => $_POST['email']));
         if ($res) {
-            
+
             $this->session->set_flashdata('msg', "Email has already been taken");
             redirect('login/sign_up');
             //update subscriber if exist in BB..
-
 //            $data = array("firstname" => $_POST['firstname'], "lastname" => $_POST['lastname'], "dob" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "mobile_number" => $_POST['mobile_number']);
 //            $update_info = $this->bb_model->update_bb_customer($_POST['email'], $data);
 //            //*********************************
@@ -119,7 +152,6 @@ class Login extends CI_Controller {
             if ($update_info) {
                 redirect('login/thank_you');
             }
-
         } else {
             // add customer in BB .....
             $data = array("first_name" => $_POST['firstname'], "last_name" => $_POST['lastname'], "date_of_birth" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "password" => $_POST['password'], "email" => $_POST['email'], "phone_number" => "", "mobile_number" => $_POST['mobile_number']);
@@ -186,14 +218,13 @@ class Login extends CI_Controller {
         } else {
             $_POST['pref'] = array('352396');
         }
-        
+
         $res = $this->bp_model->get_where('bp_customer', array("email" => $_POST['email']));
         if ($res) {
-            
+
             $this->session->set_flashdata('msg', "Email has already been taken");
             redirect('login/bepoz_sign_up');
             //update subscriber if exist in BB..
-
 //            $data = array("firstname" => $_POST['firstname'], "lastname" => $_POST['lastname'], "dob" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "mobile_number" => $_POST['mobile_number']);
 //            $update_info = $this->bb_model->update_bb_customer($_POST['email'], $data);
 //            //*********************************
@@ -209,7 +240,6 @@ class Login extends CI_Controller {
             if ($update_info) {
                 redirect('login/thank_you');
             }
-
         } else {
             // add customer in BP .....
             $data = array("first_name" => $_POST['firstname'], "last_name" => $_POST['lastname'], "date_of_birth" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "email" => $_POST['email'], "phone_number" => "", "mobile_number" => $_POST['mobile_number']);
@@ -218,9 +248,9 @@ class Login extends CI_Controller {
             //********************** 
 //            $user_data = json_decode($response, TRUE);
 //            var_dump($user_data);
-            $bp_user_created = date('Y:m:d h:m:s',time());
+            $bp_user_created = date('Y:m:d h:m:s', time());
             $bp_customer = array(
-                "BP_UID" =>$bp_uid ,
+                "BP_UID" => $bp_uid,
                 "firstname" => $_POST['firstname'],
                 "lastname" => $_POST['lastname'],
                 "email" => $_POST["email"],
@@ -232,7 +262,7 @@ class Login extends CI_Controller {
             $res = $this->bp_model->insert_bp_customer($bp_customer);
             if ($res) {
 //                $this->et_model->insert_mastersubscriber(array("email"=>$_POST["email"],"firstname"=>$_POST["firstname"],"lastname"=>$_POST["lastname"],"DOB" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'],"status"=>1,"CreatedDate" => $user_data["updated_at"]),$user_data["email"]);
-                $this->bp_model->insert_bp_customer_rel($_POST['pref'], $_POST["email"],$bp_uid);
+                $this->bp_model->insert_bp_customer_rel($_POST['pref'], $_POST["email"], $bp_uid);
                 // add subscriber in ET...... if exist then upadate status to "Active"
                 $res1 = $this->et_model->get_et_subscriber($_POST["email"]);
                 if ($res1) {
@@ -264,8 +294,8 @@ class Login extends CI_Controller {
         }
         $signin = array('email' => $_POST['email'], 'password' => $_POST['password'], 'ip_address' => $ip);
 //        $black_boxx->signin($signin);
-        redirect('login/thank_you');
-        
+        redirect('login/bepoz_thank');
+
 //        $res1 = $this->et_model->get_et_subscriber($_POST["email"]);
 //        if ($res1) {
 //            $data = array("EmailAddress" => $_POST['email'], "SubscriberKey" => $res1[0]['SubscriberID']);
@@ -287,7 +317,6 @@ class Login extends CI_Controller {
 //        }
 //        redirect('login/thank_you');
     }
-
 
     private function createCSV() {
         $csv_data = $this->mdb_model->get_mdbSubscriber();
@@ -337,5 +366,5 @@ class Login extends CI_Controller {
         ftp_close($ftp_conn);
         fclose($fp);
     }
- 
+
 }

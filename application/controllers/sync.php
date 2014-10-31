@@ -126,6 +126,7 @@ class Sync extends CI_Controller {
                         }
                     }
                     $mid = $this->et_model->insert_mastersubscriber($value->EmailAddress, $arr1[$key]);
+                    $controller_et->unsubscribe_email($value->EmailAddress,$value->SubscriberKey);
                     $arr[$key]['ms_id'] = $mid;
                 }
             }

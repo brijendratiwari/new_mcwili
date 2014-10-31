@@ -4,16 +4,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/wamp/www/new_wili/new_mcwili/application/controllers/login.php</file>
-            <file>file:/D:/wamp/www/new_wili/new_mcwili/application/config/database.php</file>
-            <file>file:/D:/wamp/www/new_wili/new_mcwili/application/controllers/black_boxx.php</file>
+            <file>file:/D:/wamp/www/new_wili/new_mcwili/application/views/common/sub_navbar_1.php</file>
             <file>file:/D:/wamp/www/new_wili/new_mcwili/application/controllers/exact_target.php</file>
-            <file>file:/D:/wamp/www/new_wili/new_mcwili/application/models/et_model.php</file>
-            <file>file:/D:/wamp/www/new_wili/new_mcwili/application/models/bb_model_bk.php</file>
-            <file>file:/D:/wamp/www/new_wili/new_mcwili/application/views/sign-up/bepoz_signup.php</file>
             <file>file:/D:/wamp/www/new_wili/new_mcwili/application/controllers/sync.php</file>
             <file>file:/D:/wamp/www/new_wili/new_mcwili/application/views/sign-up/bepoz_signup_new.php</file>
-            <file>file:/D:/wamp/www/new_wili/new_mcwili/application/models/bp_model.php</file>
-            <file>file:/D:/wamp/www/new_wili/new_mcwili/application/models/bb_model.php</file>
         </group>
     </open-files>
 </project-private>

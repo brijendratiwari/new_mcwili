@@ -475,39 +475,115 @@ class Exact_target extends CI_Controller {
         echo '</pre>';
     }
 
-    public function syncBepoz() {
-         $myclient = new ET_Client(false);
+        public function getBepozSubscribersbylist($arr = FALSE, $time = 1, $next = FALSE) {
+        // Retrieve all Subscribers on the List
+        set_time_limit(0);
+        $myclient = new ET_Client(false);
         $getList = new ET_List_Subscriber();
         $getList->authStub = $myclient;
         $getList->filter = array('Property' => 'ListID', 'SimpleOperator' => 'equals', 'Value' => '352396');
-        $getList->props = array("ObjectID", "SubscriberKey", "CreatedDate", "Client.ID", "Client.PartnerClientKey", "ListID", "Status");
-        $getResponse = $getList->get();
-        print_r('Get Status: ' . ($getResponse->status ? 'true' : 'false') . "\n");
-        print 'Code: ' . $getResponse->code . "\n";
-        print 'Message: ' . $getResponse->message . "\n";
-        print_r('More Results: ' . ($getResponse->moreResults ? 'true' : 'false') . "\n");
-        print 'Results Length: ' . count($getResponse->results) . "\n";
-        print 'Results: ' . "\n";
-        echo '<pre>';
-        print_r($getResponse->results);
-        echo '</pre>';
-        
-        
+        if ($next != FALSE)
+            $getList->filter = array('Property' => 'ObjectID', 'SimpleOperator' => 'greaterThan', 'Value' => $next);
+
+        if ($arr == FALSE) {
+            $arr = array();
+            $arr1 = array();
+        } else {
+            $arr1 = $arr;
+        }
+        $response = $getList->get();
+
+        if (count($response->results) && is_array($response->results)) {
+            foreach ($response->results as $value) {
+
+                $arr1[count($arr1)]['ObjectID'] = $value->ObjectID;
+                $arr[$value->ObjectID]['ObjectID'] = $value->ObjectID;
+                $arr[$value->ObjectID]['main_id'] = $value->ID;
+                $arr[$value->ObjectID]['ListID'] = $value->ListID;
+                $arr[$value->ObjectID]['SubscriberID'] = $value->SubscriberKey;
+                $arr[$value->ObjectID]['Status'] = $value->Status;
+                $arr[$value->ObjectID]['CreatedDate'] = $value->CreatedDate;
+            }
+        }
+
+        if (count($arr1) == 2500 * $time) {
+            return $this->getBepozSubscribersbylist($arr, $time + 1, $arr1[count($arr1) - 1]['ObjectID']);
+        } else {
+            return $arr;
+        }
+    }
+    
+        public function get_Subscriber_detail_bepoz($arr = FALSE, $time = 1, $next = FALSE) {
+        set_time_limit(0);
+        $myclient = new ET_Client(false);
+
+
         $retSub = new ET_Subscriber();
         $retSub->authStub = $myclient;
         $retSub->filter = array('Property' => 'Status', 'SimpleOperator' => 'equals', 'Value' => 'Active');
-        $retSub->filter = array('Property' => 'SubscriberKey', 'SimpleOperator' => 'equals', 'Value' => array('1413897271','1414496885','1414505268','1414575660'));
 
-//        if ($next != FALSE)
-//            $retSub->filter = array('Property' => 'ID', 'SimpleOperator' => 'greaterThan', 'Value' => $next);
-//
-//        if ($arr == FALSE)
-//            $arr = array();
+        if ($next != FALSE)
+            $retSub->filter = array('Property' => 'ID', 'SimpleOperator' => 'greaterThan', 'Value' => $next);
+
+        if ($arr == FALSE)
+            $arr = array();
 
         $response = $retSub->get();
+
+
+
+        if (count($response->results) && is_array($response->results)) {
+            foreach ($response->results as $value) {
+                $key = $value->SubscriberKey;
+                $arr[$key]['main_id'] = $value->ID;
+                $arr[$key]['EmailAddress'] = $value->EmailAddress;
+                $arr[$key]['CreatedDate'] = $value->CreatedDate;
+                $arr[$key]['SubscriberID'] = $value->SubscriberKey;
+                $arr[$key]['Status'] = $value->Status;
+
+                if (is_array($value->Attributes)) {
+                    foreach ($value->Attributes as $val) {
+
+                        if ($val->Name == 'Date of Birth') {
+                            $arr[$key]['DOB'] = $val->Value;
+                        }
+                        if ($val->Name == 'First Name') {
+                            $arr[$key]['FirstName'] = $val->Value;
+                        }
+                        if ($val->Name == 'Last Name') {
+                            $arr[$key]['LastName'] = $val->Value;
+                        }
+                        if ($val->Name == 'Full Name') {
+                            $arr[$key]['FullName'] = $val->Value;
+                        }
+                        if ($val->Name == 'Mobile') {
+                            $arr[$key]['Mobile'] = $val->Value;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        if (count($arr) == 2500 * $time) {
+            return $this->get_Subscriber_detail($arr, $time + 1, $arr[count($arr) - 1]['main_id']);
+        } else {
+            return $arr;
+        }
+    }
+    
+    public function syncBepoz() {
+         
+        $listrealtion = $this->getBepozSubscribersbylist();
+        
+        $allscrb = $this->get_Subscriber_detail_bepoz();
+        
         echo '<pre>';
-        print_r($response->results);
+        print_r($listrealtion);
+        echo '------------------';
+        print_r($allscrb);
         echo '</pre>';
+       
     }
 
 }
