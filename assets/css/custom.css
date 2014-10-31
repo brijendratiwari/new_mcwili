@@ -9,3 +9,6 @@
 .label {
     padding: 0.2em 0.2em 0.3em !important;
 }
+ .subcol{
+        padding: 2px; min-width: 40px; float: left; text-align: center;
+    }

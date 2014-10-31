@@ -127,7 +127,7 @@ class Sync extends CI_Controller {
                         }
                     }
                     $mid = $this->et_model->insert_mastersubscriber($value->EmailAddress, $arr1[$key]);
-                    $controller_et->unsubscribe_email($value->EmailAddress,$value->SubscriberKey);
+                    $controller_et->unsubscribe_email($value->EmailAddress, $value->SubscriberKey);
                     $arr[$key]['ms_id'] = $mid;
                 }
             }
@@ -190,7 +190,7 @@ class Sync extends CI_Controller {
                     $bbUI[$val['email']] = $val['id'];
                 }
             }
-            
+
             $sub_diff = $new_count - $count;
             if ($sub_diff > 0) {
                 $data['SubscribedCount'] = $sub_diff;
@@ -215,8 +215,8 @@ class Sync extends CI_Controller {
                     $arr[$key]['email'] = $value->EmailAddress;
                     $arr1[$key]['email'] = $value->EmailAddress;
                     $arr1[$key]['ET_UID'] = $value->SubscriberKey;
-                    if(isset($bbUI[$value->EmailAddress]))
-                    $arr1[$key]['BB_UID'] = $bbUI[$value->EmailAddress];
+                    if (isset($bbUI[$value->EmailAddress]))
+                        $arr1[$key]['BB_UID'] = $bbUI[$value->EmailAddress];
 
                     $arr[$key]['unsubscribed_date'] = $value->UnsubscribedDate;
                     $arr1[$key]['status'] = 0;
@@ -273,7 +273,7 @@ class Sync extends CI_Controller {
         }
     }
 
-    public function bpSync(){
+    public function bpSync() {
 //        $storeid = $this->input->post('sync');
         $storeid = 3;
         $type = 'Manual';
@@ -281,23 +281,23 @@ class Sync extends CI_Controller {
         $this->BepozSync($str_id, $type, $storeid);
     }
 
-    public function BepozSync($id, $type, $storeid, $flag = FALSE){
-        
+    public function BepozSync($id, $type, $storeid, $flag = FALSE) {
+
         $controller_et = new Exact_target();
 
         $data = array();
 
         if ($this->sync_model->check($id)) {
-            $maindata  = $controller_et->syncBepoz();
-            
+            $maindata = $controller_et->syncBepoz();
+
             $user = $maindata['list'];
-            
+
             $data_val = $this->bp_model->get_where('bp_customer');
             $count = count($data_val);
             $new_count = count($user);
             $this->bp_model->update_bp($user);
             $this->bp_model->update_mdb($user);
-            
+
             $sub_diff = $new_count - $count;
             if ($sub_diff > 0) {
                 $data['SubscribedCount'] = $sub_diff;
@@ -393,6 +393,11 @@ class Sync extends CI_Controller {
             $str_id = $this->sync_model->setTempSync(1);
             $et_response = $this->ExactTargetSync($str_id, $type, $storeid, $flag = 1);
             if ($et_response) {
+                $storeid = $this->input->post('sync');
+                $str_id = $this->sync_model->setTempSync(3);
+                $bepoz_response = $this->BepozSync($str_id, $type, $storeid, $flag = 1);
+            }
+            if($bepoz_response){
                 $new_subs = $this->sync_model->get_master_subscriber();
                 $new_unsubs = $this->sync_model->get_master_unsubscriber();
                 $sub_diff = $new_subs - $subs;

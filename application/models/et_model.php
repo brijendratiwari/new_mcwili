@@ -84,17 +84,14 @@ class Et_model extends CI_Model {
 
             $rel_data = array();
             foreach ($data as $key => $val) {
-                $msres =  $this->db->get_where('master_subscriber', array('email'=>$val['email']));
-                if($msres->num_rows() > 0 )
-                {
-                    $this->db->where(array('email'=>$val['email']));
+                $msres = $this->db->get_where('master_subscriber', array('email' => $val['email']));
+                if ($msres->num_rows() > 0) {
+                    $this->db->where(array('email' => $val['email']));
                     $this->db->update('master_subscriber', $val);
-                }
-                else
-                {
+                } else {
                     $this->db->insert('master_subscriber', $val);
                 }
-                $rel_data[$key]['subscriber_id'] = $this->db->insert_id(); 
+                $rel_data[$key]['subscriber_id'] = $this->db->insert_id();
                 $rel_data[$key]['store_id'] = '1';
             }
             $this->db->insert_batch('ms_to_store_rel', $rel_data);
@@ -190,14 +187,16 @@ class Et_model extends CI_Model {
     }
 
     public function insert_all_unsubscriber($data) {
-        foreach ($data as $unsubscribed) {
 
-            $sql = "SELECT * FROM (`all_unsubscriber`) WHERE `email` = '" . $unsubscribed["email"] . "' AND `unsubscriber_from` REGEXP '" . $unsubscribed["unsubscriber_from"] . "'";
-            $res = $this->db->query($sql);
-            if ($res->num_rows() > 0) {
-                
-            } else {
-                $this->db->insert('all_unsubscriber', $unsubscribed);
+        foreach ($data as $unsubscribed) {
+            if ($unsubscribed['unsubscriber_from'] != NULL) {
+                $sql = "SELECT * FROM (`all_unsubscriber`) WHERE `email` = '" . $unsubscribed["email"] . "' AND `unsubscriber_from` REGEXP '" . $unsubscribed["unsubscriber_from"] . "'";
+                $res = $this->db->query($sql);
+                if ($res->num_rows() > 0) {
+                    
+                } else {
+                    $this->db->insert('all_unsubscriber', $unsubscribed);
+                }
             }
         }
     }
@@ -237,8 +236,8 @@ class Et_model extends CI_Model {
     }
 
     public function add_etsubscriber($data) {
-       $res = $this->db->insert("et_subscriber", $data);
-       echo $res;
+        $res = $this->db->insert("et_subscriber", $data);
+        echo $res;
     }
 
     public function add_etsubscriber_rel($list_id, $subscriber_id) {
@@ -275,8 +274,6 @@ class Et_model extends CI_Model {
                     $arr['one'] = 1;
                 }
             }
-        } else {
-            $arr['one'] = 0;
         }
 
         return implode(',', $arr);

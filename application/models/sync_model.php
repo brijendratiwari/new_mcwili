@@ -134,75 +134,115 @@ class Sync_model extends CI_Model {
         $this->db->select('email');
         $res = $this->db->get('bb_customer');
         if ($res->num_rows() > 0) {
-        foreach ($res->result_array() as $key => $value) {
-            foreach ($value as $email) {
-                $data['email'][] = $email;
+            foreach ($res->result_array() as $key => $value) {
+                foreach ($value as $email) {
+                    $data['email'][] = $email;
+                }
             }
+            $data['email'] = implode(",", $data['email']);
+            return $data;
+        } else {
+            return NULL;
         }
-        $data['email'] = implode(",", $data['email']);
-        return $data;
-    }else{
-        return NULL;
-    }
     }
 
     public function get_etSubscriber() {
         $this->db->select('EmailAddress');
         $res = $this->db->get('et_subscriber');
         if ($res->num_rows() > 0) {
-           foreach ($res->result_array() as $key => $value) {
-            foreach ($value as $email) {
-                $data['email'][] = $email;
+            foreach ($res->result_array() as $key => $value) {
+                foreach ($value as $email) {
+                    $data['email'][] = $email;
+                }
             }
-        }
-        $data['email'] = implode(",", $data['email']);
-        return $data;
+            $data['email'] = implode(",", $data['email']);
+            return $data;
         } else {
             return NULL;
         }
     }
+
     public function get_mdbSubscriber() {
         $this->db->select('email');
-        $this->db->where('status',1);
+        $this->db->where('status', 1);
         $res = $this->db->get('master_subscriber');
         if ($res->num_rows() > 0) {
-           foreach ($res->result_array() as $key => $value) {
-            foreach ($value as $email) {
-                $data['email'][] = $email;
+            foreach ($res->result_array() as $key => $value) {
+                    $data[] = $value['email'];
             }
-        }
-        $data['email'] = implode(",", $data['email']);
-        return $data;
+//            $data['email'] = implode(",", $data['email']);
+            return $data;
         } else {
             return NULL;
         }
     }
-    public function get_bpSubscriber(){
+
+    public function get_bpSubscriber() {
         $this->db->select('et_subscriber.EmailAddress');
         $this->db->group_by('`et_subscriber_list_rel`.`SubscriberID`');
         $this->db->where_in('ListID', array('352396'));
         $this->db->from('et_subscriber_list_rel');
-        $this->db->join('et_subscriber','et_subscriber.SubscriberID=et_subscriber_list_rel.SubscriberID');
+        $this->db->join('et_subscriber', 'et_subscriber.SubscriberID=et_subscriber_list_rel.SubscriberID');
         $res = $this->db->get();
         if ($res->num_rows() > 0) {
-                       foreach ($res->result_array() as $key => $value) {
-            foreach ($value as $email) {
-                $data['email'][] = $email;
+            foreach ($res->result_array() as $key => $value) {
+                foreach ($value as $email) {
+                    $data[] = $email;
+                }
             }
-        }
-        $data['email'] = implode(",", $data['email']);
-        return $data;
+//            $data['email'] = implode(",", $data['email']);
+            return $data;
         } else {
             return NULL;
         }
     }
-    
-    public function get_master_subscriber(){
-        $res=$this->db->get_where('master_subscriber',array('status'=>1));
+
+    public function get_master_subscriber() {
+        $res = $this->db->get_where('master_subscriber', array('status' => 1));
         return $res->num_rows();
     }
-    public function get_master_unsubscriber(){
-        $res=$this->db->get_where('master_subscriber',array('status'=>0));
+
+    public function get_master_unsubscriber() {
+        $res = $this->db->get_where('master_subscriber', array('status' => 0));
         return $res->num_rows();
     }
+
+    // get specific list data for BB
+    public function getBb_SpecificListData($list_id) {
+        $query = "select master_subscriber.email from et_subscriber_list_rel 
+            JOIN master_subscriber ON master_subscriber.ET_UID = et_subscriber_list_rel.SubscriberID   
+            JOIN bb_customer ON bb_customer.BB_UID = master_subscriber.BB_UID   
+            where et_subscriber_list_rel.`ListID` = '" . $list_id . "' and master_subscriber.status = 1  ";
+
+        $res = $this->db->query($query);
+        if ($res->num_rows() > 0) {
+            foreach ($res->result_array() as $key => $value) {
+                $data[] = $value['email'];
+            }
+//            $data['email'] = implode(",", $data['email']);
+            return $data;
+        } else {
+            return NULL;
+        }
+    }
+
+    // get specific list data for ET
+    public function getEt_SpecificListData($list_id) {
+        $query = "select master_subscriber.email from et_subscriber_list_rel 
+            JOIN master_subscriber ON master_subscriber.ET_UID = et_subscriber_list_rel.SubscriberID   
+           JOIN et_subscriber ON et_subscriber.SubscriberID = master_subscriber.ET_UID   
+            where et_subscriber_list_rel.`ListID` = '" . $list_id . "' and master_subscriber.status = 1 ";
+   
+        $res = $this->db->query($query);
+        if ($res->num_rows() > 0) {
+            foreach ($res->result_array() as $key => $value) {
+                $data[] = $value['email'];
+            }
+//            $data['email'] = implode(",", $data['email']);
+            return $data;
+        } else {
+            return NULL;
+        }
+    }
+
 }

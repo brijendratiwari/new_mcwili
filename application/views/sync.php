@@ -1,5 +1,4 @@
 <div class="content">
-<?php // var_dump($UnSubscriber);die; ?>
     <div class="container">
 
         <div class="portlet">
@@ -234,16 +233,16 @@
                                     77.7%
                                 </div>
 
-                                <div class="progress progress-striped progress-sm active">
+                                <div class="progress progress-striped progress-sm active" id="bp_progessbar">
                                     <div style="width: 77%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="77" role="progressbar" class="progress-bar progress-bar-success">
                                         <span class="sr-only">77.74% Sync Progress</span>
                                     </div>
                                 </div> <!-- /.progress -->
 
                             </div> <!-- Sync-stat End -->
-                            <div class="col-sm-12 col-md-6"> <p class="row-stat-label">New Customer</p><h3 class="row-stat-value">0</h3><hr><p class="row-stat-label">Last Sync</p><h3 class="row-stat-value">00:00</h3></div>
-                            <div class="col-sm-12  col-md-6"><p class="row-stat-label">UnSubscribed</p><h3 class="row-stat-value">0</h3><hr><p class="row-stat-label">Next Sync</p><h3 class="row-stat-value">0sec</h3></div> 
-                            <h3 class="row-stat-value">&nbsp;</h3><hr><a class="btn btn-primary disabled" href="javascript:;">Stop Sync</a>   &nbsp;   <a class="btn btn-primary disabled" href="javascript:;">Manual Sync</a>
+                            <div class="col-sm-12 col-md-6"> <p class="row-stat-label">New Customer</p><h3 class="row-stat-value" id="bp_subscribe">0</h3><hr><p class="row-stat-label">Last Sync</p><h3 class="row-stat-value" id="bb_lastsync">00:00</h3></div>
+                            <div class="col-sm-12  col-md-6"><p class="row-stat-label">UnSubscribed</p><h3 class="row-stat-value" id="bp_unsubscribe">0</h3><hr><p class="row-stat-label">Next Sync</p><h3 class="row-stat-value">0sec</h3></div> 
+                            <h3 class="row-stat-value">&nbsp;</h3><hr><a class="btn btn-primary disabled" id="bp_stopsync" href="javascript:stopallsync(2);;">Stop Sync</a>   &nbsp;   <a class="btn btn-primary" id="bp_startsync"  href="javascript:startbepozsync(3);">Manual Sync</a>
                         </div> <!-- /.row-stat -->
 
                     </div> <!-- /.col -->
@@ -266,28 +265,6 @@
         </h3>
 
         <div class="portlet-body">
-  <?php 
-  if(!empty($bbCustomer)){
-    foreach($bbCustomer as $bb_customer){
-      $bb_emails = explode(",", $bb_customer);
-    }
-  }
-  if(!empty($etSubscriber)){
-    foreach($etSubscriber as $et_subscriber){
-      $et_emails = explode(",", $et_subscriber);
-    }
-    }
-  if(!empty($mdbSubscriber)){
-    foreach($mdbSubscriber as $mdb_Subscriber){
-      $mdb_emails = explode(",", $mdb_Subscriber);
-    }
-    }
-  if(!empty($bpSubscriber)){
-    foreach($bpSubscriber as $bp_subscriber){
-      $bp_emails = explode(",", $bp_subscriber);
-    }
-    }
-  ?>
           <table class="table table-striped table-bordered" id="table-1">
             <thead>
               <tr>
@@ -302,6 +279,15 @@
               </tr>
             </thead>
                          <tbody>
+                             <tr>
+                                        <td style="width: 15%"></td>
+                                        <td style="width: 15%"></td>
+                                        <td style="width: 20%"></td>
+                                        <td style="width: 10%"></td>
+                                        <td style="width: 17%"><div class="subcol">MW</div><div class="subcol">MP</div><div class="subcol">BL</div><div class="subcol">EAT</div></td>
+                                        <td style="width: 17%"><div class="subcol">CD</div><div class="subcol">FF</div><div class="subcol">EB</div></td>
+                                        <td style="width: 10%"></td>
+                           </tr>
                 <?php if($Subscriber != NULL)
                     foreach ($Subscriber as $key => $value) {
                         ?>
@@ -310,10 +296,10 @@
                             <td style="width: 15%"><?php echo $value['firstname']?></td>
                             <td style="width: 15%"><?php echo $value['lastname']?></td>
                             <td style="width: 20%"><?php echo $value['email']?></td>
-                            <td style="width: 10%"><?php if(!empty($mdbSubscriber)){ if(in_array($value['email'],$mdb_emails) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></td>
-                            <td style="width: 10%"><?php  if(!empty($etSubscriber)){ if(in_array($value['email'],$et_emails) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></td>
-                            <td style="width: 15%"><?php  if(!empty($bbCustomer)){ if(in_array($value['email'],$bb_emails) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></td>
-                            <td style="width: 10%"><?php if(!empty($bpSubscriber)){ if(in_array($value['email'],$bp_emails) ){ echo "y";}else{ echo "n";} } else{ echo 'None';}?></td>
+                            <td style="width: 10%"><?php if(!empty($mdbSubscriber)){ if(in_array($value['email'],$mdbSubscriber) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></td>
+                            <td style="width: 17%"><div class="subcol"><?php  if(!empty($mcSubscriber)){ if(in_array($value['email'],$mcSubscriber) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></div><div class="subcol"><?php  if(!empty($mount)){ if(in_array($value['email'],$mount) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></div><div class="subcol"><?php  if(!empty($brandsSubscriber)){ if(in_array($value['email'],$brandsSubscriber) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></div><div class="subcol"><?php  if(!empty($evans)){ if(in_array($value['email'],$evans) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></div></td>
+                            <td style="width: 15%"><div class="subcol"><?php  if(!empty($celldoorSubscriber)){ if(in_array($value['email'],$celldoorSubscriber) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></div><div class="subcol"><?php  if(!empty($celldoorSubscriber)){ if(in_array($value['email'],$celldoorSubscriber) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></div><div class="subcol"><?php  if(!empty($bb_brandsSubscriber)){ if(in_array($value['email'],$bb_brandsSubscriber) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></div></td>
+                            <td style="width: 10%"><?php if(!empty($bpSubscriber)){ if(in_array($value['email'],$bpSubscriber) ){ echo "y";}else{ echo "n";} } else{ echo 'None';}?></td>
                </tr>
                  <?php
                     }
@@ -341,7 +327,7 @@
               <div class="portlet">
 
         <h3 class="portlet-title">
-          <u>Master Usubscribe List </u>
+          <u>Master Unsubscribe List </u>
         </h3>
 
         <div class="portlet-body">

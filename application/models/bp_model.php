@@ -55,12 +55,10 @@ class Bp_model extends CI_Model {
         return $res;
     }
 
-
-
-      public function get_bpUnSubscriber() {
+    public function get_bpUnSubscriber() {
 
         $query = "SELECT `all_unsubscriber`.`id`, `all_unsubscriber`.`email`, `all_unsubscriber`.`firstname`, `all_unsubscriber`.`lastname`, `all_unsubscriber`.`unsubscribed_date` FROM (`store`) JOIN `all_unsubscriber` ON `all_unsubscriber`.`unsubscriber_from` REGEXP `store`.`id` WHERE `store`.`name` = 'BB' ";
-        
+
         $res = $this->db->query($query);
         if ($res->num_rows() > 0) {
             return $res->result_array();
@@ -68,8 +66,6 @@ class Bp_model extends CI_Model {
             return NULL;
         }
     }
-
- 
 
     public function get_bpListFilterSubscriber($list_id) {
 //        echo date("Y-m", strtotime("-0 months"));die;
@@ -101,13 +97,12 @@ class Bp_model extends CI_Model {
         return $data;
     }
 
-
     public function get_bpSubscriberDetail() {
         $this->db->select('*');
         $this->db->group_by('`et_subscriber_list_rel`.`SubscriberID`');
         $this->db->where_in('ListID', array('352396'));
         $this->db->from('et_subscriber_list_rel');
-        $this->db->join('et_subscriber','et_subscriber.SubscriberID=et_subscriber_list_rel.SubscriberID');
+        $this->db->join('et_subscriber', 'et_subscriber.SubscriberID=et_subscriber_list_rel.SubscriberID');
         $res = $this->db->get();
         if ($res->num_rows() > 0) {
             return $res->result_array();
@@ -122,54 +117,58 @@ class Bp_model extends CI_Model {
 
         foreach ($data as $val) {
             $now = array();
-     
-            $res = $this->db->get_where('bp_customer', array('email' => $val['email']));
+
+            $res = $this->db->get_where('bp_customer', array('email' => $val['EmailAddress']));
             if ($res->num_rows() > 0) {
                 
             } else {
 
-                $now['created'] = $val['created_at'];
-                $now['email'] = $val['email'];
-                $now['firstname'] = $val['first_name'];
-                $now['lastname'] = $val['last_name'];
-                $now['merchant_id'] = $val['merchant_id'];
-                $now['customer_id'] = $val['id'];
-                $now['bp_id'] = 2;
+                $now['BP_UID'] = $val['SubscriberID'];
+                $now['email'] = $val['EmailAddress'];
                 $now['Status'] = 'Active';
-
+                $now['firstname'] = $val['FirstName'];
+                $now['lastname'] = $val['LastName'];
+                $now['mobile_number'] = $val['Mobile'];
+                $now['dob'] = $val['DOB'];
+                $now['created'] = $val['CreatedDate'];
                 $this->db->insert('bp_customer', $now);
             }
         }
     }
+
     public function update_mdb($data) {
 
         $email = array();
 
         foreach ($data as $val) {
             $now = array();
-     
-            $res = $this->db->get_where('master_subscriber', array('email' => $val['email']));
+
+            $res = $this->db->get_where('master_subscriber', array('email' => $val['EmailAddress']));
             if ($res->num_rows() > 0) {
-                
+                $this->db->where(array('email' => $val['EmailAddress']));
+                $this->db->update('master_subscriber', array('BP_UID' => $val['SubscriberID']));
             } else {
 
-                $now['CreatedDate'] = $val['created_at'];
-                $now['email'] = $val['email'];
-                $now['firstname'] = $val['first_name'];
-                $now['lastname'] = $val['last_name'];
+                $now['CreatedDate'] = $val['CreatedDate'];
+                $now['email'] = $val['EmailAddress'];
+                $now['firstname'] = $val['FirstName'];
+                $now['lastname'] = $val['LastName'];
                 $now['Status'] = '1';
+                $now['BP_UID'] = $val['SubscriberID'];
+                $now['DOB'] = $val['DOB'];
+//                $now['ET_UID'] = $val['SubscriberID'];
 
                 $this->db->insert('master_subscriber', $now);
             }
         }
     }
-    
-     public function get_bpSubscriber(){
+
+    public function get_bpSubscriber() {
         $this->db->select('*');
         $this->db->group_by('`et_subscriber_list_rel`.`SubscriberID`');
         $this->db->where_in('ListID', array('352396'));
         $this->db->from('et_subscriber_list_rel');
-        $this->db->join('et_subscriber','et_subscriber.SubscriberID=et_subscriber_list_rel.SubscriberID');
+        $this->db->join('et_subscriber', 'et_subscriber.SubscriberID=et_subscriber_list_rel.SubscriberID');
         $res = $this->db->get();
         if ($res->num_rows() > 0) {
             return $res->result_array();
@@ -177,8 +176,8 @@ class Bp_model extends CI_Model {
             return NULL;
         }
     }
-    
-        public function get_bpallFilterSubscriber() {
+
+    public function get_bpallFilterSubscriber() {
 
         $data = array();
         $query = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y", strtotime("-1 year")) . "-01-01' and '" . date("Y", strtotime("-0 year")) . "-01-01' and `ListID` = '352396' ";
@@ -202,7 +201,8 @@ class Bp_model extends CI_Model {
         $data['today'] = $res5->num_rows();
         return $data;
     }
-        public function get_bpFilterSubscriber() {
+
+    public function get_bpFilterSubscriber() {
 
         $data = array();
         $query = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y", strtotime("-1 year")) . "-01-01' and '" . date("Y", strtotime("-0 year")) . "-01-01' and `ListID` = '352396' and `ListID` IN('351487', '351484', '351488', '351486') ";
@@ -226,4 +226,27 @@ class Bp_model extends CI_Model {
         $data['today'] = $res5->num_rows();
         return $data;
     }
+    
+     public function bp_mdb_update() {
+        $res = $this->db->query('SELECT firstname,lastname,email,created as CreatedDate,BP_UID,dob as DOB, 1 as status FROM bp_customer WHERE bp_customer.BP_UID NOT IN (SELECT BP_UID FROM master_subscriber)');
+
+        if ($res->num_rows() > 0) {
+            $data = $res->result_array();
+
+            $rel_data = array();
+            foreach ($data as $key => $val) {
+                $msres = $this->db->get_where('master_subscriber', array('email' => $val['email']));
+                if ($msres->num_rows() > 0) {
+                    $this->db->where(array('email' => $val['email']));
+                    $this->db->update('master_subscriber', $val);
+                } else {
+                    $this->db->insert('master_subscriber', $val);
+                }
+                $rel_data[$key]['subscriber_id'] = $this->db->insert_id();
+                $rel_data[$key]['store_id'] = '3';
+            }
+            $this->db->insert_batch('ms_to_store_rel', $rel_data);
+        }
+    }
+
 }

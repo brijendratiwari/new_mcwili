@@ -585,9 +585,6 @@ class Exact_target extends CI_Controller {
         foreach ($listrealtion as $value) {
             $sub_list[] = $allscrb[$value['SubscriberID']];
         }
-        echo '<pre>';
-        print_r($sub_list);
-        echo '</pre>';
         return array('relation' => $listrealtion,'list'=>$sub_list);
         
     }

@@ -8,11 +8,11 @@
 
 class Home extends CI_Controller {
 
-    public function __construct() { 
-        parent::__construct(); 
+    public function __construct() {
+        parent::__construct();
         $this->load->model('et_model');
         $this->load->model('sync_model');
-	 $this->load->model('mdb_model');
+        $this->load->model('mdb_model');
         $this->load->model('bb_model');
     }
 
@@ -42,10 +42,23 @@ class Home extends CI_Controller {
             $data['bbSyncsub'] = $this->sync_model->getLastSystemSyncsub('BB');
             $data['mdbSyncsub'] = $this->sync_model->getLastSystemSyncsub('MDB');
 //            var_dump($data['Subscriber']);die;
-            
+
             $data['UnSubscriber'] = $this->sync_model->get_UnSubscriber();
             $data['AllUnSubscriber'] = $this->sync_model->get_AllUnSubscriber();
             $data['getAutoSyncUpdate'] = $this->sync_model->get_getAutoSyncUpdate();
+
+            //get specific list data for ET 
+            $data['mcSubscriber'] = $this->sync_model->getEt_SpecificListData(351487);
+//            var_dump($data['mcSubscriber']);die;
+            $data['brandsSubscriber'] = $this->sync_model->getEt_SpecificListData(351484);
+            $data['evans'] = $this->sync_model->getEt_SpecificListData(351486);
+            $data['mount'] = $this->sync_model->getEt_SpecificListData(351488);
+             //get specific list data for ET 
+            $data['bb_brandsSubscriber'] = $this->sync_model->getBb_SpecificListData(351484);
+            $data['celldoorSubscriber'] = $this->sync_model->getBb_SpecificListData(351485);
+
+           
+
             $this->load->view('/common/header.php');
             $this->load->view('/common/navbar.php');
             $this->load->view('/common/sub_navbar.php');
@@ -77,6 +90,7 @@ class Home extends CI_Controller {
             redirect('login/index');
         }
     }
+
     public function black_boxx() {
 
         if ($this->session->userdata('logged_in')) {
@@ -103,9 +117,9 @@ class Home extends CI_Controller {
             redirect('login/index');
         }
     }
-    
-    public function master(){
-         if ($this->session->userdata('logged_in')) {
+
+    public function master() {
+        if ($this->session->userdata('logged_in')) {
 
             $data['list'] = $this->et_model->getList();
             $data['Subscriber'] = $this->mdb_model->get_mdbSubscriber();
@@ -125,9 +139,9 @@ class Home extends CI_Controller {
             redirect('login/index');
         }
     }
-    
-    public function bepoz(){
-         if ($this->session->userdata('logged_in')) {
+
+    public function bepoz() {
+        if ($this->session->userdata('logged_in')) {
             $data['list'] = $this->et_model->getList();
             $data['Subscriberdetail'] = $this->bb_model->get_bpSubscriberDetail();
             $data['Subscriber'] = $this->bb_model->get_bpSubscriber();
