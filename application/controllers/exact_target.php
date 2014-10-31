@@ -1,5 +1,4 @@
 <?php
-
 require 'application/libraries/ET_Client.php';
 
 if (!defined('BASEPATH'))
@@ -89,13 +88,16 @@ class Exact_target extends CI_Controller {
         }
     }
 
-    public function get_unSubscribe_list() {
+    public function get_unSubscribe_list($list_id = FALSE) {
 
         $myclient = new ET_Client(false);
         $retSub = new ET_Subscriber();
         $arr = array();
         $retSub->authStub = $myclient;
         $retSub->filter = array('Property' => 'Status', 'SimpleOperator' => 'equals', 'Value' => 'Unsubscribed');
+        if($list_id)
+            $retSub->filter = array('Property' => 'ListID', 'SimpleOperator' => 'equals', 'Value' => $list_id);
+        
         $getResult = $retSub->get();
 //        echo '<pre>';
 //        print_r($getResult);
@@ -530,7 +532,7 @@ class Exact_target extends CI_Controller {
 
         $response = $retSub->get();
 
-
+        $last_id = "";
 
         if (count($response->results) && is_array($response->results)) {
             foreach ($response->results as $value) {
@@ -540,7 +542,7 @@ class Exact_target extends CI_Controller {
                 $arr[$key]['CreatedDate'] = $value->CreatedDate;
                 $arr[$key]['SubscriberID'] = $value->SubscriberKey;
                 $arr[$key]['Status'] = $value->Status;
-
+                $last_id = $value->SubscriberKey;
                 if (is_array($value->Attributes)) {
                     foreach ($value->Attributes as $val) {
 
@@ -566,7 +568,7 @@ class Exact_target extends CI_Controller {
 
 
         if (count($arr) == 2500 * $time) {
-            return $this->get_Subscriber_detail($arr, $time + 1, $arr[count($arr) - 1]['main_id']);
+            return $this->get_Subscriber_detail_bepoz($arr, $time + 1, $arr[$last_id]['main_id']);
         } else {
             return $arr;
         }
@@ -578,12 +580,14 @@ class Exact_target extends CI_Controller {
         
         $allscrb = $this->get_Subscriber_detail_bepoz();
         
-        echo '<pre>';
-        print_r($listrealtion);
-        echo '------------------';
-        print_r($allscrb);
-        echo '</pre>';
+        $sub_list = array();
+        
+        foreach ($listrealtion as $value) {
+            $sub_list[] = $allscrb[$value['SubscriberID']];
+        }
        
+        return array('relation' => $listrealtion,'list'=>$allscrb);
+        
     }
 
 }
