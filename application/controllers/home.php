@@ -41,6 +41,7 @@ class Home extends CI_Controller {
             $data['getLastSystemSyncsub'] = $this->sync_model->getLastSystemSyncsub('ET');
             $data['bbSyncsub'] = $this->sync_model->getLastSystemSyncsub('BB');
             $data['mdbSyncsub'] = $this->sync_model->getLastSystemSyncsub('MDB');
+            $data['bpSyncsub'] = $this->sync_model->getLastSystemSyncsub('BP');
 //            var_dump($data['Subscriber']);die;
 
             $data['UnSubscriber'] = $this->sync_model->get_UnSubscriber();

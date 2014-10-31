@@ -240,9 +240,9 @@
                                 </div> <!-- /.progress -->
 
                             </div> <!-- Sync-stat End -->
-                            <div class="col-sm-12 col-md-6"> <p class="row-stat-label">New Customer</p><h3 class="row-stat-value" id="bp_subscribe">0</h3><hr><p class="row-stat-label">Last Sync</p><h3 class="row-stat-value" id="bb_lastsync">00:00</h3></div>
-                            <div class="col-sm-12  col-md-6"><p class="row-stat-label">UnSubscribed</p><h3 class="row-stat-value" id="bp_unsubscribe">0</h3><hr><p class="row-stat-label">Next Sync</p><h3 class="row-stat-value">0sec</h3></div> 
-                            <h3 class="row-stat-value">&nbsp;</h3><hr><a class="btn btn-primary disabled" id="bp_stopsync" href="javascript:stopallsync(2);;">Stop Sync</a>   &nbsp;   <a class="btn btn-primary" id="bp_startsync"  href="javascript:startbepozsync(3);">Manual Sync</a>
+                            <div class="col-sm-12 col-md-6"> <p class="row-stat-label">New Customer</p><h3 class="row-stat-value" id="bp_subscribe"><?php if(!empty($bpSyncsub)){ echo $bpSyncsub[0]['SubscribedCount'];} else{ echo "0";}  ?></h3><hr><p class="row-stat-label">Last Sync</p><h3 class="row-stat-value" id="bp_lastsync"><?php if(!empty($bpSyncsub)){ echo date('h:ma',  strtotime($bpSyncsub[0]['SyncTime']));}else{ echo "00:00";}?></h3></div>
+                            <div class="col-sm-12  col-md-6"><p class="row-stat-label">UnSubscribed</p><h3 class="row-stat-value" id="bp_unsubscribe"><?php if(!empty($bpSyncsub)){ echo $bpSyncsub[0]['UnSubscribedCount'];} else{ echo "0";}  ?></h3><hr><p class="row-stat-label">Next Sync</p><h3 class="row-stat-value">85sec</h3></div> 
+                            <h3 class="row-stat-value">&nbsp;</h3><hr><a class="btn btn-primary disabled" id="bp_stopsync" href="javascript:stopallsync(3);">Stop Sync</a>   &nbsp;   <a class="btn btn-primary" id="bp_startsync"  href="javascript:startbepozsync(3);">Manual Sync</a>
                         </div> <!-- /.row-stat -->
 
                     </div> <!-- /.col -->
