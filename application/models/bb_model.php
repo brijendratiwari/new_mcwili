@@ -60,10 +60,10 @@ class Bb_model extends CI_Model {
         return $res;
     }
 
-    public function get_bbSubscriber() {
-        $list_id = array('351484', '351485','351487');
-        $this->db->where_in('ListID', $list_id);
-        $res = $this->db->get('et_subscriber_list_rel');
+    public function get_bbcustomer() {
+//        $list_id = array('351484', '351485','351487');
+//        $this->db->where_in('ListID', $list_id);
+        $res = $this->db->get('bb_customer');
         if ($res->num_rows() > 0) {
             return $res->result_array();
         } else {
@@ -71,10 +71,10 @@ class Bb_model extends CI_Model {
         }
     }
 
-      public function get_bbUnSubscriber() {
+    public function get_bbUnSubscriber() {
 
         $query = "SELECT `all_unsubscriber`.`id`, `all_unsubscriber`.`email`, `all_unsubscriber`.`firstname`, `all_unsubscriber`.`lastname`, `all_unsubscriber`.`unsubscribed_date` FROM (`store`) JOIN `all_unsubscriber` ON `all_unsubscriber`.`unsubscriber_from` REGEXP `store`.`id` WHERE `store`.`name` = 'BB' ";
-        
+
         $res = $this->db->query($query);
         if ($res->num_rows() > 0) {
             return $res->result_array();
@@ -83,15 +83,15 @@ class Bb_model extends CI_Model {
         }
     }
 
-    public function get_bbFilterSubscriber() {
+    public function get_bbFilterCustomer() {
 
         $data = array();
-        $query = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y", strtotime("-1 year")) . "-01-01' and '" . date("Y", strtotime("-0 year")) . "-01-01' and `ListID` IN('351484', '351485','351487') ";
-        $query1 = "select * from et_subscriber_list_rel where `CreatedDate` > DATE_SUB(NOW(), INTERVAL 1 MONTH) and  `ListID` IN('351484', '351485','351487')";
-        $query2 = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y-m", strtotime("-2 months")) . "-01' and '" . date("Y-m", strtotime("-1 months")) . "-01' and `ListID` IN('351484', '351485','351487')";
-        $query3 = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y-m-d", strtotime("-30 days")) . "' and '" . date("Y-m-d", strtotime("-0 days")) . "' and `ListID` IN('351484', '351485','351487')";
-        $query4 = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y-m-d", strtotime("-60 days")) . "' and '" . date("Y-m-d", strtotime("-30 days")) . "' and `ListID` IN('351484', '351485','351487')";
-        $query5 = "select * from et_subscriber_list_rel where `CreatedDate` > DATE_SUB(NOW(), INTERVAL 1 DAY) and `ListID` IN('351484', '351485','351487')";
+        $query = "select * from bb_customer where `created` between '" . date("Y", strtotime("-1 year")) . "-01-01' and '" . date("Y", strtotime("-0 year")) . "-01-01'";
+        $query1 = "select * from bb_customer where `created` > DATE_SUB(NOW(), INTERVAL 1 MONTH)";
+        $query2 = "select * from bb_customer where `created` between '" . date("Y-m", strtotime("-2 months")) . "-01' and '" . date("Y-m", strtotime("-1 months")) . "-01'";
+        $query3 = "select * from bb_customer where `created` between '" . date("Y-m-d", strtotime("-30 days")) . "' and '" . date("Y-m-d", strtotime("-0 days")) . "'";
+        $query4 = "select * from bb_customer where `created` between '" . date("Y-m-d", strtotime("-60 days")) . "' and '" . date("Y-m-d", strtotime("-30 days")) . "'";
+        $query5 = "select * from bb_customer where `created` > DATE_SUB(NOW(), INTERVAL 1 DAY)";
 //        $query1 = "select count(id) from et_subscriber where CreatedDate >= DATEADD(MONTH, -1, GETDATE()) " ;
         $res = $this->db->query($query);
         $res1 = $this->db->query($query1);
@@ -111,15 +111,40 @@ class Bb_model extends CI_Model {
     public function get_bbListFilterSubscriber($list_id) {
 //        echo date("Y-m", strtotime("-0 months"));die;
         $data = array();
-        $query6 = "select * from et_subscriber_list_rel where `ListID` = '" . $list_id . "' ";
-        $query = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y", strtotime("-1 year")) . "-01-01' and '" . date("Y", strtotime("-0 year")) . "-01-01' and `ListID` = '" . $list_id . "' ";
-        $query1 = "select * from et_subscriber_list_rel where `CreatedDate` > DATE_SUB(NOW(), INTERVAL 1 MONTH) and `ListID`  = '" . $list_id . "'";
-        $query2 = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y-m", strtotime("-2 months")) . "-01' and '" . date("Y-m", strtotime("-1 months")) . "-01' and `ListID`  = '" . $list_id . "'";
-        $query3 = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y-m-d", strtotime("-30 days")) . "' and '" . date("Y-m-d", strtotime("-0 days")) . "' and `ListID`  = '" . $list_id . "'";
-        $query4 = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y-m-d", strtotime("-60 days")) . "' and '" . date("Y-m-d", strtotime("-30 days")) . "' and `ListID`  = '" . $list_id . "'";
-        $query5 = "select * from et_subscriber_list_rel where `CreatedDate` > DATE_SUB(NOW(), INTERVAL 1 DAY) and  `ListID`  = '" . $list_id . "'";
+        $query6 = "select * from et_subscriber_list_rel 
+            JOIN master_subscriber ON master_subscriber.ET_UID = et_subscriber_list_rel.SubscriberID   
+            JOIN bb_customer ON bb_customer.BB_UID = master_subscriber.BB_UID   
+            where et_subscriber_list_rel.`ListID` = '" . $list_id . "' ";
+
+
+
+        $query = "select * from et_subscriber_list_rel 
+                  JOIN master_subscriber ON master_subscriber.ET_UID = et_subscriber_list_rel.SubscriberID   
+                  JOIN bb_customer ON bb_customer.BB_UID = master_subscriber.BB_UID 
+                  where et_subscriber_list_rel.`CreatedDate` between '" . date("Y", strtotime("-1 year")) . "-01-01' and '" . date("Y", strtotime("-0 year")) . "-01-01' and et_subscriber_list_rel.`ListID` = '" . $list_id . "' ";
+        $query1 = "select * from et_subscriber_list_rel 
+                   JOIN master_subscriber ON master_subscriber.ET_UID = et_subscriber_list_rel.SubscriberID   
+                   JOIN bb_customer ON bb_customer.BB_UID = master_subscriber.BB_UID 
+                   where et_subscriber_list_rel.`CreatedDate` > DATE_SUB(NOW(), INTERVAL 1 MONTH) and et_subscriber_list_rel.`ListID`  = '" . $list_id . "'";
+        $query2 = "select * from et_subscriber_list_rel 
+                   JOIN master_subscriber ON master_subscriber.ET_UID = et_subscriber_list_rel.SubscriberID   
+                   JOIN bb_customer ON bb_customer.BB_UID = master_subscriber.BB_UID  
+                   where et_subscriber_list_rel.`CreatedDate` between '" . date("Y-m", strtotime("-2 months")) . "-01' and '" . date("Y-m", strtotime("-1 months")) . "-01' and et_subscriber_list_rel.`ListID`  = '" . $list_id . "'";
+        $query3 = "select * from et_subscriber_list_rel 
+                   JOIN master_subscriber ON master_subscriber.ET_UID = et_subscriber_list_rel.SubscriberID
+                   JOIN bb_customer ON bb_customer.BB_UID = master_subscriber.BB_UID 
+                   where et_subscriber_list_rel.`CreatedDate` between '" . date("Y-m-d", strtotime("-30 days")) . "' and '" . date("Y-m-d", strtotime("-0 days")) . "' and et_subscriber_list_rel.`ListID`  = '" . $list_id . "'";
+        $query4 = "select * from et_subscriber_list_rel 
+                   JOIN master_subscriber ON master_subscriber.ET_UID = et_subscriber_list_rel.SubscriberID
+                   JOIN bb_customer ON bb_customer.BB_UID = master_subscriber.BB_UID
+                   where et_subscriber_list_rel.`CreatedDate` between '" . date("Y-m-d", strtotime("-60 days")) . "' and '" . date("Y-m-d", strtotime("-30 days")) . "' and et_subscriber_list_rel.`ListID`  = '" . $list_id . "'";
+        $query5 = "select * from et_subscriber_list_rel 
+                   JOIN master_subscriber ON master_subscriber.ET_UID = et_subscriber_list_rel.SubscriberID
+                   JOIN bb_customer ON bb_customer.BB_UID = master_subscriber.BB_UID
+                   where et_subscriber_list_rel.`CreatedDate` > DATE_SUB(NOW(), INTERVAL 1 DAY) and  et_subscriber_list_rel.`ListID`  = '" . $list_id . "'";
 
 //        $query1 = "select count(id) from et_subscriber where CreatedDate >= DATEADD(MONTH, -1, GETDATE()) " ;
+//        echo $query6;die;
         $res = $this->db->query($query);
         $res1 = $this->db->query($query1);
         $res2 = $this->db->query($query2);
@@ -137,11 +162,12 @@ class Bb_model extends CI_Model {
 
         return $data;
     }
+
     public function get_bpListFilterSubscriber($list_id) {
 //        echo date("Y-m", strtotime("-0 months"));die;
         $data = array();
 
-        $query6="SELECT * FROM et_subscriber_list_rel et1 JOIN et_subscriber_list_rel et2 ON et1.`SubscriberID` = et2.`SubscriberID` WHERE et1.`ListID` = '" . $list_id . "' AND et2.`ListID` = '352396'";
+        $query6 = "SELECT * FROM et_subscriber_list_rel et1 JOIN et_subscriber_list_rel et2 ON et1.`SubscriberID` = et2.`SubscriberID` WHERE et1.`ListID` = '" . $list_id . "' AND et2.`ListID` = '352396'";
         $query = "select * from et_subscriber_list_rel et1 JOIN et_subscriber_list_rel et2 ON et1.`SubscriberID` = et2.`SubscriberID` where et1.`CreatedDate` between '" . date("Y", strtotime("-1 year")) . "-01-01' and '" . date("Y", strtotime("-0 year")) . "-01-01' and et1.`ListID` = '352396' and et2.`ListID` = '" . $list_id . "' ";
         $query1 = "select * from et_subscriber_list_rel et1 JOIN et_subscriber_list_rel et2 ON et1.`SubscriberID` = et2.`SubscriberID` where et1.`CreatedDate` > DATE_SUB(NOW(), INTERVAL 1 MONTH) and et1.`ListID` = '352396'  and  et2.`ListID`  = '" . $list_id . "'";
         $query2 = "select * from et_subscriber_list_rel  et1 JOIN et_subscriber_list_rel et2 ON et1.`SubscriberID` = et2.`SubscriberID` where et1.`CreatedDate` between '" . date("Y-m", strtotime("-2 months")) . "-01' and '" . date("Y-m", strtotime("-1 months")) . "-01' and et1.`ListID` = '352396' and et2.`ListID`  = '" . $list_id . "'";
@@ -177,7 +203,7 @@ class Bb_model extends CI_Model {
         $this->db->group_by('`et_subscriber_list_rel`.`SubscriberID`');
         $this->db->where_in('ListID', array('351484', '351485', '351487'));
         $this->db->from('et_subscriber_list_rel');
-        $this->db->join('et_subscriber','et_subscriber.SubscriberID=et_subscriber_list_rel.SubscriberID');
+        $this->db->join('et_subscriber', 'et_subscriber.SubscriberID=et_subscriber_list_rel.SubscriberID');
         $res = $this->db->get();
         if ($res->num_rows() > 0) {
             return $res->result_array();
@@ -185,12 +211,13 @@ class Bb_model extends CI_Model {
             return NULL;
         }
     }
+
     public function get_bpSubscriberDetail() {
         $this->db->select('*');
         $this->db->group_by('`et_subscriber_list_rel`.`SubscriberID`');
         $this->db->where_in('ListID', array('352396'));
         $this->db->from('et_subscriber_list_rel');
-        $this->db->join('et_subscriber','et_subscriber.SubscriberID=et_subscriber_list_rel.SubscriberID');
+        $this->db->join('et_subscriber', 'et_subscriber.SubscriberID=et_subscriber_list_rel.SubscriberID');
         $res = $this->db->get();
         if ($res->num_rows() > 0) {
             return $res->result_array();
@@ -205,7 +232,7 @@ class Bb_model extends CI_Model {
 
         foreach ($data as $val) {
             $now = array();
-     
+
             $res = $this->db->get_where('bb_customer', array('email' => $val['email']));
             if ($res->num_rows() > 0) {
                 
@@ -224,17 +251,18 @@ class Bb_model extends CI_Model {
             }
         }
     }
+
     public function update_mdb($data) {
 
         $email = array();
 
         foreach ($data as $val) {
             $now = array();
-     
+
             $res = $this->db->get_where('master_subscriber', array('email' => $val['email']));
             if ($res->num_rows() > 0) {
                 $this->db->where(array('email' => $val['email']));
-                $this->db->update('master_subscriber', array('BB_UID'=>$val['id']));
+                $this->db->update('master_subscriber', array('BB_UID' => $val['id']));
             } else {
 
                 $now['CreatedDate'] = $val['created_at'];
@@ -248,13 +276,13 @@ class Bb_model extends CI_Model {
             }
         }
     }
-    
-     public function get_bpSubscriber(){
+
+    public function get_bpSubscriber() {
         $this->db->select('*');
         $this->db->group_by('`et_subscriber_list_rel`.`SubscriberID`');
         $this->db->where_in('ListID', array('352396'));
         $this->db->from('et_subscriber_list_rel');
-        $this->db->join('et_subscriber','et_subscriber.SubscriberID=et_subscriber_list_rel.SubscriberID');
+        $this->db->join('et_subscriber', 'et_subscriber.SubscriberID=et_subscriber_list_rel.SubscriberID');
         $res = $this->db->get();
         if ($res->num_rows() > 0) {
             return $res->result_array();
@@ -262,8 +290,8 @@ class Bb_model extends CI_Model {
             return NULL;
         }
     }
-    
-        public function get_bpallFilterSubscriber() {
+
+    public function get_bpallFilterSubscriber() {
 
         $data = array();
         $query = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y", strtotime("-1 year")) . "-01-01' and '" . date("Y", strtotime("-0 year")) . "-01-01' and `ListID` = '352396' ";
@@ -287,7 +315,8 @@ class Bb_model extends CI_Model {
         $data['today'] = $res5->num_rows();
         return $data;
     }
-        public function get_bpFilterSubscriber() {
+
+    public function get_bpFilterSubscriber() {
 
         $data = array();
         $query = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y", strtotime("-1 year")) . "-01-01' and '" . date("Y", strtotime("-0 year")) . "-01-01' and `ListID` = '352396' and `ListID` IN('351487', '351484', '351488', '351486') ";
@@ -311,8 +340,8 @@ class Bb_model extends CI_Model {
         $data['today'] = $res5->num_rows();
         return $data;
     }
-    
-     public function bb_mdb_update(){
+
+    public function bb_mdb_update() {
         $res = $this->db->query('SELECT firstname,lastName,email,created as CreatedDate,BB_UID,1 as status FROM bb_customer WHERE bb_customer.BB_UID NOT IN (SELECT BB_UID FROM master_subscriber)');
 
         if ($res->num_rows() > 0) {
@@ -320,20 +349,18 @@ class Bb_model extends CI_Model {
 
             $rel_data = array();
             foreach ($data as $key => $val) {
-                $msres =  $this->db->get_where('master_subscriber', array('email'=>$val['email']));
-                if($msres->num_rows() > 0 )
-                {
-                    $this->db->where(array('email'=>$val['email']));
+                $msres = $this->db->get_where('master_subscriber', array('email' => $val['email']));
+                if ($msres->num_rows() > 0) {
+                    $this->db->where(array('email' => $val['email']));
                     $this->db->update('master_subscriber', $val);
-                }
-                else
-                {
+                } else {
                     $this->db->insert('master_subscriber', $val);
                 }
-                $rel_data[$key]['subscriber_id'] = $this->db->insert_id(); 
+                $rel_data[$key]['subscriber_id'] = $this->db->insert_id();
                 $rel_data[$key]['store_id'] = '2';
             }
             $this->db->insert_batch('ms_to_store_rel', $rel_data);
         }
     }
+
 }

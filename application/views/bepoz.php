@@ -45,7 +45,7 @@
                 <p class="row-stat-label">Today</p>
                 <h3 class="row-stat-value"><?php echo $FilterSubscriber['today']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-              <?php if($FilterSubscriber['today'] !=0 ) { echo number_format(((count($Subscriber)-$FilterSubscriber['today'])*100)/count($Subscriber),2); } else{ echo '0';} ?>%                    
+              <?php if($FilterSubscriber['today'] !=0 ) { echo number_format((($FilterSubscriber['today'])*100)/count($Subscriber),2); } else{ echo '0';} ?>%                    
                 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
@@ -97,7 +97,7 @@
                 <p class="row-stat-label">Today</p>
                 <h3 class="row-stat-value"><?php echo $mcSubscriber['today']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-              <?php if($mcSubscriber['today'] !=0 ) { echo number_format((($mcSubscriber['total']-$mcSubscriber['today'])*100)/$mcSubscriber['total'],2); } else{ echo '0';} ?>%                    
+              <?php if($mcSubscriber['today'] !=0 ) { echo number_format((($mcSubscriber['today'])*100)/$mcSubscriber['total'],2); } else{ echo '0';} ?>%                    
                 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
@@ -149,7 +149,7 @@
                 <p class="row-stat-label">Today</p>
                 <h3 class="row-stat-value"><?php echo $mount['today']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-    <?php if($mount['today'] !=0 ) { echo number_format((($mount['total']-$mount['today'])*100)/$mount['total'],2); } else{ echo '0';} ?>%                    
+    <?php if($mount['today'] !=0 ) { echo number_format((($mount['today'])*100)/$mount['total'],2); } else{ echo '0';} ?>%                    
                 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
@@ -203,7 +203,7 @@
                 <p class="row-stat-label">Today</p>
                 <h3 class="row-stat-value"><?php echo $brandsSubscriber['today']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-    <?php if($brandsSubscriber['today'] !=0 ) { echo number_format((($brandsSubscriber['total']-$brandsSubscriber['today'])*100)/$brandsSubscriber['total'],2); } else{ echo '0';} ?>%                    
+    <?php if($brandsSubscriber['today'] !=0 ) { echo number_format((($brandsSubscriber['today'])*100)/$brandsSubscriber['total'],2); } else{ echo '0';} ?>%                    
 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
@@ -255,7 +255,7 @@
                 <p class="row-stat-label">Today</p>
                 <h3 class="row-stat-value"><?php echo $Evans['today']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-    <?php if($Evans['today'] !=0 ) { echo number_format((($Evans['total']-$Evans['today'])*100)/$Evans['total'],2); } else{ echo '0';} ?>%                    
+    <?php if($Evans['today'] !=0 ) { echo number_format((($Evans['today'])*100)/$Evans['total'],2); } else{ echo '0';} ?>%                    
                 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->

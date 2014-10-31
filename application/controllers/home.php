@@ -82,13 +82,14 @@ class Home extends CI_Controller {
         if ($this->session->userdata('logged_in')) {
             $data['list'] = $this->et_model->getList();
             $data['Subscriberdetail'] = $this->bb_model->get_bbSubscriberDetail();
-            $data['Subscriber'] = $this->bb_model->get_bbSubscriber();
+            $data['Customer'] = $this->bb_model->get_bbcustomer();
+//            var_dump($data['Customer']);die;
             $data['mcSubscriber'] = $this->bb_model->get_bbListFilterSubscriber(351487);
             $data['brandsSubscriber'] = $this->bb_model->get_bbListFilterSubscriber(351484);
             $data['celldoorSubscriber'] = $this->bb_model->get_bbListFilterSubscriber(351485);
 //            var_dump($data['Subscriberdetail']);die;
             $data['UnSubscriber'] = $this->bb_model->get_bbUnSubscriber();
-            $data['FilterSubscriber'] = $this->bb_model->get_bbFilterSubscriber();
+            $data['FilterCustomer'] = $this->bb_model->get_bbFilterCustomer();
             $data['FilterUnSubscriber'] = $this->et_model->get_etFilterUnSubscriber();
             $data['checkSystemSync'] = $this->et_model->checkSystemSync();
             $data['getLastSystemSyncsub'] = $this->et_model->getLastSystemSyncsub();
