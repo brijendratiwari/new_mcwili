@@ -273,7 +273,7 @@ class Login extends CI_Controller {
                     }
                 } else {
 //                    $subkey = time();
-                    $subs[] = array("EmailAddress" => $_POST['email'], "SubscriberKey" => $bp_uid, "Attributes" => array(array("Name" => "First Name", "Value" => $_POST['firstname']), array("Name" => "Last Name", "Value" => $_POST['lastname'])));
+                    $subs[] = array("EmailAddress" => $_POST['email'], "SubscriberKey" => $bp_uid, "Attributes" => array(array("Name" => "First Name", "Value" => $_POST['firstname']), array("Name" => "Last Name", "Value" => $_POST['lastname']), array("Name" => "Date of Birth", "Value" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'])));
                     $response = $exact_target->add_email_list($_POST['pref'], $subs);
 //                    var_dump($response);die;
                     if ($response[0]->StatusCode == "OK") {

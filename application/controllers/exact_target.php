@@ -223,7 +223,7 @@ class Exact_target extends CI_Controller {
             $newListID = $list_id;
             // Adding Multiple Subscribers To a List in Bulk
             $response = $myclient->AddSubscribersToLists($data, $list_id);
-
+            
             return $response->results;
         } catch (Exception $e) {
             echo 'Caught exception: ', $e->getMessage(), "\n";
@@ -585,8 +585,10 @@ class Exact_target extends CI_Controller {
         foreach ($listrealtion as $value) {
             $sub_list[] = $allscrb[$value['SubscriberID']];
         }
-       
-        return array('relation' => $listrealtion,'list'=>$allscrb);
+        echo '<pre>';
+        print_r($sub_list);
+        echo '</pre>';
+        return array('relation' => $listrealtion,'list'=>$sub_list);
         
     }
 

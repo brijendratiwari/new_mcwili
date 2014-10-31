@@ -13,6 +13,7 @@ class Sync extends CI_Controller {
         $this->load->model('sync_model');
         $this->load->model('et_model');
         $this->load->model('bb_model');
+        $this->load->model('bp_model');
         require_once('exact_target.php');
         require_once('black_boxx.php');
     }
@@ -250,6 +251,113 @@ class Sync extends CI_Controller {
 
             $this->et_model->insert_all_unsubscriber($arr);
             $this->bb_model->bb_mdb_update();
+            $new_unsub = $this->et_model->get_count('all_unsubscriber', $storeid);
+            $data['UnSubscribedCount'] = $new_unsub - $old_unsub;
+            $data['type'] = $type;
+            $data['SyncTime'] = date('Y-m-d h:m:s', time());
+            $data['store_id'] = $storeid;
+
+            $this->sync_model->delTempSync($storeid);
+            $this->sync_model->insert_sync_updates($data);
+            $data['SyncTime'] = date('h:ma', time());
+            if ($flag) {
+                return $data;
+            } else {
+                echo json_encode($data);
+                die;
+            }
+        } else {
+//            $type->sync_model->delTempSync($id);
+            echo 'stop';
+            die;
+        }
+    }
+
+    public function bpSync(){
+//        $storeid = $this->input->post('sync');
+        $storeid = 3;
+        $type = 'Manual';
+        $str_id = $this->sync_model->setTempSync($storeid);
+        $this->BepozSync($str_id, $type, $storeid);
+    }
+
+    public function BepozSync($id, $type, $storeid, $flag = FALSE){
+        
+        $controller_et = new Exact_target();
+
+        $data = array();
+
+        if ($this->sync_model->check($id)) {
+            $maindata  = $controller_et->syncBepoz();
+            
+            $user = $maindata['list'];
+            
+            $data_val = $this->bp_model->get_where('bp_customer');
+            $count = count($data_val);
+            $new_count = count($user);
+            $this->bp_model->update_bp($user);
+            $this->bp_model->update_mdb($user);
+            
+            $sub_diff = $new_count - $count;
+            if ($sub_diff > 0) {
+                $data['SubscribedCount'] = $sub_diff;
+            } else {
+                $data['SubscribedCount'] = 0;
+            }
+
+            $old_unsub = $this->et_model->get_count('all_unsubscriber', $storeid);    // counting the old sub data
+//            $this->et_model->blank_tab('all_unsubscriber');
+
+            if ($this->sync_model->check($id))
+                $get_unSubscribe_list = $controller_et->get_unSubscribe_list('352396');
+            else {
+                $type->sync_model->delTempSync($id);
+                echo 'stop';
+                die;
+            }
+            $arr = array();
+            if (count($get_unSubscribe_list) && is_array($get_unSubscribe_list)) {
+                foreach ($get_unSubscribe_list as $key => $value) {
+
+                    $arr[$key]['email'] = $value->EmailAddress;
+                    $arr1[$key]['email'] = $value->EmailAddress;
+                    $arr1[$key]['ET_UID'] = $value->SubscriberKey;
+//                    if(isset($bbUI[$value->EmailAddress]))
+//                    $arr1[$key]['BB_UID'] = $bbUI[$value->EmailAddress];
+
+                    $arr[$key]['unsubscribed_date'] = $value->UnsubscribedDate;
+                    $arr1[$key]['status'] = 0;
+                    $arr[$key]['unsubscriber_from'] = $this->et_model->checkstore($value->ID);
+                    $arr[$key]['SubscriberID'] = $value->SubscriberKey;
+
+                    if (is_array($value->Attributes)) {
+                        foreach ($value->Attributes as $val) {
+
+                            if ($val->Name == 'Date of Birth') {
+                                $arr[$key]['DOB'] = $val->Value;
+                                $arr1[$key]['DOB'] = $val->Value;
+                            }
+                            if ($val->Name == 'First Name') {
+                                $arr[$key]['firstname'] = $val->Value;
+                                $arr1[$key]['firstname'] = $val->Value;
+                            }
+                            if ($val->Name == 'Last Name') {
+                                $arr[$key]['lastname'] = $val->Value;
+                                $arr1[$key]['lastname'] = $val->Value;
+                            }
+                        }
+                    }
+                    $mid = $this->et_model->insert_mastersubscriber($value->EmailAddress, $arr1[$key]);
+
+                    $controller_et->unsubscribe_email($value->EmailAddress, $value->SubscriberKey);
+
+                    $arr[$key]['ms_id'] = $mid;
+                }
+            }
+
+
+            $this->et_model->insert_all_unsubscriber($arr);
+            $this->bp_model->bp_mdb_update();
             $new_unsub = $this->et_model->get_count('all_unsubscriber', $storeid);
             $data['UnSubscribedCount'] = $new_unsub - $old_unsub;
             $data['type'] = $type;
