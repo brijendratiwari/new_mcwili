@@ -21,8 +21,88 @@ class Mdb_model extends CI_Model {
             return NULL;
         }
     }
+    public function get_csvSubscriber() {
+//        $res = $this->db->query('SELECT firstname,lastname,email,BP_UID,DOB,status,CreatedDate FROM master_subscriber WHERE master_subscriber.email NOT IN (SELECT email FROM csv_subscriber)');
+        $res = $this->db->query('
+            SELECT m1 . firstname ,m1 . firstname ,m1 . lastname ,m1 . email ,m1 . DOB ,m1 . status ,m1 . CreatedDate, 
+if((SELECT if( et1.`ID` IS NULL , "n", "y" ) AS id
+FROM et_subscriber_list_rel et1
+JOIN et_subscriber_list_rel et2 ON et1.`SubscriberID` = et2.`SubscriberID`
+WHERE et1.`ListID` = "352396"
+AND et2.`ListID` = "351487"
+AND et1.`SubscriberID` = m1.`ET_UID`)
+IS NULL , "n", "y" ) AS BR,
+if(
+(SELECT if( et1.`ID` IS NULL , "n", "y" ) AS id
+FROM et_subscriber_list_rel et1
+JOIN et_subscriber_list_rel et2 ON et1.`SubscriberID` = et2.`SubscriberID`
+WHERE et1.`ListID` = "352396"
+AND et2.`ListID` = "351484"
+AND et1.`SubscriberID` = m1.`ET_UID`)
+IS NULL , "n", "y" ) AS BO,
 
-    public function get_mdbUnSubscriber() {
+if(
+(SELECT if( et1.`ID` IS NULL , "n", "y" ) AS id
+FROM et_subscriber_list_rel et1
+JOIN et_subscriber_list_rel et2 ON et1.`SubscriberID` = et2.`SubscriberID`
+WHERE et1.`ListID` = "352396"
+AND et2.`ListID` = "351488"
+AND et1.`SubscriberID` = m1.`ET_UID`)
+IS NULL , "n", "y" ) AS BQ,
+
+if(
+(SELECT if( et1.`ID` IS NULL , "n", "y" ) AS id
+FROM et_subscriber_list_rel et1
+JOIN et_subscriber_list_rel et2 ON et1.`SubscriberID` = et2.`SubscriberID`
+WHERE et1.`ListID` = "352396"
+AND et2.`ListID` = "351486"
+AND et1.`SubscriberID` = m1.`ET_UID`)
+IS NULL , "n", "y" ) AS BP,
+
+if(
+(SELECT if( et1.`ID` IS NULL , "n", "y" ) AS id
+FROM et_subscriber_list_rel et1
+JOIN et_subscriber_list_rel et2 ON et1.`SubscriberID` = et2.`SubscriberID`
+WHERE et1.`ListID` = "352396"
+AND et2.`ListID` = "351485"
+AND et1.`SubscriberID` = m1.`ET_UID`)
+IS NULL , "n", "y" ) AS BN 
+FROM `master_subscriber` AS m1 WHERE m1.email NOT IN (SELECT email FROM csv_subscriber)
+');
+        
+         if ($res->num_rows() > 0) {
+            $data = $res->result_array();
+//              var_dump($data);die;
+            return $data;
+//            $rel_data = array();
+//            foreach ($data as $key => $val) {
+//                $msres = $this->db->get_where('csv_subscriber', array('email' => $val['email']));
+//                if ($msres->num_rows() > 0) {
+//                    $this->db->where(array('email' => $val['email']));
+//                    $this->db->update('csv_subscriber', $val);
+//                } else {
+//                    $this->db->insert('csv_subscriber', $val);
+//                }
+//            }
+//        $res1 = $this->db->get('csv_subscriber');
+//        if ($res1->num_rows() > 0) {
+//            return $res1->result_array();
+//            var_dump($res1->result_array());die;
+//        } else {
+//            return NULL;
+//        }
+
+    }else{
+        return NULL;
+    }
+    }
+   public function update_csvSubscriber($data){
+        
+                    $this->db->insert_batch('csv_subscriber', $data);
+             
+         }
+
+   public function get_mdbUnSubscriber() {
         $this->db->where("status", 0);
         $res = $this->db->get('master_subscriber');
         if ($res->num_rows() > 0) {
@@ -97,3 +177,40 @@ class Mdb_model extends CI_Model {
     }
 
 }
+//SELECT m1 . * ,
+//if(
+//(SELECT if( et1.`ID` IS NULL , 'n', 'y' ) AS id
+//FROM et_subscriber_list_rel et1
+//JOIN et_subscriber_list_rel et2 ON et1.`SubscriberID` = et2.`SubscriberID`
+//WHERE et1.`ListID` = '352396'
+//AND et2.`ListID` = '351487'
+//AND et1.`SubscriberID` = m1.`ET_UID`)
+//IS NULL , 'n', 'y' ) AS BR,
+//if(
+//(SELECT if( et1.`ID` IS NULL , 'n', 'y' ) AS id
+//FROM et_subscriber_list_rel et1
+//JOIN et_subscriber_list_rel et2 ON et1.`SubscriberID` = et2.`SubscriberID`
+//WHERE et1.`ListID` = '352396'
+//AND et2.`ListID` = '351484'
+//AND et1.`SubscriberID` = m1.`ET_UID`)
+//IS NULL , 'n', 'y' ) AS BO,
+//
+//if(
+//(SELECT if( et1.`ID` IS NULL , 'n', 'y' ) AS id
+//FROM et_subscriber_list_rel et1
+//JOIN et_subscriber_list_rel et2 ON et1.`SubscriberID` = et2.`SubscriberID`
+//WHERE et1.`ListID` = '352396'
+//AND et2.`ListID` = '351488'
+//AND et1.`SubscriberID` = m1.`ET_UID`)
+//IS NULL , 'n', 'y' ) AS BQ,
+//
+//if(
+//(SELECT if( et1.`ID` IS NULL , 'n', 'y' ) AS id
+//FROM et_subscriber_list_rel et1
+//JOIN et_subscriber_list_rel et2 ON et1.`SubscriberID` = et2.`SubscriberID`
+//WHERE et1.`ListID` = '352396'
+//AND et2.`ListID` = '351486'
+//AND et1.`SubscriberID` = m1.`ET_UID`)
+//IS NULL , 'n', 'y' ) AS BP 
+//FROM `master_subscriber` AS m1
+#######################
