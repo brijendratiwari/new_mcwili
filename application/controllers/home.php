@@ -34,8 +34,8 @@ class Home extends CI_Controller {
         if ($this->session->userdata('logged_in')) {
             $data['autosync'] = $this->sync_model->checkautosync();
             $data['Subscriber'] = $this->mdb_model->get_mdbSubscriber();
-            $data['bbCustomer'] = $this->sync_model->get_bb_customer();
-            $data['etSubscriber'] = $this->sync_model->get_etSubscriber();
+//            $data['bbCustomer'] = $this->sync_model->get_bb_customer();
+//            $data['etSubscriber'] = $this->sync_model->get_etSubscriber();
             $data['bpSubscriber'] = $this->sync_model->get_bpSubscriber();
             $data['mdbSubscriber'] = $this->sync_model->get_mdbSubscriber();
             $data['getLastSystemSyncsub'] = $this->sync_model->getLastSystemSyncsub('ET');
@@ -54,9 +54,10 @@ class Home extends CI_Controller {
             $data['brandsSubscriber'] = $this->sync_model->getEt_SpecificListData(351484);
             $data['evans'] = $this->sync_model->getEt_SpecificListData(351486);
             $data['mount'] = $this->sync_model->getEt_SpecificListData(351488);
+             $data['et_celldoorSubscriber'] = $this->sync_model->getEt_SpecificListData(351485);
              //get specific list data for ET 
             $data['bb_brandsSubscriber'] = $this->sync_model->getBb_SpecificListData(351484);
-            $data['celldoorSubscriber'] = $this->sync_model->getBb_SpecificListData(351485);
+            $data['bb_celldoorSubscriber'] = $this->sync_model->getBb_SpecificListData(351485);
 
            
 

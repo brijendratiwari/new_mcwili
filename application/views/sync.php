@@ -272,22 +272,14 @@
                 <th style="width: 20%">First Name</th>
                 <th style="width: 18%">Last Name</th>
                 <th style="width: 20%">Email</th>
-                 <th style="width: 12%">MDB</th>
-                <th style="width: 12%">Exact Target</th>
-                <th style="width: 12%">Blackbox</th>
-                <th style="width: 12%">Bepoz</th>
+                 <th style="width: 5%">MDB</th>
+                <th style="width: 20%">Exact Target<div><div class="subcol">MW</div><div class="subcol">MP</div><div class="subcol">BL</div><div class="subcol">EAT</div><div class="subcol">CD</div></div></th>
+                <th style="width: 15%">Blackbox<div><div class="subcol_BB">CD</div><div class="subcol_BB">FF</div><div class="subcol_BB">EB</div></div></th>
+                <th style="width: 10%">Bepoz</th>
               </tr>
             </thead>
                          <tbody>
-                             <tr>
-                                        <td style="width: 15%"></td>
-                                        <td style="width: 15%"></td>
-                                        <td style="width: 20%"></td>
-                                        <td style="width: 10%"></td>
-                                        <td style="width: 17%"><div class="subcol">MW</div><div class="subcol">MP</div><div class="subcol">BL</div><div class="subcol">EAT</div></td>
-                                        <td style="width: 17%"><div class="subcol">CD</div><div class="subcol">FF</div><div class="subcol">EB</div></td>
-                                        <td style="width: 10%"></td>
-                           </tr>
+   
                 <?php if($Subscriber != NULL)
                     foreach ($Subscriber as $key => $value) {
                         ?>
@@ -296,9 +288,9 @@
                             <td style="width: 15%"><?php echo $value['firstname']?></td>
                             <td style="width: 15%"><?php echo $value['lastname']?></td>
                             <td style="width: 20%"><?php echo $value['email']?></td>
-                            <td style="width: 10%"><?php if(!empty($mdbSubscriber)){ if(in_array($value['email'],$mdbSubscriber) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></td>
-                            <td style="width: 17%"><div class="subcol"><?php  if(!empty($mcSubscriber)){ if(in_array($value['email'],$mcSubscriber) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></div><div class="subcol"><?php  if(!empty($mount)){ if(in_array($value['email'],$mount) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></div><div class="subcol"><?php  if(!empty($brandsSubscriber)){ if(in_array($value['email'],$brandsSubscriber) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></div><div class="subcol"><?php  if(!empty($evans)){ if(in_array($value['email'],$evans) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></div></td>
-                            <td style="width: 15%"><div class="subcol"><?php  if(!empty($celldoorSubscriber)){ if(in_array($value['email'],$celldoorSubscriber) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></div><div class="subcol"><?php  if(!empty($celldoorSubscriber)){ if(in_array($value['email'],$celldoorSubscriber) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></div><div class="subcol"><?php  if(!empty($bb_brandsSubscriber)){ if(in_array($value['email'],$bb_brandsSubscriber) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></div></td>
+                            <td style="width: 5%"><?php if(!empty($mdbSubscriber)){ if(in_array($value['email'],$mdbSubscriber) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></td>
+                            <td style="width: 20%"><div class="subcol"><?php  if(!empty($mcSubscriber)){ if(in_array($value['email'],$mcSubscriber) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></div><div class="subcol"><?php  if(!empty($mount)){ if(in_array($value['email'],$mount) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></div><div class="subcol"><?php  if(!empty($brandsSubscriber)){ if(in_array($value['email'],$brandsSubscriber) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></div><div class="subcol"><?php  if(!empty($evans)){ if(in_array($value['email'],$evans) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></div><div class="subcol"><?php  if(!empty($et_celldoorSubscriber)){ if(in_array($value['email'],$et_celldoorSubscriber) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></div></td>
+                            <td style="width: 15%"><div class="subcol_BB"><?php  if(!empty($bb_celldoorSubscriber)){ if(in_array($value['email'],$bb_celldoorSubscriber) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></div><div class="subcol_BB"><?php  if(!empty($bb_celldoorSubscriber)){ if(in_array($value['email'],$bb_celldoorSubscriber) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></div><div class="subcol_BB"><?php  if(!empty($bb_brandsSubscriber)){ if(in_array($value['email'],$bb_brandsSubscriber) ){ echo "y";}else{ echo "n";} } else{ echo "None";}?></div></td>
                             <td style="width: 10%"><?php if(!empty($bpSubscriber)){ if(in_array($value['email'],$bpSubscriber) ){ echo "y";}else{ echo "n";} } else{ echo 'None';}?></td>
                </tr>
                  <?php

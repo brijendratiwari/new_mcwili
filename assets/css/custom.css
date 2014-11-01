@@ -10,5 +10,8 @@
     padding: 0.2em 0.2em 0.3em !important;
 }
  .subcol{
-        padding: 2px; min-width: 40px; float: left; text-align: center;
+        padding: 2px; min-width: 20%; float: left; text-align: center;
+    }
+ .subcol_BB{
+        padding: 2px; min-width: 30%; float: left; text-align: center;
     }
