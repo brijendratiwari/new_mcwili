@@ -280,7 +280,7 @@ class Login extends CI_Controller {
                         $data = array("FirstName" => $_POST['firstname'], "LastName" => $_POST['lastname'], "DOB" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "SubscriberID" => $bp_uid, "EmailAddress" => $_POST['email'], "Status" => "Active", "CreatedDate" => $bp_user_created);
                         $this->et_model->add_etsubscriber($data);
                         $this->et_model->add_etsubscriber_rel($_POST['pref'], $bp_uid);
-                        $this->createCSV();
+                         $this->new_csv_upload();
                     }
                 }
             }
