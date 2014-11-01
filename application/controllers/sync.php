@@ -10,12 +10,14 @@ class Sync extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
+        set_time_limit(0);
         $this->load->model('sync_model');
         $this->load->model('et_model');
         $this->load->model('bb_model');
         $this->load->model('bp_model');
         require_once('exact_target.php');
         require_once('black_boxx.php');
+        require_once('login.php');
     }
 
     public function StartAutoSync() {
@@ -416,6 +418,8 @@ class Sync extends CI_Controller {
                 $this->sync_model->insert_sync_updates($data);
                 $data['SyncTime'] = date('h:ma', time());
             }
+             $login = new Login();
+             $login->new_csv_upload();
             echo json_encode($data);
             die;
         }

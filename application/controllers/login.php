@@ -18,33 +18,36 @@ class Login extends CI_Controller {
         require_once('exact_target.php');
     }
 
-    private function new_csv_upload() {       // New code for uploading the file.
-
-        $csv_data = $this->mdb_model->get_mdbSubscriber();
+    public function new_csv_upload() {       // New code for uploading the file.
+        $csv_data = $this->mdb_model->get_csvSubscriber();
 
         $list = array();
         $i = 1;
+        if (!empty($csv_data)) {
         $list[0] = array("AccountID", "AccNumber", "CardNumber", "AccountGroupID", "AccountGroupName", "Title", "FirstName", "LastName", "Status", "OtherName_1", "OtherName_2", "Street_1", "Street_2", "Street_3", "City", "State", "Country", "PCode", "PhoneHome", "PhoneWork", "Fax", "Mobile", "Email1st", "Email2nd", "PostalStreet_1", "PostalStreet_2", "PostalStreet_3", "PostalCity", "PostalState", "PostalCountry", "PostalPCode", "Comment", "DateJoined", "DateNextRenewal", "DateLastRenewal", "DateExpiry", "MembershipID", "RenewalID", "DateBirth", "Gender", "DoNotPost", "DoNotEmail", "DoNotSMS", "DoNotPhone", "ExportCode_1", "ExportCode_2", "CreditLimit", "DiscountLimit", "StopCredit", "CashOnly", "PointsEarnOK", "PointsRedeemOK", "PointsPercent", "UseCALinkPnts", "AccountType", "AllowedVenueID", "AllowedOperatorID", "PriceNumber", "PricingMode", "PricingSortType", "PricingPercent", "DiscNumber", "UseGroupSettings", "StatemtComment", "OrderNumReqd", "CustomFlag_1", "CustomFlag_2", "CustomFlag_3", "CustomFlag_4", "CustomFlag_5", "CustomFlag_6", "CustomFlag_7", "CustomFlag_8", "CustomFlag_9", "CustomFlag_10", "CustomNum_1", "CustomNum_2", "CustomNum_3", "CustomNum_4", "CustomNum_5", "CustomDate_1", "CustomDate_2", "CustomDate_3", "CustomDate_4", "CustomDate_5", "CustomText_1", "CustomText_2", "CustomText_3", "CustomText_4", "CustomText_5", "CustomText_6", "CustomText_7", "CustomText_8", "CustomText_9", "CustomText_10", "CustomText_11", "CustomText_12", "CustomText_13", "CustomText_14", "CustomText_15", "CustomText_16", "CustomText_17", "CustomText_18", "CustomText_19", "CustomText_20", "Account Balance", "GrossTurnover", "NettTurnover", "PointsEarned", "PointsRedeemed", "Joining Fees Paid", "Renewals Paid", "Count of Visits", "DateLastTrans");
-        foreach ($csv_data as $record) {
-            $list[$i] = array("", "", "", "", "", "", $record["firstname"], $record["lastname"], $record["status"], "", "", "", "", "", "", "", "", "", "", "", "", "", $record["email"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", $record["DOB"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", $record["CreatedDate"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
-            $i++;
-        }
+            foreach ($csv_data as $record) {
+                $list[$i] = array("", "", "", "", "", "", $record["firstname"], $record["lastname"], $record["status"], "", "", "", "", "", "", "", "", "", "", "", "", "", $record["email"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", $record["DOB"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "","", "",$record['BN'],$record['BO'],$record['BP'],$record['BQ'],$record['BR'], "", "", "", "", "", "", "", "", "", "", $record["CreatedDate"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+                $i++;
+            }
 
-        $request = curl_init('http://mcwilliams.dev-iis.com/api.php');
+
+            $request = curl_init('http://mcwilliams.dev-iis.com/api.php');
 
 // send a file
-        curl_setopt($request, CURLOPT_POST, true);
-        curl_setopt(
-                $request, CURLOPT_POSTFIELDS, array(
-            'data' => json_encode($list)
-        ));
+            curl_setopt($request, CURLOPT_POST, true);
+            curl_setopt(
+                    $request, CURLOPT_POSTFIELDS, array(
+                    'data' => json_encode($list)
+                     ));
 
 // output the response
-        curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
-        echo curl_exec($request);
+            curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
+            echo curl_exec($request);
 
 // close the session
-        curl_close($request);
+            curl_close($request);
+            $this->mdb_model->update_csvSubscriber($csv_data);
+        }
     }
 
     public function test() {
@@ -60,8 +63,6 @@ class Login extends CI_Controller {
         $res = $black_boxx->signin($signin);
         var_dump($res);
     }
-
-
 
     public function index() {
 
@@ -124,8 +125,9 @@ class Login extends CI_Controller {
     public function thank_you() {
         $this->load->view('sign-up/thankyou.php');
     }
+
     public function bepoz_thank() {
-        $this->load->view('sign-up/thankyou_new.php');   
+        $this->load->view('sign-up/thankyou_new.php');
     }
 
     public function createuser() {
@@ -280,7 +282,7 @@ class Login extends CI_Controller {
                         $data = array("FirstName" => $_POST['firstname'], "LastName" => $_POST['lastname'], "DOB" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "SubscriberID" => $bp_uid, "EmailAddress" => $_POST['email'], "Status" => "Active", "CreatedDate" => $bp_user_created);
                         $this->et_model->add_etsubscriber($data);
                         $this->et_model->add_etsubscriber_rel($_POST['pref'], $bp_uid);
-                         $this->new_csv_upload();
+                        $this->new_csv_upload();
                     }
                 }
             }
