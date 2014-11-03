@@ -84,9 +84,8 @@ class Sync_model extends CI_Model {
             }
         }
     }
-    
 
-        public function getallListSubsciberCount($name) {
+    public function getallListSubsciberCount($name) {
         $query = "select max(sync_updates.id) as latest_sync from  (`store`) 
                         join `sync_updates` on `store`.`id` = `sync_updates`.`store_id` where `store`.`name` = '" . $name . "' ";
         $res = $this->db->query($query);
@@ -96,8 +95,8 @@ class Sync_model extends CI_Model {
             $res1 = $this->db->query($query1);
             return $res1->result_array();
         }
-        }
-    
+    }
+
     public function get_UnSubscriber() {
         $this->db->select('master_subscriber.id,master_subscriber.firstname,master_subscriber.lastname,master_subscriber.email,store.name as storename');
         $this->db->where('master_subscriber.status', 0);
@@ -319,15 +318,20 @@ class Sync_model extends CI_Model {
                         $this->db->select('firstname,lastname,email,created as CreatedDate');
                         $res3 = $this->db->get('bp_customer');
                     }
-                    return $res3->result_array();
+                    if ($res3->num_rows() > 0) {
+                        return $res3->result_array();
+                    } else {
+                        return NULL;
+                    }
                 }
             } else {
                 return NULL;
             }
         }
     }
+
     public function getLastUnSubscriber() {
-           $this->db->select('max(id) as id');
+        $this->db->select('max(id) as id');
         $res = $this->db->get('sync_updates');
         if ($res->num_rows() > 0) {
             $id = $res->result_array();
@@ -342,18 +346,16 @@ class Sync_model extends CI_Model {
                 if ($res2->num_rows() > 0) {
                     $sync_table = $res2->result_array();
 //                        $this->db->order_by('id', 'DESC');
-                 $query=  "select firstname,lastname,email,unsubscribed_date from all_unsubscriber where unsubscriber_from REGEXP '" . $store_id[0]['store_id'] . "' order by id ";
-                        if ($store_id[0]['UnSubscribedCount'] >= 3) {
+                    $query = "select firstname,lastname,email,unsubscribed_date from all_unsubscriber where unsubscriber_from REGEXP '" . $store_id[0]['store_id'] . "' order by id ";
+                    if ($store_id[0]['UnSubscribedCount'] >= 3) {
 //                            $this->db->limit('3');
-                            $query .= "Limit 3";
-                            
-                        } else {
-                            $query .= "Limit ".$store_id[0]['UnSubscribedCount']."";
-                        }
-                        $res3 = $this->db->query($query);
-                        return $res3->result_array();
+                        $query .= "Limit 3";
+                    } else {
+                        $query .= "Limit " . $store_id[0]['UnSubscribedCount'] . "";
                     }
-          
+                    $res3 = $this->db->query($query);
+                    return $res3->result_array();
+                }
             } else {
                 return NULL;
             }
