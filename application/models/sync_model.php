@@ -299,7 +299,7 @@ class Sync_model extends CI_Model {
                         $res3 = $this->db->get('et_subscriber');
                     }
                     if ($sync_table[0]['name'] == "BB") {
-                        $this->db->order_by('id', 'DESC');
+                        $this->db->order_by('CreatedDate', 'DESC');
                         if ($store_id[0]['SubscribedCount'] >= 3) {
                             $this->db->limit('3');
                         } else {
@@ -346,7 +346,7 @@ class Sync_model extends CI_Model {
                 if ($res2->num_rows() > 0) {
                     $sync_table = $res2->result_array();
 //                        $this->db->order_by('id', 'DESC');
-                    $query = "select firstname,lastname,email,unsubscribed_date from all_unsubscriber where unsubscriber_from REGEXP '" . $store_id[0]['store_id'] . "' order by id ";
+                    $query = "select firstname,lastname,email,unsubscribed_date from all_unsubscriber where unsubscriber_from REGEXP '" . $store_id[0]['store_id'] . "' order by unsubscribed_date ";
                     if ($store_id[0]['UnSubscribedCount'] >= 3) {
 //                            $this->db->limit('3');
                         $query .= "Limit 3";
