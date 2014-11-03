@@ -423,7 +423,7 @@
 
         <div class="portlet-body">
 
-          <table id="table-exact-target" class="table table-striped table-bordered">
+          <table id="table-bepoz" class="table table-striped table-bordered">
             <thead>
               <tr>
                 <!--<th style="width: 8%">UID</th>-->

@@ -246,7 +246,7 @@
             
           </div> <!-- /.col -->
 
-        </div> <!-- /.row -->
+        </div> <!-- /.row --><input type="hidden" id="base_url_final" value="<?php echo base_url()?>index.php/">
 <div class="portlet">
 
         <h3 class="portlet-title">
@@ -268,22 +268,7 @@
               </tr>
             </thead>
             <tbody>
-                <?php if($Subscriber != NULL)
 
-                    foreach ($Subscriber as $key => $value) {
-                        ?>
-                <tr>
-                            <!--<td style="width: 8%"><?php echo $value['id']?></td>-->
-                            <td style="width: 20%"><?php echo $value['firstname']?></td>
-                            <td style="width: 20%"><?php echo $value['lastname']?></td>
-                            <td style="width: 30%"><?php echo $value['email']?></td>
-                            <!--<td style="width: 10%"><?php // echo $value['CreatedDate']?></td>-->
-                            <td style="width: 15%"><?php if(!empty($getLastSystemSyncsub)){ echo $getLastSystemSyncsub[0]['SyncTime']; } else{ echo '00:00';}?></td>
-                            <td style="width: 10%"><?php echo 'Active'?></td>
-                </tr>
-                <?php
-                    }
-                    ?>
             </tbody>
             <tfoot>
               <tr>
