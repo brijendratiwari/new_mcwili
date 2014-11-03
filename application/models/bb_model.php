@@ -363,4 +363,18 @@ class Bb_model extends CI_Model {
         }
     }
 
+    public function getLastSystemSyncsub() {
+        $query = "select max(sync_updates.SyncTime) as latest_sync from  (`store`) 
+                        join `sync_updates` on `store`.`id` = `sync_updates`.`store_id` where `store`.`name` = 'BB' ";
+        $res = $this->db->query($query);
+//        echo $this->db->last_query();
+        if ($res->num_rows() > 0) {
+            $data = $res->result_array();
+            $query1 = "select UnSubscribedCount,SubscribedCount,SyncTime from sync_updates where SyncTime = '" . $data[0]['latest_sync'] . "'";
+            $res1 = $this->db->query($query1);
+//        var_dump($res1->result_array());die;
+            return $res1->result_array();
+        }
+    }
+
 }

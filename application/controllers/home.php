@@ -54,12 +54,12 @@ class Home extends CI_Controller {
             $data['brandsSubscriber'] = $this->sync_model->getEt_SpecificListData(351484);
             $data['evans'] = $this->sync_model->getEt_SpecificListData(351486);
             $data['mount'] = $this->sync_model->getEt_SpecificListData(351488);
-             $data['et_celldoorSubscriber'] = $this->sync_model->getEt_SpecificListData(351485);
-             //get specific list data for ET 
+            $data['et_celldoorSubscriber'] = $this->sync_model->getEt_SpecificListData(351485);
+            //get specific list data for ET 
             $data['bb_brandsSubscriber'] = $this->sync_model->getBb_SpecificListData(351484);
             $data['bb_celldoorSubscriber'] = $this->sync_model->getBb_SpecificListData(351485);
 
-           
+
 
             $this->load->view('/common/header.php');
             $this->load->view('/common/navbar.php');
@@ -108,7 +108,7 @@ class Home extends CI_Controller {
             $data['FilterCustomer'] = $this->bb_model->get_bbFilterCustomer();
             $data['FilterUnSubscriber'] = $this->et_model->get_etFilterUnSubscriber();
             $data['checkSystemSync'] = $this->et_model->checkSystemSync();
-            $data['getLastSystemSyncsub'] = $this->et_model->getLastSystemSyncsub();
+            $data['getLastSystemSyncsub'] = $this->bb_model->getLastSystemSyncsub();
 //            var_dump($data['getLastSystemSyncsub']);die;
             $this->load->view('/common/header.php');
             $this->load->view('/common/navbar.php');
@@ -166,6 +166,256 @@ class Home extends CI_Controller {
         } else {
             redirect('login/index');
         }
+    }
+
+    public function get_all_mdb() {         //Ajax table data for MDB.
+        $sLimit = "";
+        $lenght = 10;
+        $str_point = 0;
+        $getLastSystemSyncsub = $this->mdb_model->getLastSystemSync();
+        if (isset($getLastSystemSyncsub[0]['SyncTime'])) {
+            $sync = $getLastSystemSyncsub[0]['SyncTime'];
+        } else {
+            $sync = 0;
+        }
+
+        $col_sort = array("id", "firstname", "lastname", "email");
+
+        $order_by = "id";
+        $temp = 'asc';
+
+        if (isset($_GET['iSortCol_0'])) {
+            $index = $_GET['iSortCol_0'];
+            $temp = $_GET['sSortDir_0'] === 'asc' ? 'asc' : 'desc';
+            $order_by = $col_sort[$index];
+        }
+        $this->mdb_model->db->select('id,firstname,lastname,email');
+
+        if (isset($_GET['sSearch']) && $_GET['sSearch'] != "") {
+            $words = $_GET['sSearch'];
+            for ($i = 0; $i < count($col_sort); $i++) {
+
+                $this->mdb_model->db->or_like($col_sort[$i], $words, "both");
+            }
+        }
+
+        $this->mdb_model->db->order_by($order_by, $temp);
+
+        if (isset($_GET['iDisplayStart']) && $_GET['iDisplayLength'] != '-1') {
+            $str_point = intval($_GET['iDisplayStart']);
+            $lenght = intval($_GET['iDisplayLength']);
+            $records = $this->mdb_model->db->get("master_subscriber", $lenght, $str_point);
+        } else {
+            $records = $this->mdb_model->db->get("master_subscriber");
+        }
+        $total_record = $this->db->count_all('master_subscriber');
+        $output = array(
+            "sEcho" => intval($_GET['sEcho']),
+            "iTotalRecords" => $total_record,
+            "iTotalDisplayRecords" => $total_record,
+            "aaData" => array()
+        );
+
+        $result = $records->result_array();
+
+        $i = 0;
+        $final = array();
+        foreach ($result as $val) {
+
+            $output['aaData'][] = array("DT_RowId" => $val['firstname'], $val['firstname'], $val['lastname'], $val['email'], $sync, 'Active');
+        }
+
+        echo json_encode($output);
+        die;
+    }
+
+    public function get_all_et() {   // ajax table data for ET.
+        $sLimit = "";
+        $lenght = 10;
+        $str_point = 0;
+
+        $getLastSystemSyncsub = $this->et_model->getLastSystemSyncsub();
+
+        if (isset($getLastSystemSyncsub[0]['SyncTime'])) {
+            $sync = $getLastSystemSyncsub[0]['SyncTime'];
+        } else {
+            $sync = 0;
+        }
+
+        $col_sort = array("ID", "FirstName", "LastName", "EmailAddress", "CreatedDate");
+
+        $order_by = "id";
+        $temp = 'asc';
+
+        if (isset($_GET['iSortCol_0'])) {
+            $index = $_GET['iSortCol_0'];
+            $temp = $_GET['sSortDir_0'] === 'asc' ? 'asc' : 'desc';
+            $order_by = $col_sort[$index];
+        }
+        $this->mdb_model->db->select($col_sort);
+
+        if (isset($_GET['sSearch']) && $_GET['sSearch'] != "") {
+            $words = $_GET['sSearch'];
+            for ($i = 0; $i < count($col_sort); $i++) {
+
+                $this->mdb_model->db->or_like($col_sort[$i], $words, "both");
+            }
+        }
+
+        $this->mdb_model->db->order_by($order_by, $temp);
+
+        if (isset($_GET['iDisplayStart']) && $_GET['iDisplayLength'] != '-1') {
+            $str_point = intval($_GET['iDisplayStart']);
+            $lenght = intval($_GET['iDisplayLength']);
+            $records = $this->mdb_model->db->get("et_subscriber", $lenght, $str_point);
+        } else {
+            $records = $this->mdb_model->db->get("et_subscriber");
+        }
+        $total_record = $this->db->count_all('et_subscriber');
+        $output = array(
+            "sEcho" => intval($_GET['sEcho']),
+            "iTotalRecords" => $total_record,
+            "iTotalDisplayRecords" => $total_record,
+            "aaData" => array()
+        );
+
+        $result = $records->result_array();
+
+        $i = 0;
+        $final = array();
+        foreach ($result as $val) {
+
+            $output['aaData'][] = array("DT_RowId" => $val['FirstName'], $val['FirstName'], $val['LastName'], $val['EmailAddress'], $val['CreatedDate'], $sync, 'Active');
+        }
+
+        echo json_encode($output);
+        die;
+    }
+
+    public function get_all_bb() {   // ajax table data for BlackBoxx.
+        $sLimit = "";
+        $lenght = 10;
+        $str_point = 0;
+
+        $getLastSystemSyncsub = $this->bb_model->getLastSystemSyncsub();
+
+        if (isset($getLastSystemSyncsub[0]['SyncTime'])) {
+            $sync = $getLastSystemSyncsub[0]['SyncTime'];
+        } else {
+            $sync = 0;
+        }
+
+        $col_sort = array("id", "firstname", "lastname", "email", "created");
+
+        $order_by = "id";
+        $temp = 'asc';
+
+        if (isset($_GET['iSortCol_0'])) {
+            $index = $_GET['iSortCol_0'];
+            $temp = $_GET['sSortDir_0'] === 'asc' ? 'asc' : 'desc';
+            $order_by = $col_sort[$index];
+        }
+        $this->mdb_model->db->select($col_sort);
+
+        if (isset($_GET['sSearch']) && $_GET['sSearch'] != "") {
+            $words = $_GET['sSearch'];
+            for ($i = 0; $i < count($col_sort); $i++) {
+
+                $this->mdb_model->db->or_like($col_sort[$i], $words, "both");
+            }
+        }
+
+        $this->mdb_model->db->order_by($order_by, $temp);
+
+        if (isset($_GET['iDisplayStart']) && $_GET['iDisplayLength'] != '-1') {
+            $str_point = intval($_GET['iDisplayStart']);
+            $lenght = intval($_GET['iDisplayLength']);
+            $records = $this->mdb_model->db->get("bb_customer", $lenght, $str_point);
+        } else {
+            $records = $this->mdb_model->db->get("bb_customer");
+        }
+        $total_record = $this->db->count_all('bb_customer');
+        $output = array(
+            "sEcho" => intval($_GET['sEcho']),
+            "iTotalRecords" => $total_record,
+            "iTotalDisplayRecords" => $total_record,
+            "aaData" => array()
+        );
+
+        $result = $records->result_array();
+
+        $i = 0;
+        $final = array();
+        foreach ($result as $val) {
+
+            $output['aaData'][] = array("DT_RowId" => $val['firstname'], $val['firstname'], $val['lastname'], $val['email'], $val['created'], $sync, 'Active');
+        }
+
+        echo json_encode($output);
+        die;
+    }
+
+    public function get_all_bp() {   // ajax table data for BePoz.
+        $sLimit = "";
+        $lenght = 10;
+        $str_point = 0;
+//SELECT * FROM (`et_subscriber_list_rel`) JOIN `et_subscriber` ON `et_subscriber`.`SubscriberID`=`et_subscriber_list_rel`.`SubscriberID` WHERE `ListID` IN ('352396') GROUP BY `et_subscriber_list_rel`.`SubscriberID`
+        $getLastSystemSyncsub = $this->bb_model->getLastSystemSyncsub();
+
+        if (isset($getLastSystemSyncsub[0]['SyncTime'])) {
+            $sync = $getLastSystemSyncsub[0]['SyncTime'];
+        } else {
+            $sync = 0;
+        }
+
+        $col_sort = array("id", "firstname", "lastname", "email", "created");
+
+        $order_by = "id";
+        $temp = 'asc';
+
+        if (isset($_GET['iSortCol_0'])) {
+            $index = $_GET['iSortCol_0'];
+            $temp = $_GET['sSortDir_0'] === 'asc' ? 'asc' : 'desc';
+            $order_by = $col_sort[$index];
+        }
+        $this->mdb_model->db->select("*");
+
+        if (isset($_GET['sSearch']) && $_GET['sSearch'] != "") {
+            $words = $_GET['sSearch'];
+            for ($i = 0; $i < count($col_sort); $i++) {
+
+                $this->mdb_model->db->or_like($col_sort[$i], $words, "both");
+            }
+        }
+
+        $this->mdb_model->db->order_by($order_by, $temp);
+
+        if (isset($_GET['iDisplayStart']) && $_GET['iDisplayLength'] != '-1') {
+            $str_point = intval($_GET['iDisplayStart']);
+            $lenght = intval($_GET['iDisplayLength']);
+            $records = $this->mdb_model->db->get("bb_customer", $lenght, $str_point);
+        } else {
+            $records = $this->mdb_model->db->get("bb_customer");
+        }
+        $total_record = $this->db->count_all('bb_customer');
+        $output = array(
+            "sEcho" => intval($_GET['sEcho']),
+            "iTotalRecords" => $total_record,
+            "iTotalDisplayRecords" => $total_record,
+            "aaData" => array()
+        );
+
+        $result = $records->result_array();
+
+        $i = 0;
+        $final = array();
+        foreach ($result as $val) {
+
+            $output['aaData'][] = array("DT_RowId" => $val['firstname'], $val['firstname'], $val['lastname'], $val['email'], $val['created'], $sync, 'Active');
+        }
+
+        echo json_encode($output);
+        die;
     }
 
 }
