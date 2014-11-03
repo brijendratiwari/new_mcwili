@@ -26,7 +26,7 @@ class Login extends CI_Controller {
         if (!empty($csv_data)) {
         $list[0] = array("AccountID", "AccNumber", "CardNumber", "AccountGroupID", "AccountGroupName", "Title", "FirstName", "LastName", "Status", "OtherName_1", "OtherName_2", "Street_1", "Street_2", "Street_3", "City", "State", "Country", "PCode", "PhoneHome", "PhoneWork", "Fax", "Mobile", "Email1st", "Email2nd", "PostalStreet_1", "PostalStreet_2", "PostalStreet_3", "PostalCity", "PostalState", "PostalCountry", "PostalPCode", "Comment", "DateJoined", "DateNextRenewal", "DateLastRenewal", "DateExpiry", "MembershipID", "RenewalID", "DateBirth", "Gender", "DoNotPost", "DoNotEmail", "DoNotSMS", "DoNotPhone", "ExportCode_1", "ExportCode_2", "CreditLimit", "DiscountLimit", "StopCredit", "CashOnly", "PointsEarnOK", "PointsRedeemOK", "PointsPercent", "UseCALinkPnts", "AccountType", "AllowedVenueID", "AllowedOperatorID", "PriceNumber", "PricingMode", "PricingSortType", "PricingPercent", "DiscNumber", "UseGroupSettings", "StatemtComment", "OrderNumReqd", "CustomFlag_1", "CustomFlag_2", "CustomFlag_3", "CustomFlag_4", "CustomFlag_5", "CustomFlag_6", "CustomFlag_7", "CustomFlag_8", "CustomFlag_9", "CustomFlag_10", "CustomNum_1", "CustomNum_2", "CustomNum_3", "CustomNum_4", "CustomNum_5", "CustomDate_1", "CustomDate_2", "CustomDate_3", "CustomDate_4", "CustomDate_5", "CustomText_1", "CustomText_2", "CustomText_3", "CustomText_4", "CustomText_5", "CustomText_6", "CustomText_7", "CustomText_8", "CustomText_9", "CustomText_10", "CustomText_11", "CustomText_12", "CustomText_13", "CustomText_14", "CustomText_15", "CustomText_16", "CustomText_17", "CustomText_18", "CustomText_19", "CustomText_20", "Account Balance", "GrossTurnover", "NettTurnover", "PointsEarned", "PointsRedeemed", "Joining Fees Paid", "Renewals Paid", "Count of Visits", "DateLastTrans");
             foreach ($csv_data as $record) {
-                $list[$i] = array("", "", "", "", "", "", $record["firstname"], $record["lastname"], $record["status"], "", "", "", "", "", "", "", "", "", "", "", "", "", $record["email"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", $record["DOB"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "","", "",$record['BN'],$record['BO'],$record['BP'],$record['BQ'],$record['BR'], "", "", "", "", "", "", "", "", "", "", $record["CreatedDate"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+                $list[$i] = array("", "", "", "", "", "", $record["firstname"], $record["lastname"], 1, "", "", "", "", "", "", "", "", "", "", "", "", "", $record["email"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", $record["DOB"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "","", "",$record['BN'],$record['BO'],$record['BP'],$record['BQ'],$record['BR'], "", "", "", "", "", "", "", "", "", "", $record["CreatedDate"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
                 $i++;
             }
 
@@ -50,6 +50,72 @@ class Login extends CI_Controller {
         }
     }
 
+    public function new_csv_BepozUpload($data,$lists) {       // New code for uploading the file.
+//        $csv_data = $this->mdb_model->get_csvSubscriber();
+        
+        $list = array();
+        $i = 1;
+        if (!empty($data)) {
+        if(in_array("351486", $lists))  {  
+            $BP = "y";
+        }else{
+            $BP='n';
+        }
+        if(in_array("351488", $lists))  {  
+            $BQ = "y";
+        }else{
+            $BQ='n';
+        }
+        if(in_array("351487", $lists))  {  
+            $BR = "y";
+        }else{
+            $BR='n';
+        }
+        if(in_array("351484", $lists))  {  
+            $BO = "y";
+        }else{
+            $BO='n';
+        }
+        $list[0] = array("AccountID", "AccNumber", "CardNumber", "AccountGroupID", "AccountGroupName", "Title", "FirstName", "LastName", "Status", "OtherName_1", "OtherName_2", "Street_1", "Street_2", "Street_3", "City", "State", "Country", "PCode", "PhoneHome", "PhoneWork", "Fax", "Mobile", "Email1st", "Email2nd", "PostalStreet_1", "PostalStreet_2", "PostalStreet_3", "PostalCity", "PostalState", "PostalCountry", "PostalPCode", "Comment", "DateJoined", "DateNextRenewal", "DateLastRenewal", "DateExpiry", "MembershipID", "RenewalID", "DateBirth", "Gender", "DoNotPost", "DoNotEmail", "DoNotSMS", "DoNotPhone", "ExportCode_1", "ExportCode_2", "CreditLimit", "DiscountLimit", "StopCredit", "CashOnly", "PointsEarnOK", "PointsRedeemOK", "PointsPercent", "UseCALinkPnts", "AccountType", "AllowedVenueID", "AllowedOperatorID", "PriceNumber", "PricingMode", "PricingSortType", "PricingPercent", "DiscNumber", "UseGroupSettings", "StatemtComment", "OrderNumReqd", "CustomFlag_1", "CustomFlag_2", "CustomFlag_3", "CustomFlag_4", "CustomFlag_5", "CustomFlag_6", "CustomFlag_7", "CustomFlag_8", "CustomFlag_9", "CustomFlag_10", "CustomNum_1", "CustomNum_2", "CustomNum_3", "CustomNum_4", "CustomNum_5", "CustomDate_1", "CustomDate_2", "CustomDate_3", "CustomDate_4", "CustomDate_5", "CustomText_1", "CustomText_2", "CustomText_3", "CustomText_4", "CustomText_5", "CustomText_6", "CustomText_7", "CustomText_8", "CustomText_9", "CustomText_10", "CustomText_11", "CustomText_12", "CustomText_13", "CustomText_14", "CustomText_15", "CustomText_16", "CustomText_17", "CustomText_18", "CustomText_19", "CustomText_20", "Account Balance", "GrossTurnover", "NettTurnover", "PointsEarned", "PointsRedeemed", "Joining Fees Paid", "Renewals Paid", "Count of Visits", "DateLastTrans");
+                $list[1] = array("", "", "", "", "", "", $data["firstname"], $data["lastname"], $data["Status"], "", "", "", "", "", "", "", "", "", "", "", "", "", $data["email"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", $data["dob"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "","", "","n",$BO,$BP,$BQ,$BR, "", "", "", "", "", "", "", "", "", "", $data["created"], "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+                
+//die;
+            $request = curl_init('http://mcwilliams.dev-iis.com/api.php');
+
+// send a file
+            curl_setopt($request, CURLOPT_POST, true);
+            curl_setopt(
+                    $request, CURLOPT_POSTFIELDS, array(
+                    'data' => json_encode($list)
+                     ));
+
+// output the response
+            curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
+            echo curl_exec($request);
+
+// close the session
+            curl_close($request);
+            
+            $csv_data = array(
+                'email' => $data["email"],
+                'firstname' => $data["firstname"],
+                'lastname' => $data["lastname"],
+                'DOB' => $data["dob"],
+                'status' => $data["Status"],
+                'BP_UID' => $data['BP_UID'],
+                'CreatedDate' =>  $data["created"],
+                'BR' => $BR,
+                'BO' => $BO,
+                'BP' => $BP,
+                'BQ' => $BQ,
+                'BN' => 'n'
+                );
+            
+            $this->mdb_model->insert_cvs($csv_data);
+        
+        }
+    }
+    
     public function test() {
         $black_boxx = new Black_boxx();
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
@@ -133,6 +199,11 @@ class Login extends CI_Controller {
     public function createuser() {
         $black_boxx = new Black_boxx();
         $exact_target = new Exact_target();
+            if (isset($_POST['pref'])) {
+            array_push($_POST['pref'], '351485');
+        } else {
+            $_POST['pref'] = array('351485');
+        }
         $res = $this->bb_model->get_where('bb_customer', array("email" => $_POST['email']));
         if ($res) {
 
@@ -282,7 +353,7 @@ class Login extends CI_Controller {
                         $data = array("FirstName" => $_POST['firstname'], "LastName" => $_POST['lastname'], "DOB" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "SubscriberID" => $bp_uid, "EmailAddress" => $_POST['email'], "Status" => "Active", "CreatedDate" => $bp_user_created);
                         $this->et_model->add_etsubscriber($data);
                         $this->et_model->add_etsubscriber_rel($_POST['pref'], $bp_uid);
-                        $this->new_csv_upload();
+                        $this->new_csv_BepozUpload($bp_customer,$_POST['pref']);
                     }
                 }
             }

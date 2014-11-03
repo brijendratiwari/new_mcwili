@@ -372,7 +372,7 @@
                         <div class="row">
 
                             <section class="col col-10">
-                                <label class="checkbox" for="customer_terms_of_service" style="text-align:center">
+                                <label class="checkbox" for="customer_terms_of_service" >
 
                                     <input required="" id="customer_terms_of_service" name="agree" type="checkbox" value="1" />
                                     <i class="check"></i>

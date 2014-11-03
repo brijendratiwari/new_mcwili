@@ -17,9 +17,9 @@
                         <div class="well">
 
                             <ul class="icons-list text-md">
-                                <li><i class="icon-li fa fa-exchange text-success"></i>Sync <?php if(!empty($mdbSyncsub)){ echo $mdbSyncsub[0]['SubscribedCount'];} else{ echo '0';}  ?> subscribers <?php if(!empty($mdbSyncsub)){ echo $mdbSyncsub[0]['SyncTime'];} else{ echo "00:00";}?></li>
-                                <li><i class="icon-li fa fa-exchange text-success"></i>Sync <?php if(!empty($mdbSyncsub)){ echo $mdbSyncsub[0]['UnSubscribedCount'];} else{ echo '0';}  ?> Unsubscribers <?php if(!empty($mdbSyncsub)){ echo $mdbSyncsub[0]['SyncTime'];} else{ echo "00:00";}?></li>
-                                <li><i class="icon-li fa fa-exchange text-success"></i>Sync Successful <?php if(!empty($mdbSyncsub)){ echo $mdbSyncsub[0]['SyncTime']; } else{ echo '00:00';}?></li>
+                                <li><i class="icon-li fa fa-exchange text-success"></i>Sync <?php if(!empty($getLastSystemSyncsub)){ echo $getLastSystemSyncsub[0]['SubscribedCount'];} else{ echo '0';}  ?> subscribers,<?php if(!empty($getLastSystemSyncsub)){ echo $getLastSystemSyncsub[0]['SyncTime'];} else{ echo "00:00";}?></li>
+                                <li><i class="icon-li fa fa-exchange text-success"></i>Sync <?php if(!empty($getLastSystemSyncsub)){ echo $getLastSystemSyncsub[0]['UnSubscribedCount'];} else{ echo '0';}  ?> Unsubscribers,<?php if(!empty($getLastSystemSyncsub)){ echo $getLastSystemSyncsub[0]['SyncTime'];} else{ echo "00:00";}?></li>
+                                <li><i class="icon-li fa fa-exchange text-success"></i>Sync Successful <?php if(!empty($getLastSystemSyncsub)){ echo $getLastSystemSyncsub[0]['SyncTime']; } else{ echo '00:00';}?></li>
                             </ul>
                         </div> <!-- /.well -->
 
@@ -73,16 +73,12 @@
                         <div class="well">
 
                             <ul class="icons-list text-md">
-                                    <?php if(!empty($mdbSyncsub) && !empty($Subscriber)){
-                                      $res = array_slice($Subscriber,-3,3); ?>
-                                 <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $res[0]['firstname']." ".$res[0]['lastname'].",".$res[0]['email'].",".$mdbSyncsub[0]['SyncTime'];  ?> </li>
-                                <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $res[1]['firstname']." ".$res[1]['lastname'].",".$res[1]['email'].",".$mdbSyncsub[0]['SyncTime'];?></li>
-                                <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $res[2]['firstname']." ".$res[2]['lastname'].",".$res[2]['email'].",".$mdbSyncsub[0]['SyncTime'];?></li>
-                           <?php    }else{ ?>
-                                     <li><i class="icon-li fa fa-exchange text-success"></i>No New Subscriber Found</li>
-                                <li><i class="icon-li fa fa-exchange text-success"></i></i>No New Subscriber Found</li>
-                                <li><i class="icon-li fa fa-exchange text-success"></i></i>No New Subscriber Found</li>
- 
+                                           <?php if(!empty($lastSubscriber)){ 
+     foreach ($lastSubscriber as $last_subscriber)  {
+                      ?>
+                                <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $last_subscriber['firstname']." ".$last_subscriber['lastname'].",".$last_subscriber['email'].",".date("Y-m-d h:ma",  strtotime($last_subscriber['CreatedDate']));  ?> </li>
+                     <?php  } }else{ ?>
+                                <li><i class="icon-li fa fa-exchange text-success"></i>No New Subscriber Found</li>
                                 <?php } ?>
                             </ul>
                         </div> <!-- /.well -->
@@ -95,16 +91,11 @@
                         <div class="well">
 
               <ul class="icons-list text-md">
-                     <?php if(!empty($mdbSyncsub) && !empty($AllUnSubscriber)){
-                       $res = array_slice($AllUnSubscriber,-3,3); ?>
-                                <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $res[0]['firstname']." ".$res[0]['lastname'].",".$res[0]['email'].",".$mdbSyncsub[0]['SyncTime'];  ?> </li>
-                                <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $res[1]['firstname']." ".$res[1]['lastname'].",".$res[1]['email'].",".$mdbSyncsub[0]['SyncTime'];?></li>
-                                <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $res[2]['firstname']." ".$res[2]['lastname'].",".$res[2]['email'].",".$mdbSyncsub[0]['SyncTime'];?></li>
-                           <?php    }else{ ?>
+                     <?php if(!empty($lastUnSubscriber)){
+                        foreach ($lastUnSubscriber as $last_unsubscriber)  { ?>
+                                <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $last_unsubscriber['firstname']." ".$last_unsubscriber['lastname'].",".$last_unsubscriber['email'].",".date("Y-m-d h:ma",  strtotime($last_unsubscriber['unsubscribed_date']));  ?> </li>
+                        <?php   } }else{ ?>
                                 <li><i class="icon-li fa fa-exchange text-success"></i>UnSubscriber Not Found</li>
-                                <li><i class="icon-li fa fa-exchange text-success"></i></i>UnSubscriber Not Found</li>
-                                <li><i class="icon-li fa fa-exchange text-success"></i></i>UnSubscriber Not Found</li>
- 
                                 <?php } ?>
                             </ul>
                         </div> <!-- /.well -->
@@ -179,8 +170,8 @@
                                 </div> <!-- /.progress -->
 
                             </div> <!-- Sync-stat End -->
-                            <div class="col-sm-12 col-md-6"> <p class="row-stat-label">Subscribed</p><h3 class="row-stat-value" id="et_subscribe"><?php if(!empty($getLastSystemSyncsub)){ echo $getLastSystemSyncsub[0]['SubscribedCount'];} else{ echo "0";}  ?></h3><hr><p class="row-stat-label">Last Sync</p><h3 class="row-stat-value" id="et_lastsync"><?php if(!empty($getLastSystemSyncsub)){ echo date('h:ma',  strtotime($getLastSystemSyncsub[0]['SyncTime']));}else{ echo "00:00";}?></h3></div>
-                            <div class="col-sm-12  col-md-6"><p class="row-stat-label">UnSubscribers</p><h3 class="row-stat-value" id="et_unsubscribe"><?php if(!empty($getLastSystemSyncsub)){ echo $getLastSystemSyncsub[0]['UnSubscribedCount'];}else{ echo "0";}?></h3><hr><p class="row-stat-label">Next Sync</p><h3 class="row-stat-value" id="exact_target_timer">85Sec</h3></div> 
+                            <div class="col-sm-12 col-md-6"> <p class="row-stat-label">Subscribed</p><h3 class="row-stat-value" id="et_subscribe"><?php if(!empty($etSyncsub)){ echo $etSyncsub[0]['SubscribedCount'];} else{ echo "0";}  ?></h3><hr><p class="row-stat-label">Last Sync</p><h3 class="row-stat-value" id="et_lastsync"><?php if(!empty($etSyncsub)){ echo date('h:ma',  strtotime($etSyncsub[0]['SyncTime']));}else{ echo "00:00";}?></h3></div>
+                            <div class="col-sm-12  col-md-6"><p class="row-stat-label">UnSubscribers</p><h3 class="row-stat-value" id="et_unsubscribe"><?php if(!empty($etSyncsub)){ echo $etSyncsub[0]['UnSubscribedCount'];}else{ echo "0";}?></h3><hr><p class="row-stat-label">Next Sync</p><h3 class="row-stat-value" id="exact_target_timer">85Sec</h3></div> 
                             <h3 class="row-stat-value">&nbsp;</h3><hr><a id="et_stopsync" class="btn btn-primary disabled" href="javascript:stopallsync(1);">Stop Sync</a>   &nbsp;   <a id="et_startsync" class="btn btn-primary" href="javascript:startsync(1);">Manual Sync</a>
                         </div> <!-- /.row-stat -->
 
@@ -324,7 +315,7 @@
 
         <div class="portlet-body">
   <?php // var_dump($AllUnSubscriber); ?>
-          <table class="table table-striped table-bordered" id="table-1">
+          <table class="table table-striped table-bordered" id="table-2">
             <thead>
               <tr>
                 <!--<th style="width: 30%">ID</th>-->
@@ -347,7 +338,7 @@
                             <td style="width: 15%"><?php echo $value['firstname']?></td>
                             <td style="width: 15%"><?php echo $value['lastname']?></td>
                             <td style="width: 20%"><?php echo $value['email']?></td>
-                            <td style="width: 10%"><?php  if(in_array("4",$store_name)){echo "y";}else{echo "n";}?></td>
+                            <td style="width: 10%"><?php  if(in_array("5",$store_name)){echo "y";}else{echo "n";}?></td>
                             <td style="width: 10%"><?php  if(in_array("1",$store_name)){echo "y";}else{echo "n";}?></td>
                             <td style="width: 15%"><?php  if(in_array("2",$store_name)){echo "y";}else{echo "n";}?></td>
                             <td style="width: 10%"><?php  if(in_array("3",$store_name)){echo "y";}else{echo "n";}?></td>
@@ -380,17 +371,5 @@
 
 </div> <!-- .content -->
 </div> <!-- .content -->
-<?php 
-//  if(!empty($getLastSystemSyncsub)){ $time=  date("h:m:sa",strtotime($getLastSystemSyncsub[0]['SyncTime']));}
-//  if(!empty($getAutoSyncUpdate)){ $next=$getAutoSyncUpdate[0]['time_duration'];
-//$endTime = strtotime("+30'".$next."'minutes", strtotime($time));
-////echo $next_time = strtotime(date('h:i:s', $time))."<br>";
-//$current_time=strtotime(date('h:i:sa',time()));
-//$diff = $endTime-$current_time;
-//if($diff){
-//    $timer_time= date('m', $diff);
-//}
-//  }
-?>
 <!--<input type="hidden" name="auto_sync_time" value="<?php   echo $timer_time; ?>" id="auto_sync_time">-->
 <script src="<?php echo base_url();?>assets/js/sync.js"></script>

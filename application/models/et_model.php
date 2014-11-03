@@ -269,9 +269,11 @@ class Et_model extends CI_Model {
                         $arr['two'] = 2;
                     } else {
                         $arr['one'] = 1;
+                        $arr['five'] = 5;
                     }
                 } else {
                     $arr['one'] = 1;
+                    $arr['five'] = 5;
                 }
             }
         }

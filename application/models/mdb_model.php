@@ -21,6 +21,7 @@ class Mdb_model extends CI_Model {
             return NULL;
         }
     }
+
     public function get_csvSubscriber() {
 //        $res = $this->db->query('SELECT firstname,lastname,email,BP_UID,DOB,status,CreatedDate FROM master_subscriber WHERE master_subscriber.email NOT IN (SELECT email FROM csv_subscriber)');
         $res = $this->db->query('
@@ -69,8 +70,8 @@ AND et1.`SubscriberID` = m1.`ET_UID`)
 IS NULL , "n", "y" ) AS BN 
 FROM `master_subscriber` AS m1 WHERE m1.email NOT IN (SELECT email FROM csv_subscriber)
 ');
-        
-         if ($res->num_rows() > 0) {
+
+        if ($res->num_rows() > 0) {
             $data = $res->result_array();
 //              var_dump($data);die;
             return $data;
@@ -91,18 +92,21 @@ FROM `master_subscriber` AS m1 WHERE m1.email NOT IN (SELECT email FROM csv_subs
 //        } else {
 //            return NULL;
 //        }
-
-    }else{
-        return NULL;
+        } else {
+            return NULL;
+        }
     }
-    }
-   public function update_csvSubscriber($data){
-        
-                    $this->db->insert_batch('csv_subscriber', $data);
-             
-         }
 
-   public function get_mdbUnSubscriber() {
+    public function update_csvSubscriber($data) {
+
+        $this->db->insert_batch('csv_subscriber', $data);
+    }
+
+    public function insert_cvs($data) {
+        $this->db->insert('csv_subscriber', $data);
+    }
+
+    public function get_mdbUnSubscriber() {
         $this->db->where("status", 0);
         $res = $this->db->get('master_subscriber');
         if ($res->num_rows() > 0) {
@@ -177,6 +181,7 @@ FROM `master_subscriber` AS m1 WHERE m1.email NOT IN (SELECT email FROM csv_subs
     }
 
 }
+
 //SELECT m1 . * ,
 //if(
 //(SELECT if( et1.`ID` IS NULL , 'n', 'y' ) AS id

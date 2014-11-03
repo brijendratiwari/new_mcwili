@@ -255,8 +255,8 @@
                     <fieldset>					
                         <div class="row">
                            
-                            <section class="col col-12" style="font-size: 15px;font-weight: bold;">
-                            Thank you for becoming a member
+                            <section class="col col-12" style="font-size: 15px;">
+                            <span style="font-size: 20px;">Congratulations you're now a member.</span><br><br>
                                  We are so glad to have you as part of our family story.
                                  <br><br>
                                  You will be the first to know about our upcoming offers,new releases and special events,
@@ -284,7 +284,7 @@
                             <section class="col col-6">
                            </section>
                             <section class="col col-6">
-                                <a class="button" href="<?php echo base_url(); ?>index.php/login/bepoz_sign_up">Back To Signup</a> 
+                                <a class="button" href="<?php echo base_url(); ?>index.php/login/bepoz_sign_up">Back</a> 
                             </section>
                         </div>
                     </fieldset>

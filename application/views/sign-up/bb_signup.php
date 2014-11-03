@@ -93,7 +93,14 @@
         <meta name="generator" content="WordPress 4.0" />
         <style type="text/css"> .check{display: inline-block !important;
     position: relative !important;
-    top: 2px !important;}.easingsliderlite { } .easingsliderlite .easingsliderlite-arrows.easingsliderlite-next, .easingsliderlite .easingsliderlite-arrows.easingsliderlite-prev { } .easingsliderlite .easingsliderlite-arrows.easingsliderlite-next { background-image: url(https://mcwilliams-cd-prod.elasticbeanstalk.com/wp-content/plugins/easing-slider/images/slideshow_arrow_next.png); } .easingsliderlite .easingsliderlite-arrows.easingsliderlite-prev { background-image: url(https://mcwilliams-cd-prod.elasticbeanstalk.com/wp-content/plugins/easing-slider/images/slideshow_arrow_prev.png); } .easingsliderlite .easingsliderlite-pagination .easingsliderlite-icon { } .easingsliderlite .easingsliderlite-pagination .easingsliderlite-icon.inactive { background-image: url(https://mcwilliams-cd-prod.elasticbeanstalk.com/wp-content/plugins/easing-slider/images/slideshow_icon_inactive.png); } .easingsliderlite .easingsliderlite-pagination .easingsliderlite-icon.active { background-image: url(https://mcwilliams-cd-prod.elasticbeanstalk.com/wp-content/plugins/easing-slider/images/slideshow_icon_active.png); } </style> </head>
+    top: 2px !important;}
+            .acc-info {
+    float: left;
+    text-align: left;
+    width: 100%;
+    padding-bottom: 10px;
+}
+.easingsliderlite { } .easingsliderlite .easingsliderlite-arrows.easingsliderlite-next, .easingsliderlite .easingsliderlite-arrows.easingsliderlite-prev { } .easingsliderlite .easingsliderlite-arrows.easingsliderlite-next { background-image: url(https://mcwilliams-cd-prod.elasticbeanstalk.com/wp-content/plugins/easing-slider/images/slideshow_arrow_next.png); } .easingsliderlite .easingsliderlite-arrows.easingsliderlite-prev { background-image: url(https://mcwilliams-cd-prod.elasticbeanstalk.com/wp-content/plugins/easing-slider/images/slideshow_arrow_prev.png); } .easingsliderlite .easingsliderlite-pagination .easingsliderlite-icon { } .easingsliderlite .easingsliderlite-pagination .easingsliderlite-icon.inactive { background-image: url(https://mcwilliams-cd-prod.elasticbeanstalk.com/wp-content/plugins/easing-slider/images/slideshow_icon_inactive.png); } .easingsliderlite .easingsliderlite-pagination .easingsliderlite-icon.active { background-image: url(https://mcwilliams-cd-prod.elasticbeanstalk.com/wp-content/plugins/easing-slider/images/slideshow_icon_active.png); } </style> </head>
     <body class="blog logged_out bbxx_users_new">
         <div id="scrollTop" style="display: none;"></div>
 
@@ -330,16 +337,21 @@
                             <div class="row">
                                 
                                 <section class="col col-10">
-                                    <label class="checkbox" for="customer_terms_of_service" style="text-align:center">
-                                       
-                                        <input required="" id="customer_terms_of_service" name="agree" type="checkbox" value="1" />
-                                         <i class="check"></i>
-                                        I agree with the Terms and Condition <abbr title="required">*</abbr>
+                                    <span class="acc-info">By creating an account, you will be added to the McWilliam's cellar door mailing list. You may unsubscribe at
+  any time. </span>
+<label style="padding:0" for="customer_terms_of_service" class="checkbox">
                                     </label>
-                                </section>
-                                <section class="col col-2">
-                                    <input type="submit" class="button" value="Continue" > 
-                                </section>
+                                    
+                                    <div class="col-md-12">
+                                        <div class="col-md-9" style="float:left;padding-top: 18px;">
+                                            <input type="checkbox" value="1" name="agree" id="customer_terms_of_service" required="">
+                                         <i class="check"></i>
+                                       I agree with the Terms and Condition. <abbr title="required">*</abbr> 
+                                        </div>
+                                        <div class="col-md-3" style="float:right">
+                                         <input type="submit" class="button" value="Continue" style="float:left"> 
+                                        </div>
+                                    </div>
                             </div>
                         </fieldset>
                     </form>			

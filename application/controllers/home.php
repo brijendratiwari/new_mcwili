@@ -34,23 +34,29 @@ class Home extends CI_Controller {
         if ($this->session->userdata('logged_in')) {
             $data['autosync'] = $this->sync_model->checkautosync();
             $data['Subscriber'] = $this->mdb_model->get_mdbSubscriber();
-//            $data['bbCustomer'] = $this->sync_model->get_bb_customer();
-//            $data['etSubscriber'] = $this->sync_model->get_etSubscriber();
             $data['bpSubscriber'] = $this->sync_model->get_bpSubscriber();
             $data['mdbSubscriber'] = $this->sync_model->get_mdbSubscriber();
-            $data['getLastSystemSyncsub'] = $this->sync_model->getLastSystemSyncsub('ET');
-            $data['bbSyncsub'] = $this->sync_model->getLastSystemSyncsub('BB');
-            $data['mdbSyncsub'] = $this->sync_model->getLastSystemSyncsub('MDB');
-            $data['bpSyncsub'] = $this->sync_model->getLastSystemSyncsub('BP');
-//            var_dump($data['Subscriber']);die;
+            //get all recently added subscriber and unsubscriber.
+            $data['getLastSystemSyncsub'] = $this->sync_model->getLastSystemSyncsub();
+            
+            $data['etSyncsub'] = $this->sync_model->getallListSubsciberCount('ET');
+            $data['bbSyncsub'] = $this->sync_model->getallListSubsciberCount('BB');
+            $data['mdbSyncsub'] = $this->sync_model->getallListSubsciberCount('MDB');
+            $data['bpSyncsub'] = $this->sync_model->getallListSubsciberCount('BP');
+            
+            // get last three subscriber
+            $data['lastSubscriber'] = $this->sync_model->getLastSubscriber();
+           // get last three unsubscriber
+            $data['lastUnSubscriber'] = $this->sync_model->getLastUnSubscriber();
 
             $data['UnSubscriber'] = $this->sync_model->get_UnSubscriber();
+           
             $data['AllUnSubscriber'] = $this->sync_model->get_AllUnSubscriber();
+
             $data['getAutoSyncUpdate'] = $this->sync_model->get_getAutoSyncUpdate();
 
             //get specific list data for ET 
             $data['mcSubscriber'] = $this->sync_model->getEt_SpecificListData(351487);
-//            var_dump($data['mcSubscriber']);die;
             $data['brandsSubscriber'] = $this->sync_model->getEt_SpecificListData(351484);
             $data['evans'] = $this->sync_model->getEt_SpecificListData(351486);
             $data['mount'] = $this->sync_model->getEt_SpecificListData(351488);

@@ -69,7 +69,24 @@ class Sync_model extends CI_Model {
         $this->db->insert("sync_updates", $data);
     }
 
-    public function getLastSystemSyncsub($name) {
+    public function getLastSystemSyncsub() {
+        $this->db->select('max(id) as id');
+        $res = $this->db->get('sync_updates');
+        if ($res->num_rows() > 0) {
+            $id = $res->result_array();
+            $this->db->select('store_id,SubscribedCount,UnSubscribedCount,SyncTime');
+            $this->db->where('id', $id[0]['id']);
+            $res1 = $this->db->get('sync_updates');
+            if ($res1->num_rows() > 0) {
+                return $res1->result_array();
+            } else {
+                return NULL;
+            }
+        }
+    }
+    
+
+        public function getallListSubsciberCount($name) {
         $query = "select max(sync_updates.id) as latest_sync from  (`store`) 
                         join `sync_updates` on `store`.`id` = `sync_updates`.`store_id` where `store`.`name` = '" . $name . "' ";
         $res = $this->db->query($query);
@@ -79,8 +96,8 @@ class Sync_model extends CI_Model {
             $res1 = $this->db->query($query1);
             return $res1->result_array();
         }
-    }
-
+        }
+    
     public function get_UnSubscriber() {
         $this->db->select('master_subscriber.id,master_subscriber.firstname,master_subscriber.lastname,master_subscriber.email,store.name as storename');
         $this->db->where('master_subscriber.status', 0);
@@ -168,7 +185,7 @@ class Sync_model extends CI_Model {
         $res = $this->db->get('master_subscriber');
         if ($res->num_rows() > 0) {
             foreach ($res->result_array() as $key => $value) {
-                    $data[] = $value['email'];
+                $data[] = $value['email'];
             }
 //            $data['email'] = implode(",", $data['email']);
             return $data;
@@ -232,7 +249,7 @@ class Sync_model extends CI_Model {
             JOIN master_subscriber ON master_subscriber.ET_UID = et_subscriber_list_rel.SubscriberID   
            JOIN et_subscriber ON et_subscriber.SubscriberID = master_subscriber.ET_UID   
             where et_subscriber_list_rel.`ListID` = '" . $list_id . "' and master_subscriber.status = 1 ";
-   
+
         $res = $this->db->query($query);
         if ($res->num_rows() > 0) {
             foreach ($res->result_array() as $key => $value) {
@@ -242,6 +259,104 @@ class Sync_model extends CI_Model {
             return $data;
         } else {
             return NULL;
+        }
+    }
+
+    public function getLastSubscriber() {
+
+        $this->db->select('max(id) as id');
+        $res = $this->db->get('sync_updates');
+        if ($res->num_rows() > 0) {
+            $id = $res->result_array();
+            $this->db->select('store_id,SubscribedCount');
+            $this->db->where('id', $id[0]['id']);
+            $res1 = $this->db->get('sync_updates');
+            if ($res1->num_rows() > 0) {
+                $store_id = $res1->result_array();
+                $this->db->select('name');
+                $this->db->where('id', $store_id[0]['store_id']);
+                $res2 = $this->db->get('store');
+                if ($res2->num_rows() > 0) {
+                    $sync_table = $res2->result_array();
+                    if ($sync_table[0]['name'] == "MDB") {
+                        $this->db->order_by('id', 'DESC');
+
+                        if ($store_id[0]['SubscribedCount'] >= 3) {
+                            $this->db->limit('3');
+                        } else {
+                            $this->db->limit($store_id[0]['SubscribedCount']);
+                        }
+                        $this->db->select('firstname,lastname,email,CreatedDate');
+                        $res3 = $this->db->get('master_subscriber');
+                    }
+                    if ($sync_table[0]['name'] == "ET") {
+                        $this->db->order_by('id', 'DESC');
+                        if ($store_id[0]['SubscribedCount'] >= 3) {
+                            $this->db->limit('3');
+                        } else {
+                            $this->db->limit($store_id[0]['SubscribedCount']);
+                        }
+                        $this->db->select('FirstName as firstname,LastName as lastname, EmailAddress as email,CreatedDate');
+                        $res3 = $this->db->get('et_subscriber');
+                    }
+                    if ($sync_table[0]['name'] == "BB") {
+                        $this->db->order_by('id', 'DESC');
+                        if ($store_id[0]['SubscribedCount'] >= 3) {
+                            $this->db->limit('3');
+                        } else {
+                            $this->db->limit($store_id[0]['SubscribedCount']);
+                        }
+                        $this->db->select('firstname,lastname,email,created as CreatedDate');
+                        $res3 = $this->db->get('bb_customer');
+                    }
+                    if ($sync_table[0]['name'] == "BP") {
+                        $this->db->order_by('id', 'DESC');
+                        if ($store_id[0]['SubscribedCount'] >= 3) {
+                            $this->db->limit('3');
+                        } else {
+                            $this->db->limit($store_id[0]['SubscribedCount']);
+                        }
+                        $this->db->select('firstname,lastname,email,created as CreatedDate');
+                        $res3 = $this->db->get('bp_customer');
+                    }
+                    return $res3->result_array();
+                }
+            } else {
+                return NULL;
+            }
+        }
+    }
+    public function getLastUnSubscriber() {
+           $this->db->select('max(id) as id');
+        $res = $this->db->get('sync_updates');
+        if ($res->num_rows() > 0) {
+            $id = $res->result_array();
+            $this->db->select('store_id,UnSubscribedCount');
+            $this->db->where('id', $id[0]['id']);
+            $res1 = $this->db->get('sync_updates');
+            if ($res1->num_rows() > 0) {
+                $store_id = $res1->result_array();
+                $this->db->select('name');
+                $this->db->where('id', $store_id[0]['store_id']);
+                $res2 = $this->db->get('store');
+                if ($res2->num_rows() > 0) {
+                    $sync_table = $res2->result_array();
+//                        $this->db->order_by('id', 'DESC');
+                 $query=  "select firstname,lastname,email,unsubscribed_date from all_unsubscriber where unsubscriber_from REGEXP '" . $store_id[0]['store_id'] . "' order by id ";
+                        if ($store_id[0]['UnSubscribedCount'] >= 3) {
+//                            $this->db->limit('3');
+                            $query .= "Limit 3";
+                            
+                        } else {
+                            $query .= "Limit ".$store_id[0]['UnSubscribedCount']."";
+                        }
+                        $res3 = $this->db->query($query);
+                        return $res3->result_array();
+                    }
+          
+            } else {
+                return NULL;
+            }
         }
     }
 
