@@ -436,22 +436,7 @@
               </tr>
             </thead>
             <tbody>
-                <?php if($Subscriberdetail != NULL)
-
-                    foreach ($Subscriberdetail as $key => $value) {
-                        ?>
-                <tr>
-                            <!--<td style="width: 8%"><?php echo $value['ID']?></td>-->
-                            <td style="width: 15%"><?php echo $value['FirstName']?></td>
-                            <td style="width: 15%"><?php echo $value['LastName']?></td>
-                            <td style="width: 20%"><?php echo $value['EmailAddress']?></td>
-                            <td style="width: 10%"><?php echo $value['CreatedDate']?></td>
-                            <td style="width: 15%"><?php if(!empty($getLastSystemSyncsub)){ echo $getLastSystemSyncsub[0]['SyncTime']; } else{ echo '00:00';}?></td>
-                            <td style="width: 10%"><?php echo $value['Status']?></td>
-                </tr>
-                <?php
-                    }
-                    ?>
+ 
             </tbody>
             <tfoot>
               <tr>
