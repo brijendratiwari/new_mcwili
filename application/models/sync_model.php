@@ -85,15 +85,25 @@ class Sync_model extends CI_Model {
         }
     }
 
-    public function getallListSubsciberCount($name) {
-        $query = "select max(sync_updates.id) as latest_sync from  (`store`) 
-                        join `sync_updates` on `store`.`id` = `sync_updates`.`store_id` where `store`.`name` = '" . $name . "' ";
-        $res = $this->db->query($query);
+    public function getallListSubsciberCount($store_id) {
+//        $query = "select max(sync_updates.SyncTime) as latest_sync from  (`store`) 
+//                        join `sync_updates` on `store`.`id` = `sync_updates`.`store_id` where `store`.`name` = '" . $name . "' ";
+        $this->db->select('max(id) as latest_id');
+        $this->db->where('store_id',$store_id);
+        $res = $this->db->get('sync_updates');
         if ($res->num_rows() > 0) {
-            $data = $res->result_array();
-            $query1 = "select UnSubscribedCount,SubscribedCount,SyncTime from sync_updates where id = '" . $data[0]['latest_sync'] . "'";
-            $res1 = $this->db->query($query1);
-            return $res1->result_array();
+            $id = $res->result_array();
+            $this->db->select('UnSubscribedCount,SubscribedCount,SyncTime');
+            $this->db->where('id', $id[0]['latest_id']);
+            $res1 = $this->db->get('sync_updates');
+            if ($res1->num_rows() > 0) {
+//                var_dump($res1->result_array());die;
+                return $res1->result_array();
+            } else {
+                return NULL;
+            }
+        } else {
+            return NULL;
         }
     }
 
@@ -289,7 +299,7 @@ class Sync_model extends CI_Model {
                         $res3 = $this->db->get('master_subscriber');
                     }
                     if ($sync_table[0]['name'] == "ET") {
-                       $this->db->order_by('CreatedDate', 'DESC');
+                        $this->db->order_by('CreatedDate', 'DESC');
                         if ($store_id[0]['SubscribedCount'] >= 3) {
                             $this->db->limit('3');
                         } else {

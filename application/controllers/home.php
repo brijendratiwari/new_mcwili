@@ -39,10 +39,10 @@ class Home extends CI_Controller {
             //get all recently added subscriber and unsubscriber.
             $data['getLastSystemSyncsub'] = $this->sync_model->getLastSystemSyncsub();
             
-            $data['etSyncsub'] = $this->sync_model->getallListSubsciberCount('ET');
-            $data['bbSyncsub'] = $this->sync_model->getallListSubsciberCount('BB');
-            $data['mdbSyncsub'] = $this->sync_model->getallListSubsciberCount('MDB');
-            $data['bpSyncsub'] = $this->sync_model->getallListSubsciberCount('BP');
+            $data['etSyncsub'] = $this->sync_model->getallListSubsciberCount(1);
+            $data['bbSyncsub'] = $this->sync_model->getallListSubsciberCount(2);
+            $data['mdbSyncsub'] = $this->sync_model->getallListSubsciberCount(5);
+            $data['bpSyncsub'] = $this->sync_model->getallListSubsciberCount(3);
             
             // get last three subscriber
             $data['lastSubscriber'] = $this->sync_model->getLastSubscriber();
