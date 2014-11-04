@@ -107,8 +107,9 @@ FROM `master_subscriber` AS m1 WHERE m1.email NOT IN (SELECT email FROM csv_subs
     }
 
     public function get_mdbUnSubscriber() {
-        $this->db->where("status", 0);
-        $res = $this->db->get('master_subscriber');
+          $query = "SELECT `all_unsubscriber`.`id`, `all_unsubscriber`.`email`, `all_unsubscriber`.`firstname`, `all_unsubscriber`.`lastname`, `all_unsubscriber`.`unsubscribed_date` FROM (`store`) JOIN `all_unsubscriber` ON `all_unsubscriber`.`unsubscriber_from` REGEXP `store`.`id` WHERE `store`.`name` = 'MDB' ";
+
+        $res = $this->db->query($query);
         if ($res->num_rows() > 0) {
             return $res->result_array();
         } else {
