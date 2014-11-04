@@ -70,6 +70,16 @@ class Bb_model extends CI_Model {
             return NULL;
         }
     }
+    public function get_bbcustomerCount() {
+//        $list_id = array('351484', '351485','351487');
+//        $this->db->where_in('ListID', $list_id);
+        $res = $this->db->get('bb_customer');
+        if ($res->num_rows() > 0) {
+            return $res->num_rows();
+        } else {
+            return NULL;
+        }
+    }
 
     public function get_bbUnSubscriber() {
 
@@ -91,7 +101,7 @@ class Bb_model extends CI_Model {
         $query2 = "select * from bb_customer where `created` between '" . date("Y-m", strtotime("-2 months")) . "-01' and '" . date("Y-m", strtotime("-1 months")) . "-01'";
         $query3 = "select * from bb_customer where `created` between '" . date("Y-m-d", strtotime("-30 days")) . "' and '" . date("Y-m-d", strtotime("-0 days")) . "'";
         $query4 = "select * from bb_customer where `created` between '" . date("Y-m-d", strtotime("-60 days")) . "' and '" . date("Y-m-d", strtotime("-30 days")) . "'";
-        $query5 = "select * from bb_customer where `created` > DATE_SUB(NOW(), INTERVAL 1 DAY)";
+        $query5 = "select * from bb_customer where `created` > CURDATE()";
 //        $query1 = "select count(id) from et_subscriber where CreatedDate >= DATEADD(MONTH, -1, GETDATE()) " ;
         $res = $this->db->query($query);
         $res1 = $this->db->query($query1);
@@ -141,7 +151,7 @@ class Bb_model extends CI_Model {
         $query5 = "select * from et_subscriber_list_rel 
                    JOIN master_subscriber ON master_subscriber.ET_UID = et_subscriber_list_rel.SubscriberID
                    JOIN bb_customer ON bb_customer.BB_UID = master_subscriber.BB_UID
-                   where et_subscriber_list_rel.`CreatedDate` > DATE_SUB(NOW(), INTERVAL 1 DAY) and  et_subscriber_list_rel.`ListID`  = '" . $list_id . "'";
+                   where et_subscriber_list_rel.`CreatedDate` > CURDATE() and  et_subscriber_list_rel.`ListID`  = '" . $list_id . "'";
 
 //        $query1 = "select count(id) from et_subscriber where CreatedDate >= DATEADD(MONTH, -1, GETDATE()) " ;
 //        echo $query6;die;
@@ -286,6 +296,19 @@ class Bb_model extends CI_Model {
         $res = $this->db->get();
         if ($res->num_rows() > 0) {
             return $res->result_array();
+        } else {
+            return NULL;
+        }
+    }
+    public function get_bpSubscriberCount() {
+        $this->db->select('*');
+        $this->db->group_by('`et_subscriber_list_rel`.`SubscriberID`');
+        $this->db->where_in('ListID', array('352396'));
+        $this->db->from('et_subscriber_list_rel');
+        $this->db->join('et_subscriber', 'et_subscriber.SubscriberID=et_subscriber_list_rel.SubscriberID');
+        $res = $this->db->get();
+        if ($res->num_rows() > 0) {
+            return $res->num_rows();
         } else {
             return NULL;
         }

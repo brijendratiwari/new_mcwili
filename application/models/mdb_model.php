@@ -21,6 +21,15 @@ class Mdb_model extends CI_Model {
             return NULL;
         }
     }
+    public function get_mdbSubscriberCount() {
+        $this->db->where("status", 1);
+        $res = $this->db->get('master_subscriber');
+        if ($res->num_rows() > 0) {
+            return $res->num_rows();
+        } else {
+            return NULL;
+        }
+    }
 
     public function get_csvSubscriber() {
 //        $res = $this->db->query('SELECT firstname,lastname,email,BP_UID,DOB,status,CreatedDate FROM master_subscriber WHERE master_subscriber.email NOT IN (SELECT email FROM csv_subscriber)');

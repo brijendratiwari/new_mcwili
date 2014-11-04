@@ -16,9 +16,9 @@
             <div class="col-sm-6 col-md-3">
               <div class="row-stat">
                 <p class="row-stat-label">Total Customers</p>
-                <h3 class="row-stat-value"><?php echo count($Customer); ?></h3>
+                <h3 class="row-stat-value"><?php if($Customer !=0 ) {echo $Customer;} else{ echo "0";} ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if(count($Customer) !=0 ){ echo number_format(((count($Customer)-$FilterCustomer['year'])*100)/count($Customer),2); }else{ echo '0';} ?>% from previous year</span>
+                    <?php if($Customer !=0 ){ echo number_format((($Customer-$FilterCustomer['year'])*100)/$Customer,2); }else{ echo '0';} ?>% from previous year</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
 
@@ -45,7 +45,7 @@
                 <p class="row-stat-label">Today</p>
                 <h3 class="row-stat-value"><?php echo $FilterCustomer['today']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-              <?php if($FilterCustomer['today'] !=0 ) { echo number_format((($FilterCustomer['today'])*100)/count($Customer),2); } else{ echo '0';} ?>%                    
+              <?php if($FilterCustomer['today'] !=0 ) { echo number_format((($FilterCustomer['today'])*100)/$Customer,2); } else{ echo '0';} ?>%                    
                 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->

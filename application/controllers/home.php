@@ -82,7 +82,7 @@ class Home extends CI_Controller {
         if ($this->session->userdata('logged_in')) {
 
             $data['list'] = $this->et_model->getList();
-            $data['Subscriber'] = $this->et_model->get_etSubscriber();
+            $data['Subscriber'] = $this->et_model->get_etSubscriberCount();
             $data['UnSubscriber'] = $this->et_model->get_UnSubscriber();
             $data['FilterSubscriber'] = $this->et_model->get_etFilterSubscriber();
             $data['FilterUnSubscriber'] = $this->et_model->get_etFilterUnSubscriber();
@@ -104,7 +104,7 @@ class Home extends CI_Controller {
         if ($this->session->userdata('logged_in')) {
             $data['list'] = $this->et_model->getList();
             $data['Subscriberdetail'] = $this->bb_model->get_bbSubscriberDetail();
-            $data['Customer'] = $this->bb_model->get_bbcustomer();
+            $data['Customer'] = $this->bb_model->get_bbcustomerCount();
 //            var_dump($data['Customer']);die;
             $data['mcSubscriber'] = $this->bb_model->get_bbListFilterSubscriber(351487);
             $data['brandsSubscriber'] = $this->bb_model->get_bbListFilterSubscriber(351484);
@@ -130,7 +130,7 @@ class Home extends CI_Controller {
         if ($this->session->userdata('logged_in')) {
 
             $data['list'] = $this->et_model->getList();
-            $data['Subscriber'] = $this->mdb_model->get_mdbSubscriber();
+            $data['Subscriber'] = $this->mdb_model->get_mdbSubscriberCount();
             $data['UnSubscriber'] = $this->mdb_model->get_mdbUnSubscriber();
             $data['FilterSubscriber'] = $this->mdb_model->get_mdbFilterSubscriber();
             $data['FilterUnSubscriber'] = $this->et_model->get_etFilterUnSubscriber();
@@ -152,7 +152,7 @@ class Home extends CI_Controller {
         if ($this->session->userdata('logged_in')) {
             $data['list'] = $this->et_model->getList();
             $data['Subscriberdetail'] = $this->bb_model->get_bpSubscriberDetail();
-            $data['Subscriber'] = $this->bb_model->get_bpSubscriber();
+            $data['Subscriber'] = $this->bb_model->get_bpSubscriberCount();
             $data['mcSubscriber'] = $this->bb_model->get_bpListFilterSubscriber(351487); //McWilliams Wine
             $data['brandsSubscriber'] = $this->bb_model->get_bpListFilterSubscriber(351484); //Brands Laira
             $data['mount'] = $this->bb_model->get_bpListFilterSubscriber(351488); //Mount Pleasant
