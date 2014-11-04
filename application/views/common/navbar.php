@@ -167,12 +167,12 @@
                 </a>
               </li>
 
-              <li>
+<!--              <li>
                 <a href="#">
                   <i class="fa fa-dollar"></i> 
                   &nbsp;&nbsp;Plans & Billing
                 </a>
-              </li>
+              </li>-->
 
               <li>
                 <a href="#">
