@@ -149,7 +149,7 @@ class Sync extends CI_Controller {
             $controller_et->et_mdb_update();
             $this->sync_model->delTempSync($storeid);
             $this->sync_model->insert_sync_updates($data);
-            $data['SyncTime'] = date('h:ma', time());
+            $data['SyncTime'] = date_format(date_create(date("Y-m-d H:i:s")),'g:i A');
         } else {
 //            $type->sync_model->delTempSync($id);
             echo 'stop';
@@ -261,7 +261,7 @@ class Sync extends CI_Controller {
 
             $this->sync_model->delTempSync($storeid);
             $this->sync_model->insert_sync_updates($data);
-            $data['SyncTime'] = date('h:ma', time());
+            $data['SyncTime'] = date_format(date_create(date("Y-m-d H:i:s")),'g:i A');
             if ($flag) {
                 return $data;
             } else {
@@ -368,7 +368,7 @@ class Sync extends CI_Controller {
 
             $this->sync_model->delTempSync($storeid);
             $this->sync_model->insert_sync_updates($data);
-            $data['SyncTime'] = date('h:ma', time());
+            $data['SyncTime'] = date_format(date_create(date("Y-m-d H:i:s")),'g:i A');
             if ($flag) {
                 return $data;
             } else {
@@ -416,7 +416,7 @@ class Sync extends CI_Controller {
                 $data['store_id'] = $storeid;
                 $this->sync_model->delTempSync($storeid);
                 $this->sync_model->insert_sync_updates($data);
-                $data['SyncTime'] = date('h:ma', time());
+                $data['SyncTime'] = date_format(date_create(date("Y-m-d H:i:s")),'g:i A');
             }
              $login = new Login();
              $login->new_csv_upload();

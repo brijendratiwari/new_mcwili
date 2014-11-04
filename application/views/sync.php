@@ -76,7 +76,7 @@
                                            <?php if(!empty($lastSubscriber)){ 
      foreach ($lastSubscriber as $last_subscriber)  {
                       ?>
-                                <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $last_subscriber['firstname']." ".$last_subscriber['lastname'].",".$last_subscriber['email'].",".date("Y-m-d h:ma",  strtotime($last_subscriber['CreatedDate']));  ?> </li>
+                                <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $last_subscriber['firstname']." ".$last_subscriber['lastname'].",".$last_subscriber['email'].",".  date_format(date_create($last_subscriber['CreatedDate']),'Y-m-d g:i A');  ?> </li>
                      <?php  } }else{ ?>
                                 <li><i class="icon-li fa fa-exchange text-success"></i>No New Subscriber Found</li>
                                 <?php } ?>
@@ -93,7 +93,7 @@
               <ul class="icons-list text-md">
                      <?php if(!empty($lastUnSubscriber)){
                         foreach ($lastUnSubscriber as $last_unsubscriber)  { ?>
-                                <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $last_unsubscriber['firstname']." ".$last_unsubscriber['lastname'].",".$last_unsubscriber['email'].",".date("Y-m-d h:ma",  strtotime($last_unsubscriber['unsubscribed_date']));  ?> </li>
+                  <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $last_unsubscriber['firstname']." ".$last_unsubscriber['lastname'].",".$last_unsubscriber['email'].",".  date_format(date_create($last_unsubscriber['unsubscribed_date']),'Y-m-d g:i A');  ?> </li>
                         <?php   } }else{ ?>
                                 <li><i class="icon-li fa fa-exchange text-success"></i>UnSubscriber Not Found</li>
                                 <?php } ?>
