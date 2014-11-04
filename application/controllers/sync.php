@@ -143,7 +143,7 @@ class Sync extends CI_Controller {
                 $data['UnSubscribedCount'] = 0;
             }
             $data['type'] = $type;
-            $data['SyncTime'] = date('Y-m-d h:m:s', time());
+            $data['SyncTime'] = date("Y-m-d H:i:s");
             $data['store_id'] = $storeid;
 
             $controller_et->et_mdb_update();
@@ -256,7 +256,7 @@ class Sync extends CI_Controller {
             $new_unsub = $this->et_model->get_count('all_unsubscriber', $storeid);
             $data['UnSubscribedCount'] = $new_unsub - $old_unsub;
             $data['type'] = $type;
-            $data['SyncTime'] = date('Y-m-d h:m:s', time());
+            $data['SyncTime'] =  date("Y-m-d H:i:s");
             $data['store_id'] = $storeid;
 
             $this->sync_model->delTempSync($storeid);
@@ -363,7 +363,7 @@ class Sync extends CI_Controller {
             $new_unsub = $this->et_model->get_count('all_unsubscriber', $storeid);
             $data['UnSubscribedCount'] = $new_unsub - $old_unsub;
             $data['type'] = $type;
-            $data['SyncTime'] = date('Y-m-d h:m:s', time());
+            $data['SyncTime'] =  date("Y-m-d H:i:s");
             $data['store_id'] = $storeid;
 
             $this->sync_model->delTempSync($storeid);
@@ -412,7 +412,7 @@ class Sync extends CI_Controller {
                 $data['SyncTime'] = date('h:ma', time());
                 $data['UnSubscribedCount'] = $new_unsubs - $unsubs;
                 $data['type'] = $type;
-                $data['SyncTime'] = date('Y-m-d h:m:s', time());
+                $data['SyncTime'] =  date("Y-m-d H:i:s");
                 $data['store_id'] = $storeid;
                 $this->sync_model->delTempSync($storeid);
                 $this->sync_model->insert_sync_updates($data);
