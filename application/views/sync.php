@@ -139,7 +139,7 @@
                                 </div> <!-- /.progress -->
 
                             </div> <!-- Sync-stat End -->
-                            <div class="col-sm-12 col-md-6"> <p class="row-stat-label">Subscribed</p><h3 class="row-stat-value" id="mdb_subscribe"><?php if(!empty($mdbSyncsub)){ echo $mdbSyncsub[0]['SubscribedCount'];} else{ echo "0";}  ?></h3><hr><p class="row-stat-label">Last Sync</p><h3 class="row-stat-value" id="mdb_lastsync"><?php if(!empty($mdbSyncsub)){ echo date_format(date_create($bpSyncsub[0]['SyncTime']),'g:i A');}else{ echo "00:00";}?></h3></div>
+                            <div class="col-sm-12 col-md-6"> <p class="row-stat-label">Subscribed</p><h3 class="row-stat-value" id="mdb_subscribe"><?php if(!empty($mdbSyncsub)){ echo $mdbSyncsub[0]['SubscribedCount'];} else{ echo "0";}  ?></h3><hr><p class="row-stat-label">Last Sync</p><h3 class="row-stat-value" id="mdb_lastsync"><?php if(!empty($mdbSyncsub)){ echo date_format(date_create($mdbSyncsub[0]['SyncTime']),'g:i A');}else{ echo "00:00";}?></h3></div>
                             <div class="col-sm-12  col-md-6"><p class="row-stat-label">UnSubscribers</p><h3 class="row-stat-value" id="mdb_unsubscribe"><?php if(!empty($mdbSyncsub)){ echo $mdbSyncsub[0]['UnSubscribedCount'];}else{ echo "0";}?></h3><hr><p class="row-stat-label">Next Sync</p><h3 class="row-stat-value">0sec</h3></div> 
                             <h3 class="row-stat-value">&nbsp;</h3><hr><a id="mdb_stopsync" class="btn btn-primary  disabled" href="javascript:stopallsync(5);">Stop Sync</a>   &nbsp;   <a id="mdb_startsync" class="btn btn-primary" href="javascript:startmdbsync(5);">Manual Sync</a>
                         </div> <!-- /.row-stat -->
