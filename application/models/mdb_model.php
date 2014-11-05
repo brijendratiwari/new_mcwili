@@ -21,6 +21,15 @@ class Mdb_model extends CI_Model {
             return NULL;
         }
     }
+    public function get_mdbSubscriberCount() {
+        $this->db->where("status", 1);
+        $res = $this->db->get('master_subscriber');
+        if ($res->num_rows() > 0) {
+            return $res->num_rows();
+        } else {
+            return NULL;
+        }
+    }
 
     public function get_csvSubscriber() {
 //        $res = $this->db->query('SELECT firstname,lastname,email,BP_UID,DOB,status,CreatedDate FROM master_subscriber WHERE master_subscriber.email NOT IN (SELECT email FROM csv_subscriber)');
@@ -107,8 +116,9 @@ FROM `master_subscriber` AS m1 WHERE m1.email NOT IN (SELECT email FROM csv_subs
     }
 
     public function get_mdbUnSubscriber() {
-        $this->db->where("status", 0);
-        $res = $this->db->get('master_subscriber');
+          $query = "SELECT `all_unsubscriber`.`id`, `all_unsubscriber`.`email`, `all_unsubscriber`.`firstname`, `all_unsubscriber`.`lastname`, `all_unsubscriber`.`unsubscribed_date` FROM (`store`) JOIN `all_unsubscriber` ON `all_unsubscriber`.`unsubscriber_from` REGEXP `store`.`id` WHERE `store`.`name` = 'MDB' ";
+
+        $res = $this->db->query($query);
         if ($res->num_rows() > 0) {
             return $res->result_array();
         } else {

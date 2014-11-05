@@ -16,9 +16,9 @@
             <div class="col-sm-6 col-md-3">
               <div class="row-stat">
                 <p class="row-stat-label">Total Subscribers</p>
-                <h3 class="row-stat-value"><?php echo count($Subscriber); ?></h3>
+                <h3 class="row-stat-value"><?php if( $Subscriber !=0) {echo $Subscriber;} else{ echo "0";} ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if(count($Subscriber) !=0 ){ echo number_format(((count($Subscriber)-$FilterSubscriber['year'])*100)/count($Subscriber),2); }else{ echo '0';} ?>% from previous year</span>
+                    <?php if( $Subscriber !=0){ echo number_format((($Subscriber-$FilterSubscriber['year'])*100)/$Subscriber,2); }else{ echo '0';} ?>% from previous year</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
 
@@ -45,7 +45,7 @@
                 <p class="row-stat-label">Last 7 days</p>
                 <h3 class="row-stat-value"><?php echo $FilterSubscriber['last_seven']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-              <?php if($FilterSubscriber['last_seven'] !=0 ) { echo number_format((($FilterSubscriber['last_seven'])*100)/count($Subscriber),2); } else{ echo '0';} ?>%                    
+              <?php if($FilterSubscriber['last_seven'] !=0 ) { echo number_format((($FilterSubscriber['last_seven'])*100)/$Subscriber,2); } else{ echo '0';} ?>%                    
                 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
@@ -321,9 +321,9 @@
   <div class="well">
             
             <ul class="icons-list text-md">
-                <li><i class="icon-li fa fa-exchange text-success"></i>Sync <?php if(!empty($getLastSystemSyncsub)){ echo $getLastSystemSyncsub[0]['SubscribedCount']; }else{ echo '0';} ?> subscribers <?php if(!empty($getLastSystemSyncsub)){echo $getLastSystemSyncsub[0]['SyncTime']; } else{ echo "00:00";}?></li>
-              <li><i class="icon-li fa fa-exchange text-success"></i>Sync <?php if(!empty($getLastSystemSyncsub)){ echo $getLastSystemSyncsub[0]['UnSubscribedCount']; } else{ echo '0';}  ?> Unsubscribers <?php if(!empty($getLastSystemSyncsub)){ echo $getLastSystemSyncsub[0]['SyncTime']; } else{ echo '00:00';}?></li>
-               <li><i class="icon-li fa fa-exchange text-success"></i>Sync Successful <?php if(!empty($getLastSystemSyncsub)){ echo $getLastSystemSyncsub[0]['SyncTime']; } else{ echo '0';}?></li>
+                <li><i class="icon-li fa fa-exchange text-success"></i>Sync <?php if(!empty($getLastSystemSyncsub)){ echo $getLastSystemSyncsub[0]['SubscribedCount']; }else{ echo '0';} ?> subscribers <?php if(!empty($getLastSystemSyncsub)){echo date_format(date_create($getLastSystemSyncsub[0]['SyncTime']),"Y-m-d g:i A"); } else{ echo "00:00";}?></li>
+              <li><i class="icon-li fa fa-exchange text-success"></i>Sync <?php if(!empty($getLastSystemSyncsub)){ echo $getLastSystemSyncsub[0]['UnSubscribedCount']; } else{ echo '0';}  ?> Unsubscribers <?php if(!empty($getLastSystemSyncsub)){ echo date_format(date_create($getLastSystemSyncsub[0]['SyncTime']),"Y-m-d g:i A"); } else{ echo '00:00';}?></li>
+               <li><i class="icon-li fa fa-exchange text-success"></i>Sync Successful <?php if(!empty($getLastSystemSyncsub)){ echo date_format(date_create($getLastSystemSyncsub[0]['SyncTime']),"Y-m-d g:i A"); } else{ echo '00:00';}?></li>
 
             </ul>
           </div> <!-- /.well -->

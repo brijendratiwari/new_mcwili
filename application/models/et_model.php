@@ -106,6 +106,14 @@ class Et_model extends CI_Model {
             return NULL;
         }
     }
+    public function get_etSubscriberCount() {
+        $res = $this->db->get('et_subscriber');
+        if ($res->num_rows() > 0) {
+            return $res->num_rows();
+        } else {
+            return NULL;
+        }
+    }
 
     public function get_UnSubscriber() {
 
