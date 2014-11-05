@@ -509,7 +509,7 @@ class Home extends CI_Controller {
 
         $i = 0;
         $final = array();
-        $key = array();
+        $key = array(0);
         for ($i = 0; $i < count($result); $i++) {
             if ($result[$i]['ET_UID'] != "")
                 $key[] = "'" . $result[$i]['ET_UID'] . "'";
