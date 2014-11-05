@@ -17,9 +17,9 @@
                         <div class="well">
 
                             <ul class="icons-list text-md">
-                                <li><i class="icon-li fa fa-exchange text-success"></i>Sync <?php if(!empty($mdbSyncsub)){ echo $mdbSyncsub[0]['SubscribedCount'];} else{ echo '0';}  ?> subscribers <?php if(!empty($mdbSyncsub)){ echo $mdbSyncsub[0]['SyncTime'];} else{ echo "00:00";}?></li>
-                                <li><i class="icon-li fa fa-exchange text-success"></i>Sync <?php if(!empty($mdbSyncsub)){ echo $mdbSyncsub[0]['UnSubscribedCount'];} else{ echo '0';}  ?> Unsubscribers <?php if(!empty($mdbSyncsub)){ echo $mdbSyncsub[0]['SyncTime'];} else{ echo "00:00";}?></li>
-                                <li><i class="icon-li fa fa-exchange text-success"></i>Sync Successful <?php if(!empty($mdbSyncsub)){ echo $mdbSyncsub[0]['SyncTime']; } else{ echo '00:00';}?></li>
+                                <li><i class="icon-li fa fa-exchange text-success"></i>Sync <?php if(!empty($getLastSystemSyncsub)){ echo $getLastSystemSyncsub[0]['SubscribedCount'];} else{ echo '0';}  ?> subscribers,<?php if(!empty($getLastSystemSyncsub)){ echo date_format(date_create($getLastSystemSyncsub[0]['SyncTime']),'Y-m-d g:i A');} else{ echo "00:00";}?></li>
+                                <li><i class="icon-li fa fa-exchange text-success"></i>Sync <?php if(!empty($getLastSystemSyncsub)){ echo $getLastSystemSyncsub[0]['UnSubscribedCount'];} else{ echo '0';}  ?> Unsubscribers,<?php if(!empty($getLastSystemSyncsub)){ echo date_format(date_create($getLastSystemSyncsub[0]['SyncTime']),'Y-m-d g:i A');} else{ echo "00:00";}?></li>
+                                <li><i class="icon-li fa fa-exchange text-success"></i>Sync Successful <?php if(!empty($getLastSystemSyncsub)){ echo date_format(date_create($getLastSystemSyncsub[0]['SyncTime']),'Y-m-d g:i A'); } else{ echo '00:00';}?></li>
                             </ul>
                         </div> <!-- /.well -->
 
@@ -73,16 +73,12 @@
                         <div class="well">
 
                             <ul class="icons-list text-md">
-                                    <?php if(!empty($mdbSyncsub) && !empty($Subscriber)){
-                                      $res = array_slice($Subscriber,-3,3); ?>
-                                 <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $res[0]['firstname']." ".$res[0]['lastname'].",".$res[0]['email'].",".$mdbSyncsub[0]['SyncTime'];  ?> </li>
-                                <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $res[1]['firstname']." ".$res[1]['lastname'].",".$res[1]['email'].",".$mdbSyncsub[0]['SyncTime'];?></li>
-                                <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $res[2]['firstname']." ".$res[2]['lastname'].",".$res[2]['email'].",".$mdbSyncsub[0]['SyncTime'];?></li>
-                           <?php    }else{ ?>
-                                     <li><i class="icon-li fa fa-exchange text-success"></i>No New Subscriber Found</li>
-                                <li><i class="icon-li fa fa-exchange text-success"></i></i>No New Subscriber Found</li>
-                                <li><i class="icon-li fa fa-exchange text-success"></i></i>No New Subscriber Found</li>
- 
+                                           <?php if(!empty($lastSubscriber)){ 
+     foreach ($lastSubscriber as $last_subscriber)  {
+                      ?>
+                                <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $last_subscriber['firstname']." ".$last_subscriber['lastname'].",".$last_subscriber['email'].",".  date_format(date_create($last_subscriber['CreatedDate']),'Y-m-d g:i A');  ?> </li>
+                     <?php  } }else{ ?>
+                                <li><i class="icon-li fa fa-exchange text-success"></i>No New Subscriber Found</li>
                                 <?php } ?>
                             </ul>
                         </div> <!-- /.well -->
@@ -95,12 +91,10 @@
                         <div class="well">
 
               <ul class="icons-list text-md">
-                     <?php if(!empty($mdbSyncsub) && !empty($AllUnSubscriber)){
-                       $res = array_slice($AllUnSubscriber,-3,3); ?>
-                                <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $res[0]['firstname']." ".$res[0]['lastname'].",".$res[0]['email'].",".$mdbSyncsub[0]['SyncTime'];  ?> </li>
-                                <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $res[1]['firstname']." ".$res[1]['lastname'].",".$res[1]['email'].",".$mdbSyncsub[0]['SyncTime'];?></li>
-                                <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $res[2]['firstname']." ".$res[2]['lastname'].",".$res[2]['email'].",".$mdbSyncsub[0]['SyncTime'];?></li>
-                           <?php    }else{ ?>
+                     <?php if(!empty($lastUnSubscriber)){
+                        foreach ($lastUnSubscriber as $last_unsubscriber)  { ?>
+                  <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $last_unsubscriber['firstname']." ".$last_unsubscriber['lastname'].",".$last_unsubscriber['email'].",".  date_format(date_create($last_unsubscriber['unsubscribed_date']),'Y-m-d g:i A');  ?> </li>
+                        <?php   } }else{ ?>
                                 <li><i class="icon-li fa fa-exchange text-success"></i>UnSubscriber Not Found</li>
                                 <li><i class="icon-li fa fa-exchange text-success"></i></i>UnSubscriber Not Found</li>
                                 <li><i class="icon-li fa fa-exchange text-success"></i></i>UnSubscriber Not Found</li>
@@ -148,7 +142,7 @@
                                 </div> <!-- /.progress -->
 
                             </div> <!-- Sync-stat End -->
-                            <div class="col-sm-12 col-md-6"> <p class="row-stat-label">Subscribed</p><h3 class="row-stat-value" id="mdb_subscribe"><?php if(!empty($mdbSyncsub)){ echo $mdbSyncsub[0]['SubscribedCount'];} else{ echo "0";}  ?></h3><hr><p class="row-stat-label">Last Sync</p><h3 class="row-stat-value" id="mdb_lastsync"><?php if(!empty($mdbSyncsub)){ echo date('h:ma',  strtotime($mdbSyncsub[0]['SyncTime']));}else{ echo "00:00";}?></h3></div>
+                            <div class="col-sm-12 col-md-6"> <p class="row-stat-label">Subscribed</p><h3 class="row-stat-value" id="mdb_subscribe"><?php if(!empty($mdbSyncsub)){ echo $mdbSyncsub[0]['SubscribedCount'];} else{ echo "0";}  ?></h3><hr><p class="row-stat-label">Last Sync</p><h3 class="row-stat-value" id="mdb_lastsync"><?php if(!empty($mdbSyncsub)){ echo date_format(date_create($mdbSyncsub[0]['SyncTime']),'g:i A');}else{ echo "00:00";}?></h3></div>
                             <div class="col-sm-12  col-md-6"><p class="row-stat-label">UnSubscribers</p><h3 class="row-stat-value" id="mdb_unsubscribe"><?php if(!empty($mdbSyncsub)){ echo $mdbSyncsub[0]['UnSubscribedCount'];}else{ echo "0";}?></h3><hr><p class="row-stat-label">Next Sync</p><h3 class="row-stat-value">0sec</h3></div> 
                             <h3 class="row-stat-value">&nbsp;</h3><hr><a id="mdb_stopsync" class="btn btn-primary  disabled" href="javascript:stopallsync(5);">Stop Sync</a>   &nbsp;   <a id="mdb_startsync" class="btn btn-primary" href="javascript:startmdbsync(5);">Manual Sync</a>
                         </div> <!-- /.row-stat -->
@@ -179,8 +173,8 @@
                                 </div> <!-- /.progress -->
 
                             </div> <!-- Sync-stat End -->
-                            <div class="col-sm-12 col-md-6"> <p class="row-stat-label">Subscribed</p><h3 class="row-stat-value" id="et_subscribe"><?php if(!empty($getLastSystemSyncsub)){ echo $getLastSystemSyncsub[0]['SubscribedCount'];} else{ echo "0";}  ?></h3><hr><p class="row-stat-label">Last Sync</p><h3 class="row-stat-value" id="et_lastsync"><?php if(!empty($getLastSystemSyncsub)){ echo date('h:ma',  strtotime($getLastSystemSyncsub[0]['SyncTime']));}else{ echo "00:00";}?></h3></div>
-                            <div class="col-sm-12  col-md-6"><p class="row-stat-label">UnSubscribers</p><h3 class="row-stat-value" id="et_unsubscribe"><?php if(!empty($getLastSystemSyncsub)){ echo $getLastSystemSyncsub[0]['UnSubscribedCount'];}else{ echo "0";}?></h3><hr><p class="row-stat-label">Next Sync</p><h3 class="row-stat-value" id="exact_target_timer">85Sec</h3></div> 
+                            <div class="col-sm-12 col-md-6"> <p class="row-stat-label">Subscribed</p><h3 class="row-stat-value" id="et_subscribe"><?php if(!empty($etSyncsub)){ echo $etSyncsub[0]['SubscribedCount'];} else{ echo "0";}  ?></h3><hr><p class="row-stat-label">Last Sync</p><h3 class="row-stat-value" id="et_lastsync"><?php if(!empty($etSyncsub)){ echo date_format(date_create($etSyncsub[0]['SyncTime']),'g:i A');}else{ echo "00:00";}?></h3></div>
+                            <div class="col-sm-12  col-md-6"><p class="row-stat-label">UnSubscribers</p><h3 class="row-stat-value" id="et_unsubscribe"><?php if(!empty($etSyncsub)){ echo $etSyncsub[0]['UnSubscribedCount'];}else{ echo "0";}?></h3><hr><p class="row-stat-label">Next Sync</p><h3 class="row-stat-value" id="exact_target_timer">85Sec</h3></div> 
                             <h3 class="row-stat-value">&nbsp;</h3><hr><a id="et_stopsync" class="btn btn-primary disabled" href="javascript:stopallsync(1);">Stop Sync</a>   &nbsp;   <a id="et_startsync" class="btn btn-primary" href="javascript:startsync(1);">Manual Sync</a>
                         </div> <!-- /.row-stat -->
 
@@ -210,7 +204,7 @@
                                 </div> <!-- /.progress -->
 
                             </div> <!-- Sync-stat End -->
-                             <div class="col-sm-12 col-md-6"> <p class="row-stat-label">New Customer</p><h3 class="row-stat-value" id="bb_subscribe"><?php if(!empty($bbSyncsub)){ echo $bbSyncsub[0]['SubscribedCount'];} else{ echo "0";}  ?></h3><hr><p class="row-stat-label">Last Sync</p><h3 class="row-stat-value" id="bb_lastsync"><?php if(!empty($bbSyncsub)){ echo date('h:ma',  strtotime($bbSyncsub[0]['SyncTime']));}else{ echo "00:00";}?></h3></div>
+                            <div class="col-sm-12 col-md-6"> <p class="row-stat-label">New Customer</p><h3 class="row-stat-value" id="bb_subscribe"><?php if(!empty($bbSyncsub)){ echo $bbSyncsub[0]['SubscribedCount'];} else{ echo "0";}  ?></h3><hr><p class="row-stat-label">Last Sync</p><h3 class="row-stat-value" id="bb_lastsync"><?php if(!empty($bbSyncsub)){ echo date_format(date_create($bbSyncsub[0]['SyncTime']),'g:i A');}else{ echo "00:00";}?></h3></div>
                             <div class="col-sm-12  col-md-6"><p class="row-stat-label">UnSubscribed</p><h3 class="row-stat-value" id="bb_unsubscribe"><?php if(!empty($bbSyncsub)){ echo $bbSyncsub[0]['UnSubscribedCount'];}else{ echo "0";}?></h3><hr><p class="row-stat-label">Next Sync</p><h3 class="row-stat-value">85sec</h3></div> 
                             <h3 class="row-stat-value">&nbsp;</h3><hr><a id="bb_stopsync" class="btn btn-primary disabled" href="javascript:stopallsync(2);">Stop Sync</a>   &nbsp;   <a id="bb_startsync" class="btn btn-primary" href="javascript:startblackboxxsync(2);">Manual Sync</a>
                         </div> <!-- /.row-stat -->
@@ -240,7 +234,7 @@
                                 </div> <!-- /.progress -->
 
                             </div> <!-- Sync-stat End -->
-                            <div class="col-sm-12 col-md-6"> <p class="row-stat-label">New Customer</p><h3 class="row-stat-value" id="bp_subscribe"><?php if(!empty($bpSyncsub)){ echo $bpSyncsub[0]['SubscribedCount'];} else{ echo "0";}  ?></h3><hr><p class="row-stat-label">Last Sync</p><h3 class="row-stat-value" id="bp_lastsync"><?php if(!empty($bpSyncsub)){ echo date('h:ma',  strtotime($bpSyncsub[0]['SyncTime']));}else{ echo "00:00";}?></h3></div>
+                            <div class="col-sm-12 col-md-6"> <p class="row-stat-label">New Customer</p><h3 class="row-stat-value" id="bp_subscribe"><?php if(!empty($bpSyncsub)){ echo $bpSyncsub[0]['SubscribedCount'];} else{ echo "0";}  ?></h3><hr><p class="row-stat-label">Last Sync</p><h3 class="row-stat-value" id="bp_lastsync"><?php if(!empty($bpSyncsub)){ echo date_format(date_create($bpSyncsub[0]['SyncTime']),'g:i A');}else{ echo "00:00";}?></h3></div>
                             <div class="col-sm-12  col-md-6"><p class="row-stat-label">UnSubscribed</p><h3 class="row-stat-value" id="bp_unsubscribe"><?php if(!empty($bpSyncsub)){ echo $bpSyncsub[0]['UnSubscribedCount'];} else{ echo "0";}  ?></h3><hr><p class="row-stat-label">Next Sync</p><h3 class="row-stat-value">85sec</h3></div> 
                             <h3 class="row-stat-value">&nbsp;</h3><hr><a class="btn btn-primary disabled" id="bp_stopsync" href="javascript:stopallsync(3);">Stop Sync</a>   &nbsp;   <a class="btn btn-primary" id="bp_startsync"  href="javascript:startbepozsync(3);">Manual Sync</a>
                         </div> <!-- /.row-stat -->
