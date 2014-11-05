@@ -220,11 +220,18 @@ class Home extends CI_Controller {
         if (isset($_GET['iDisplayStart']) && $_GET['iDisplayLength'] != '-1') {
             $str_point = intval($_GET['iDisplayStart']);
             $lenght = intval($_GET['iDisplayLength']);
+            $this->mdb_model->db->like('status', 1);
             $records = $this->mdb_model->db->get("master_subscriber", $lenght, $str_point);
         } else {
+            $this->mdb_model->db->like('status', 1);
             $records = $this->mdb_model->db->get("master_subscriber");
         }
-        $total_record = $this->db->count_all('master_subscriber');
+//         $this->db->select('status',1);
+        $this->db->select('*');
+        $this->db->from('master_subscriber');
+        $this->db->where('status', 1);
+        $total_record = $this->db->count_all_results();
+//        $total_record = $this->db->count_all('master_subscriber');
         $output = array(
             "sEcho" => intval($_GET['sEcho']),
             "iTotalRecords" => $total_record,
@@ -480,11 +487,17 @@ class Home extends CI_Controller {
         if (isset($_GET['iDisplayStart']) && $_GET['iDisplayLength'] != '-1') {
             $str_point = intval($_GET['iDisplayStart']);
             $lenght = intval($_GET['iDisplayLength']);
+            $this->mdb_model->db->like('status', 1);
             $records = $this->mdb_model->db->get("master_subscriber", $lenght, $str_point);
         } else {
+            $this->mdb_model->db->like('status', 1);
             $records = $this->mdb_model->db->get("master_subscriber");
         }
-        $total_record = $this->db->count_all('master_subscriber');
+        $this->db->select('*');
+        $this->db->from('master_subscriber');
+        $this->db->where('status', 1);
+        $total_record = $this->db->count_all_results();
+//        $total_record = $this->db->count_all('master_subscriber');
         $output = array(
             "sEcho" => intval($_GET['sEcho']),
             "iTotalRecords" => $total_record,

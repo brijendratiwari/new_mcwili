@@ -8,8 +8,10 @@ $(document).ready(function(){
 //    $("#table-bepoz").dataTable();
     
     $("#table-exact-target").dataTable({
+              "oLanguage": {
+            "sProcessing": "<img src='"+base_url+"../assets/img/ajax-loader.gif'>"},
          "ordering": false,
-        "bProcessing": false,
+        "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": base_url + "home/get_all_mdb", "bDeferRender": true,
         "aLengthMenu": [[10, 30, 50, 100, -1], [10, 30, 50, 100, $("#sAll").val()]],
@@ -27,8 +29,10 @@ $(document).ready(function(){
         ]}
         );
     $("#exact-target").dataTable({
+                 "oLanguage": {
+            "sProcessing": "<img src='"+base_url+"../assets/img/ajax-loader.gif'>"},
          "ordering": false,
-        "bProcessing": false,
+        "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": base_url + "home/get_all_et", "bDeferRender": true,
         "aLengthMenu": [[10, 30, 50, 100, -1], [10, 30, 50, 100, $("#sAll").val()]],
@@ -46,8 +50,10 @@ $(document).ready(function(){
         ]}
         );
     $("#black-boxx").dataTable({
+             "oLanguage": {
+            "sProcessing": "<img src='"+base_url+"../assets/img/ajax-loader.gif'>"},
          "ordering": false,
-        "bProcessing": false,
+        "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": base_url + "home/get_all_bb", "bDeferRender": true,
         "aLengthMenu": [[10, 30, 50, 100, -1], [10, 30, 50, 100, $("#sAll").val()]],
@@ -65,8 +71,10 @@ $(document).ready(function(){
         ]}
         );
     $("#table-bepoz").dataTable({
+             "oLanguage": {
+            "sProcessing": "<img src='"+base_url+"../assets/img/ajax-loader.gif'>"},
          "ordering": false,
-        "bProcessing": false,
+        "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": base_url + "home/get_all_bp", "bDeferRender": true,
         "aLengthMenu": [[10, 30, 50, 100, -1], [10, 30, 50, 100, $("#sAll").val()]],
@@ -84,6 +92,10 @@ $(document).ready(function(){
         ]}
         );
     $("#table-sync").dataTable({
+             "oLanguage": {
+            "sProcessing": "<img src='"+base_url+"../assets/img/ajax-loader.gif'>",
+        },
+        
          "ordering": false,
         "bProcessing": true,
         "bServerSide": true,

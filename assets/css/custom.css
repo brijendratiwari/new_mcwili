@@ -15,3 +15,92 @@
  .subcol_BB{
         padding: 2px; min-width: 30%; float: left; text-align: center;
     }
+    #table-exact-target_processing > img {
+    left: 50%;
+    margin-top: 5%;
+    position: absolute;
+}
+/*css for loader*/
+#table-exact-target_processing {
+    left: 0;
+    position: relative;
+    text-align: center;
+    width: 100%;
+    z-index: 99;
+}
+    #exact-target_processing > img {
+    left: 50%;
+    margin-top: 5%;
+    position: absolute;
+}
+#exact-target_processing {
+    left: 0;
+    position: relative;
+    text-align: center;
+    width: 100%;
+    z-index: 99;
+}
+    #black-boxx_processing > img {
+    left: 50%;
+    margin-top: 5%;
+    position: absolute;
+}
+#black-boxx_processing {
+    left: 0;
+    position: relative;
+    text-align: center;
+    width: 100%;
+    z-index: 99;
+}
+    #black-boxx_processing > img {
+    left: 50%;
+    margin-top: 5%;
+    position: absolute;
+}
+#black-boxx_processing {
+    left: 0;
+    position: relative;
+    text-align: center;
+    width: 100%;
+    z-index: 99;
+}
+    #table-bepoz_processing > img {
+    left: 50%;
+    margin-top: 5%;
+    position: absolute;
+}
+#table-bepoz_processing {
+    left: 0;
+    position: relative;
+    text-align: center;
+    width: 100%;
+    z-index: 99;
+}
+    #table-sync_processing > img {
+    left: 50%;
+    margin-top: 5%;
+    position: absolute;
+}
+#table-sync_processing {
+    left: 0;
+    position: relative;
+    text-align: center;
+    width: 100%;
+    z-index: 99;
+}
+/*#########################*/
+.dataTables_filter input {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555;
+    height: 34px;
+    line-height: 1.42672;
+    padding: 6px 12px;
+}
+
+.dataTables_filter input :focus {
+    border-color: #66afe9;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
+    outline: 0 none;
+}
