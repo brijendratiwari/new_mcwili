@@ -267,8 +267,8 @@
                 <th style="width: 18%">Last Name</th>
                 <th style="width: 20%">Email</th>
                  <th style="width: 5%">MDB</th>
-                 <th style="width: 20%">Exact Target<div style="width: 200px;"><div class="subcol">MW</div><div class="subcol">MP</div><div class="subcol">BL</div><div class="subcol">EAT</div><div class="subcol">CD</div></div></th>
-                <th style="width: 15%">Blackbox<div><div class="subcol_BB">CD</div><div class="subcol_BB">FF</div><div class="subcol_BB">EB</div></div></th>
+                 <th style="width: 20%"><div style="text-align: center;">Exact Target</div><div style="width: 200px;"><div class="subcol">MW</div><div class="subcol">MP</div><div class="subcol">BL</div><div class="subcol">EAT</div><div class="subcol">CD</div></div></th>
+                <th style="width: 15%"><div style="text-align: center;">Blackbox</div><div><div class="subcol_BB">CD</div><div class="subcol_BB">FF</div><div class="subcol_BB">EB</div></div></th>
                 <th style="width: 10%">Bepoz</th>
               </tr>
             </thead>
