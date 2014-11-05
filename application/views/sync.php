@@ -283,8 +283,8 @@
                 <th style="width: 18%">Last Name</th>
                 <th style="width: 20%">Email</th>
                 <th style="width: 12%">MDB</th>
-                <th style="width: 12%">Exact Target</th>
-                <th style="width: 12%">Blackbox</th>
+                <th style="width: 20%"><div style="width: 200px;"><div class="subcol">MW</div><div class="subcol">MP</div><div class="subcol">BL</div><div class="subcol">EAT</div><div class="subcol">CD</div></div><div style="text-align: center;">Exact Target</div></th>
+                <th style="width: 15%"><div><div class="subcol_BB">CD</div><div class="subcol_BB">FF</div><div class="subcol_BB">EB</div></div><div style="text-align: center;">Blackbox</div></th>
                 <th style="width: 12%">Bepoz</th>
                
               </tr>
