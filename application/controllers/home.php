@@ -103,7 +103,7 @@ class Home extends CI_Controller {
 
         if ($this->session->userdata('logged_in')) {
             $data['list'] = $this->et_model->getList();
-            $data['Subscriberdetail'] = $this->bb_model->get_bbSubscriberDetail();
+//            $data['Subscriberdetail'] = $this->bb_model->get_bbSubscriberDetail();
             $data['Customer'] = $this->bb_model->get_bbcustomerCount();
 //            var_dump($data['Customer']);die;
             $data['mcSubscriber'] = $this->bb_model->get_bbListFilterSubscriber(351487);
@@ -112,7 +112,7 @@ class Home extends CI_Controller {
 //            var_dump($data['Subscriberdetail']);die;
             $data['UnSubscriber'] = $this->bb_model->get_bbUnSubscriber();
             $data['FilterCustomer'] = $this->bb_model->get_bbFilterCustomer();
-            $data['FilterUnSubscriber'] = $this->et_model->get_etFilterUnSubscriber();
+//            $data['FilterUnSubscriber'] = $this->et_model->get_etFilterUnSubscriber();
             $data['checkSystemSync'] = $this->et_model->checkSystemSync();
             $data['getLastSystemSyncsub'] = $this->bb_model->getLastSystemSyncsub();
 //            var_dump($data['getLastSystemSyncsub']);die;
@@ -151,7 +151,7 @@ class Home extends CI_Controller {
     public function bepoz() {
         if ($this->session->userdata('logged_in')) {
             $data['list'] = $this->et_model->getList();
-            $data['Subscriberdetail'] = $this->bb_model->get_bpSubscriberDetail();
+//            $data['Subscriberdetail'] = $this->bb_model->get_bpSubscriberDetail();
             $data['Subscriber'] = $this->bb_model->get_bpSubscriberCount();
             $data['mcSubscriber'] = $this->bb_model->get_bpListFilterSubscriber(351487); //McWilliams Wine
             $data['brandsSubscriber'] = $this->bb_model->get_bpListFilterSubscriber(351484); //Brands Laira
@@ -160,7 +160,7 @@ class Home extends CI_Controller {
 //            var_dump($data['Subscriberdetail']);die;
             $data['UnSubscriber'] = $this->bb_model->get_bbUnSubscriber();
             $data['FilterSubscriber'] = $this->bb_model->get_bpallFilterSubscriber();
-            $data['FilterUnSubscriber'] = $this->et_model->get_etFilterUnSubscriber();
+//            $data['FilterUnSubscriber'] = $this->et_model->get_etFilterUnSubscriber();
             $data['checkSystemSync'] = $this->et_model->checkSystemSync();
             $data['getLastSystemSyncsub'] = $this->et_model->getLastSystemSyncsub();
 //            var_dump($data['getLastSystemSyncsub']);die;
