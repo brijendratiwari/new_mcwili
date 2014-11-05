@@ -417,7 +417,7 @@
                 <th style="width: 15%">First Name</th>
                 <th style="width: 15%">Last Name</th>
                 <th style="width: 20%">Email</th>
-                <th style="width: 10%">Created At</th>
+                <th style="width: 10%">UnSubscribed At</th>
                 <th style="width: 15%">System Sync</th>
                 <th style="width: 10%">Status</th>
               </tr>
