@@ -83,6 +83,26 @@ $(document).ready(function(){
             
         ]}
         );
+    $("#table-sync").dataTable({
+         "ordering": false,
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": base_url + "home/get_all_sync", "bDeferRender": true,
+        "aLengthMenu": [[10, 30, 50, 100, -1], [10, 30, 50, 100, $("#sAll").val()]],
+//        "sPaginationType": "full_numbers",
+        "iDisplayLength": 10,
+        "bDestroy": true, //!!!--- for remove data table warning.
+        "aoColumnDefs": [
+            {"aTargets": [0]},
+            {"sClass": " aligncenter", "aTargets": [1]},
+            {"sClass": "eamil_conform aligncenter", "aTargets": [2]},
+            {"bSortable": false,"sClass": "hidden-phone", "aTargets": [3]},
+            {"bSortable": false,"sClass": "hidden-phone", "aTargets": [4]},
+            {"bSortable": false,"sClass": "hidden-phone", "aTargets": [5]},
+            {"bSortable": false,"sClass": "hidden-phone", "aTargets": [6]}
+            
+        ]}
+        );
     $("#unSubscriber").dataTable();
 });
 

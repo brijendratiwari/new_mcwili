@@ -238,7 +238,7 @@ class Sync_model extends CI_Model {
         $query = "select master_subscriber.email from et_subscriber_list_rel 
             JOIN master_subscriber ON master_subscriber.ET_UID = et_subscriber_list_rel.SubscriberID   
             JOIN bb_customer ON bb_customer.BB_UID = master_subscriber.BB_UID   
-            where et_subscriber_list_rel.`ListID` = '" . $list_id . "' and master_subscriber.status = 1  ";
+            where et_subscriber_list_rel.`ListID` = '" . $list_id . "' and master_subscriber.status = 1 ";
 
         $res = $this->db->query($query);
         if ($res->num_rows() > 0) {
@@ -258,7 +258,24 @@ class Sync_model extends CI_Model {
             JOIN master_subscriber ON master_subscriber.ET_UID = et_subscriber_list_rel.SubscriberID   
            JOIN et_subscriber ON et_subscriber.SubscriberID = master_subscriber.ET_UID   
             where et_subscriber_list_rel.`ListID` = '" . $list_id . "' and master_subscriber.status = 1 ";
-
+        $res = $this->db->query($query);
+        if ($res->num_rows() > 0) {
+            foreach ($res->result_array() as $key => $value) {
+                $data[] = $value['email'];
+            }
+//            $data['email'] = implode(",", $data['email']);
+            return $data;
+        } else {
+            return NULL;
+        }
+    }
+    public function getEt_SpecificListDataKey($list_id,$key) {
+        
+        
+        $query = "select master_subscriber.email from et_subscriber_list_rel 
+            JOIN master_subscriber ON master_subscriber.ET_UID = et_subscriber_list_rel.SubscriberID   
+            where et_subscriber_list_rel.`ListID` = '" . $list_id . "' and master_subscriber.status = 1 and et_subscriber_list_rel.SubscriberID in (".$key.")";
+        
         $res = $this->db->query($query);
         if ($res->num_rows() > 0) {
             foreach ($res->result_array() as $key => $value) {

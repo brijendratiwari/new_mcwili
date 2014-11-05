@@ -8,6 +8,16 @@
 
 class Home extends CI_Controller {
 
+    // ET
+    public $mcSubscriber;
+    public $brandsSubscriber;
+    public $evans;
+    public $mount;
+    public $et_celldoorSubscriber;
+    // BB 
+    public $bb_brandsSubscriber;
+    public $bb_celldoorSubscriber;
+
     public function __construct() {
         parent::__construct();
         $this->load->model('et_model');
@@ -34,36 +44,36 @@ class Home extends CI_Controller {
         if ($this->session->userdata('logged_in')) {
             $data['autosync'] = $this->sync_model->checkautosync();
             $data['Subscriber'] = $this->mdb_model->get_mdbSubscriber();
-            $data['bpSubscriber'] = $this->sync_model->get_bpSubscriber();
-            $data['mdbSubscriber'] = $this->sync_model->get_mdbSubscriber();
+//            $data['bpSubscriber'] = $this->sync_model->get_bpSubscriber();
+//            
             //get all recently added subscriber and unsubscriber.
             $data['getLastSystemSyncsub'] = $this->sync_model->getLastSystemSyncsub();
-            
+
             $data['etSyncsub'] = $this->sync_model->getallListSubsciberCount(1);
             $data['bbSyncsub'] = $this->sync_model->getallListSubsciberCount(2);
             $data['mdbSyncsub'] = $this->sync_model->getallListSubsciberCount(5);
             $data['bpSyncsub'] = $this->sync_model->getallListSubsciberCount(3);
-            
+
             // get last three subscriber
             $data['lastSubscriber'] = $this->sync_model->getLastSubscriber();
-           // get last three unsubscriber
+            // get last three unsubscriber
             $data['lastUnSubscriber'] = $this->sync_model->getLastUnSubscriber();
 
             $data['UnSubscriber'] = $this->sync_model->get_UnSubscriber();
-           
+
             $data['AllUnSubscriber'] = $this->sync_model->get_AllUnSubscriber();
 
             $data['getAutoSyncUpdate'] = $this->sync_model->get_getAutoSyncUpdate();
 
             //get specific list data for ET 
-            $data['mcSubscriber'] = $this->sync_model->getEt_SpecificListData(351487);
-            $data['brandsSubscriber'] = $this->sync_model->getEt_SpecificListData(351484);
-            $data['evans'] = $this->sync_model->getEt_SpecificListData(351486);
-            $data['mount'] = $this->sync_model->getEt_SpecificListData(351488);
-            $data['et_celldoorSubscriber'] = $this->sync_model->getEt_SpecificListData(351485);
-            //get specific list data for ET 
-            $data['bb_brandsSubscriber'] = $this->sync_model->getBb_SpecificListData(351484);
-            $data['bb_celldoorSubscriber'] = $this->sync_model->getBb_SpecificListData(351485);
+//            $data['mcSubscriber'] = $this->sync_model->getEt_SpecificListData(351487);
+//            $data['brandsSubscriber'] = $this->sync_model->getEt_SpecificListData(351484);
+//            $data['evans'] = $this->sync_model->getEt_SpecificListData(351486);
+//            $data['mount'] = $this->sync_model->getEt_SpecificListData(351488);
+//            $data['et_celldoorSubscriber'] = $this->sync_model->getEt_SpecificListData(351485);
+//            //get specific list data for ET 
+//            $data['bb_brandsSubscriber'] = $this->sync_model->getBb_SpecificListData(351484);
+//            $data['bb_celldoorSubscriber'] = $this->sync_model->getBb_SpecificListData(351485);
 
 
 
@@ -375,7 +385,7 @@ class Home extends CI_Controller {
         }
 
         $col_sort = array("et_subscriber.ID", "et_subscriber.FirstName", "et_subscriber.LastName", "et_subscriber.EmailAddress", "et_subscriber.CreatedDate");
-        
+
         $order_by = "id";
         $temp = 'asc';
 
@@ -386,8 +396,8 @@ class Home extends CI_Controller {
         }
         $this->mdb_model->db->select("*");
 //        $this->mdb_model->db->from("*");
-        $this->mdb_model->db->where('et_subscriber_list_rel.ListID','352396');
-        $this->mdb_model->db->join('et_subscriber','et_subscriber.SubscriberID=et_subscriber_list_rel.SubscriberID');
+        $this->mdb_model->db->where('et_subscriber_list_rel.ListID', '352396');
+        $this->mdb_model->db->join('et_subscriber', 'et_subscriber.SubscriberID=et_subscriber_list_rel.SubscriberID');
         if (isset($_GET['sSearch']) && $_GET['sSearch'] != "") {
             $words = $_GET['sSearch'];
             for ($i = 0; $i < count($col_sort); $i++) {
@@ -421,6 +431,199 @@ class Home extends CI_Controller {
         foreach ($result as $val) {
 
             $output['aaData'][] = array("DT_RowId" => $val['FirstName'], $val['FirstName'], $val['LastName'], $val['EmailAddress'], $val['CreatedDate'], $sync, 'Active');
+        }
+
+        echo json_encode($output);
+        die;
+    }
+
+    public function get_all_sync() {
+        $sLimit = "";
+        $lenght = 10;
+        $str_point = 0;
+
+        $mdbSubscriber = $this->sync_model->get_mdbSubscriber();
+        $bpSubscriber = $this->sync_model->get_bpSubscriber();
+
+//        var_dump($bpSubscriber);
+//        die;
+
+        $getLastSystemSyncsub = $this->mdb_model->getLastSystemSync();
+        if (isset($getLastSystemSyncsub[0]['SyncTime'])) {
+            $sync = $getLastSystemSyncsub[0]['SyncTime'];
+        } else {
+            $sync = 0;
+        }
+
+        $col_sort = array("firstname", "lastname", "email");
+
+        $order_by = "id";
+        $temp = 'asc';
+
+        if (isset($_GET['iSortCol_0'])) {
+            $index = $_GET['iSortCol_0'];
+            $temp = $_GET['sSortDir_0'] === 'asc' ? 'asc' : 'desc';
+            $order_by = $col_sort[$index];
+        }
+        $this->mdb_model->db->select('id,ET_UID,firstname,lastname,email');
+
+        if (isset($_GET['sSearch']) && $_GET['sSearch'] != "") {
+            $words = $_GET['sSearch'];
+            for ($i = 0; $i < count($col_sort); $i++) {
+
+                $this->mdb_model->db->or_like($col_sort[$i], $words, "both");
+            }
+        }
+
+        $this->mdb_model->db->order_by($order_by, $temp);
+
+        if (isset($_GET['iDisplayStart']) && $_GET['iDisplayLength'] != '-1') {
+            $str_point = intval($_GET['iDisplayStart']);
+            $lenght = intval($_GET['iDisplayLength']);
+            $records = $this->mdb_model->db->get("master_subscriber", $lenght, $str_point);
+        } else {
+            $records = $this->mdb_model->db->get("master_subscriber");
+        }
+        $total_record = $this->db->count_all('master_subscriber');
+        $output = array(
+            "sEcho" => intval($_GET['sEcho']),
+            "iTotalRecords" => $total_record,
+            "iTotalDisplayRecords" => $total_record,
+            "aaData" => array()
+        );
+
+        $result = $records->result_array();
+
+        $i = 0;
+        $final = array();
+        $key = array();
+        for ($i = 0; $i < count($result); $i++) {
+            if ($result[$i]['ET_UID'] != "")
+                $key[] = "'" . $result[$i]['ET_UID'] . "'";
+        }
+
+        $strkey = implode(',', $key);
+
+
+        //get specific list data for ET 
+        $mcSubscriber = $this->sync_model->getEt_SpecificListDataKey(351487, $strkey);
+        $brandsSubscriber = $this->sync_model->getEt_SpecificListDataKey(351484, $strkey);
+        $evans = $this->sync_model->getEt_SpecificListDataKey(351486, $strkey);
+        $mount = $this->sync_model->getEt_SpecificListDataKey(351488, $strkey);
+        $et_celldoorSubscriber = $this->sync_model->getEt_SpecificListDataKey(351485, $strkey);
+
+        //get specific list data for BB 
+
+        $bb_brandsSubscriber = $this->sync_model->getEt_SpecificListDataKey(351484, $strkey);
+//            $bb_celldoorSubscriber = $this->sync_model->getEt_SpecificListDataKey(351485,$strkey);
+        $bb_celldoorSubscriber = $et_celldoorSubscriber;
+
+
+
+
+
+
+        foreach ($result as $val) {
+            $mdb = "";
+            $bepoz = "";
+            $mdb = "y";
+
+
+            if (!empty($bpSubscriber)) {
+                if (in_array($val['email'], $bpSubscriber)) {
+                    $bepoz = "y";
+                } else {
+                    $bepoz = "n";
+                }
+            } else {
+                $bepoz = "n";
+            }
+
+            $blackboxx = "<div class='subcol_BB'>";
+            if (!empty($bb_celldoorSubscriber)) {
+                if (in_array($val['email'], $bb_celldoorSubscriber)) {
+                    $blackboxx .= "y";
+                } else {
+                    $blackboxx .= "n";
+                }
+            } else {
+                $blackboxx .= "n";
+            }
+            $blackboxx .= '</div><div class="subcol_BB">';
+            if (!empty($bb_celldoorSubscriber)) {
+                if (in_array($val['email'], $bb_celldoorSubscriber)) {
+                    $blackboxx .= "y";
+                } else {
+                    $blackboxx .= "n";
+                }
+            } else {
+                $blackboxx .= "n";
+            }
+            $blackboxx .= '</div><div class="subcol_BB">';
+            if (!empty($bb_brandsSubscriber)) {
+                if (in_array($val['email'], $bb_brandsSubscriber)) {
+                    $blackboxx .= "y";
+                } else {
+                    $blackboxx .= "n";
+                }
+            } else {
+                $blackboxx .= "n";
+            }
+            $blackboxx .= '</div>';
+
+            $exacttarget = '<div class="subcol">';
+            if (!empty($mcSubscriber)) {
+                if (in_array($val['email'], $mcSubscriber)) {
+                    $exacttarget .= "y";
+                } else {
+                    $exacttarget .= "n";
+                }
+            } else {
+                $exacttarget .= "n";
+            }
+            $exacttarget .= '</div><div class="subcol">';
+            if (!empty($mount)) {
+                if (in_array($val['email'], $mount)) {
+                    $exacttarget .= "y";
+                } else {
+                    $exacttarget .= "n";
+                }
+            } else {
+                $exacttarget .= "n";
+            }
+            $exacttarget .= '</div><div class="subcol">';
+            if (!empty($brandsSubscriber)) {
+                if (in_array($val['email'], $brandsSubscriber)) {
+                    $exacttarget .= "y";
+                } else {
+                    $exacttarget .= "n";
+                }
+            } else {
+                $exacttarget .= "n";
+            }
+            $exacttarget .= '</div><div class="subcol">';
+            if (!empty($evans)) {
+                if (in_array($val['email'], $evans)) {
+                    $exacttarget .= "y";
+                } else {
+                    $exacttarget .= "n";
+                }
+            } else {
+                $exacttarget .= "n";
+            }
+            $exacttarget .= '</div><div class="subcol">';
+            if (!empty($et_celldoorSubscriber)) {
+                if (in_array($val['email'], $et_celldoorSubscriber)) {
+                    $exacttarget .= "y";
+                } else {
+                    $exacttarget .= "n";
+                }
+            } else {
+                $exacttarget .= "n";
+            }
+            $exacttarget .= '</div>';
+
+            $output['aaData'][] = array("DT_RowId" => $val['firstname'], $val['firstname'], $val['lastname'], $val['email'], $mdb, $exacttarget, $blackboxx, $bepoz);
         }
 
         echo json_encode($output);

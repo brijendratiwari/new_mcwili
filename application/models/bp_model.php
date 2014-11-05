@@ -250,3 +250,62 @@ class Bp_model extends CI_Model {
     }
 
 }
+SELECT m1 . * ,
+if(
+(SELECT if( m1.`email` IS NULL , 'n', 'y' ) AS id
+FROM et_subscriber_list_rel et1
+WHERE et1.`ListID` = '351487'
+AND m1.status = 1
+AND et1.`SubscriberID` = m1.`ET_UID`)
+IS NULL , 'n', 'y' ) AS MC,
+
+if(
+(SELECT if( m1.`email` IS NULL , 'n', 'y' ) AS id
+FROM et_subscriber_list_rel et1
+WHERE et1.`ListID` = '351488'
+AND m1.status = 1
+AND et1.`SubscriberID` = m1.`ET_UID`)
+IS NULL , 'n', 'y' ) AS MP,
+
+if(
+(SELECT if( m1.`email` IS NULL , 'n', 'y' ) AS id
+FROM et_subscriber_list_rel et1
+WHERE et1.`ListID` = '351485'
+AND m1.status = 1
+AND et1.`SubscriberID` = m1.`ET_UID`)
+IS NULL , 'n', 'y' ) AS CD,
+
+if(
+(SELECT if( m1.`email` IS NULL , 'n', 'y' ) AS id
+FROM et_subscriber_list_rel et1
+WHERE et1.`ListID` = '351486'
+AND m1.status = 1
+AND et1.`SubscriberID` = m1.`ET_UID`)
+IS NULL , 'n', 'y' ) AS EAT,
+
+if(
+(SELECT if( m1.`email` IS NULL , 'n', 'y' ) AS id
+FROM et_subscriber_list_rel et1
+WHERE et1.`ListID` = '351484'
+AND m1.status = 1
+AND et1.`SubscriberID` = m1.`ET_UID`)
+IS NULL , 'n', 'y' ) AS BL,
+
+if(
+(SELECT if( m1.`email` IS NULL , 'n', 'y' ) AS id
+FROM et_subscriber_list_rel et1
+WHERE et1.`ListID` = '351485'
+AND m1.status = 1
+AND et1.`SubscriberID` = m1.`ET_UID`)
+IS NULL , 'n', 'y' ) AS CD,
+
+if(
+(SELECT if( m1.`email` IS NULL , 'n', 'y' ) AS id
+FROM et_subscriber_list_rel et1
+WHERE et1.`ListID` = '352396'
+AND m1.status = 1
+AND et1.`SubscriberID` = m1.`ET_UID`)
+IS NULL , 'n', 'y' ) AS Bepoz
+
+FROM `master_subscriber` AS m1
+ORDER BY `Bepoz`  DESC
