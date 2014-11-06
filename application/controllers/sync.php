@@ -386,16 +386,16 @@ class Sync extends CI_Controller {
     public function mdbSync() {
         $subs = $this->sync_model->get_master_subscriber();
         $unsubs = $this->sync_model->get_master_unsubscriber();
-        $storeid = $this->input->post('sync');
-        $type = $this->input->post('type');
+        $storeid = $this->input->get('sync');
+        $type = $this->input->get('type');
         $str_id = $this->sync_model->setTempSync(2);
         $response = $this->BlackBoxxSync($str_id, $type, $storeid, $flag = 1);
         if ($response) {
-            $storeid = $this->input->post('sync');
+            $storeid = $this->input->get('sync');
             $str_id = $this->sync_model->setTempSync(1);
             $et_response = $this->ExactTargetSync($str_id, $type, $storeid, $flag = 1);
             if ($et_response) {
-                $storeid = $this->input->post('sync');
+                $storeid = $this->input->get('sync');
                 $str_id = $this->sync_model->setTempSync(3);
                 $bepoz_response = $this->BepozSync($str_id, $type, $storeid, $flag = 1);
             }
