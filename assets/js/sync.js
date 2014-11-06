@@ -295,7 +295,7 @@ function startmdbsync(id) {
     var stopper;
     $.ajax({
         url: base_url + "sync/mdbSync",
-        type: "POST",
+        type: "GET",
         data: {sync: id, type: 'Manual'},
         beforeSend: function() {
             $("#mdb_progessbar").parent('.progress-stat').removeClass('hide');
