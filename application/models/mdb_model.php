@@ -130,8 +130,8 @@ FROM `master_subscriber` AS m1 WHERE m1.email NOT IN (SELECT email FROM csv_subs
 
         $data = array();
         $query = "select * from master_subscriber where `CreatedDate` between '" . date("Y", strtotime("-1 year")) . "-01-01' and '" . date("Y", strtotime("-0 year")) . "-01-01'";
-        $query1 = "select * from master_subscriber where `CreatedDate` between '" . date("Y-m", strtotime("-1 months")) . "-01' and '" . date("Y-m", strtotime("-0 months")) . "-01'";
-        $query2 = "select * from master_subscriber where `CreatedDate` between '" . date("Y-m", strtotime("-2 months")) . "-01' and '" . date("Y-m", strtotime("-1 months")) . "-01'";
+        $query1 = "select * from master_subscriber where MONTH(CreatedDate) = (MONTH(CURDATE())-1) ";
+        $query2 = "select * from master_subscriber where MONTH(CreatedDate) = (MONTH(CURDATE())-2) ";
         $query3 = "select * from master_subscriber where `CreatedDate` between '" . date("Y-m-d", strtotime("-30 days")) . "' and '" . date("Y-m-d", strtotime("-0 days")) . "'";
         $query4 = "select * from master_subscriber where `CreatedDate` between '" . date("Y-m-d", strtotime("-60 days")) . "' and '" . date("Y-m-d", strtotime("-30 days")) . "'";
         $query5 = "select * from et_subscriber where `CreatedDate` between '" . date("Y-m-d", strtotime("-7 days")) . "' and '" . date("Y-m-d", strtotime("-0 days")) . "'";
