@@ -71,10 +71,10 @@ class Bp_model extends CI_Model {
 //        echo date("Y-m", strtotime("-0 months"));die;
         $data = array();
         $query6 = "select * from et_subscriber_list_rel where `ListID` = '" . $list_id . "' ";
-        $query = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y", strtotime("-1 year")) . "-01-01' and '" . date("Y", strtotime("-0 year")) . "-01-01' and `ListID` = '" . $list_id . "' ";
-        $query1 = "select * from et_subscriber_list_rel where `CreatedDate` > DATE_SUB(NOW(), INTERVAL 1 MONTH) and `ListID`  = '" . $list_id . "'";
-        $query2 = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y-m", strtotime("-2 months")) . "-01' and '" . date("Y-m", strtotime("-1 months")) . "-01' and `ListID`  = '" . $list_id . "'";
-        $query3 = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y-m-d", strtotime("-30 days")) . "' and '" . date("Y-m-d", strtotime("-0 days")) . "' and `ListID`  = '" . $list_id . "'";
+        $query = "select * from et_subscriber_list_rel where YEAR(`CreatedDate`) = (YEAR(CURDATE())-1) and `ListID` = '" . $list_id . "' ";
+        $query1 = "select * from et_subscriber_list_rel where MONTH(`CreatedDate`) = MONTH(CURDATE())  and `ListID`  = '" . $list_id . "'";
+        $query2 = "select * from et_subscriber_list_rel where MONTH(`CreatedDate`) = (MONTH(CURDATE())-1) and `ListID`  = '" . $list_id . "'";
+        $query3 = "select * from et_subscriber_list_rel where CreatedDate >= DATE_SUB( CURDATE( ) , INTERVAL 30 DAY) and `ListID`  = '" . $list_id . "'";
         $query4 = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y-m-d", strtotime("-60 days")) . "' and '" . date("Y-m-d", strtotime("-30 days")) . "' and `ListID`  = '" . $list_id . "'";
         $query5 = "select * from et_subscriber_list_rel where `CreatedDate` > CURDATE() and  `ListID`  = '" . $list_id . "'";
 
@@ -180,10 +180,10 @@ class Bp_model extends CI_Model {
     public function get_bpallFilterSubscriber() {
 
         $data = array();
-        $query = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y", strtotime("-1 year")) . "-01-01' and '" . date("Y", strtotime("-0 year")) . "-01-01' and `ListID` = '352396' ";
-        $query1 = "select * from et_subscriber_list_rel where `CreatedDate` > DATE_SUB(NOW(), INTERVAL 1 MONTH) and `ListID` = '352396'";
-        $query2 = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y-m", strtotime("-2 months")) . "-01' and `ListID` = '352396' and '" . date("Y-m", strtotime("-1 months")) . "-01' ";
-        $query3 = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y-m-d", strtotime("-30 days")) . "' and '" . date("Y-m-d", strtotime("-0 days")) . "' and `ListID` = '352396' ";
+        $query = "select * from et_subscriber_list_rel where YEAR(`CreatedDate`) = (YEAR(CURDATE())-1)  and `ListID` = '352396' ";
+        $query1 = "select * from et_subscriber_list_rel where MONTH( CURDATE( ) ) = MONTH(CreatedDate)  and `ListID` = '352396'";
+        $query2 = "select * from et_subscriber_list_rel where MONTH(`CreatedDate`) = (MONTH(CURDATE())-1) and `ListID` = '352396'";
+        $query3 = "select * from et_subscriber_list_rel where `CreatedDate` >= DATE_SUB( CURDATE( ) , INTERVAL 30 DAY) and `ListID` = '352396' ";
         $query4 = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y-m-d", strtotime("-60 days")) . "' and '" . date("Y-m-d", strtotime("-30 days")) . "' and `ListID` = '352396' ";
         $query5 = "select * from et_subscriber_list_rel where `CreatedDate` > CURDATE() and `ListID` = '352396'";
 //        $query1 = "select count(id) from et_subscriber where CreatedDate >= DATEADD(MONTH, -1, GETDATE()) " ;
@@ -226,8 +226,8 @@ class Bp_model extends CI_Model {
         $data['today'] = $res5->num_rows();
         return $data;
     }
-    
-     public function bp_mdb_update() {
+
+    public function bp_mdb_update() {
         $res = $this->db->query('SELECT firstname,lastname,email,created as CreatedDate,BP_UID,dob as DOB, 1 as status FROM bp_customer WHERE bp_customer.BP_UID NOT IN (SELECT BP_UID FROM master_subscriber)');
 
         if ($res->num_rows() > 0) {

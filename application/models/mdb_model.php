@@ -132,7 +132,7 @@ FROM `master_subscriber` AS m1 WHERE m1.email NOT IN (SELECT email FROM csv_subs
         $query = "select * from master_subscriber where YEAR(CreatedDate) = (YEAR(CURDATE())-1)";
         $query1 = "select * from master_subscriber where MONTH(CreatedDate) = (MONTH(CURDATE())-1) ";
         $query2 = "select * from master_subscriber where MONTH(CreatedDate) = (MONTH(CURDATE())-2) ";
-        $query3 = "select * from master_subscriber where `CreatedDate` between '" . date("Y-m-d", strtotime("-30 days")) . "' and '" . date("Y-m-d", strtotime("-0 days")) . "'";
+        $query3 = "select * from master_subscriber where CreatedDate >= DATE_SUB( CURDATE( ) , INTERVAL 30 DAY) ";
         $query4 = "select * from master_subscriber where `CreatedDate` between '" . date("Y-m-d", strtotime("-60 days")) . "' and '" . date("Y-m-d", strtotime("-30 days")) . "'";
         $query5 = "select * from et_subscriber where `CreatedDate` between '" . date("Y-m-d", strtotime("-7 days")) . "' and '" . date("Y-m-d", strtotime("-0 days")) . "'";
 
@@ -159,7 +159,7 @@ FROM `master_subscriber` AS m1 WHERE m1.email NOT IN (SELECT email FROM csv_subs
         $query = "select * from all_unsubscriber where YEAR(unsubscribed_date) = (YEAR(CURDATE())-1) ";
         $query1 = "select * from all_unsubscriber where `unsubscribed_date` between '" . date("Y-m", strtotime("-4 hour")) . "-01' and '" . date("Y-m", strtotime("-0 hour")) . "-01'";
         $query2 = "select * from all_unsubscriber where `unsubscribed_date` between '" . date("Y-m", strtotime("-4 hour")) . "-01' and '" . date("Y-m", strtotime("-2 hour")) . "-01'";
-        $query3 = "select * from all_unsubscriber where `unsubscribed_date` between '" . date("Y-m-d", strtotime("-30 days")) . "' and '" . date("Y-m-d", strtotime("-0 days")) . "'";
+        $query3 = "select * from all_unsubscriber where unsubscribed_date >= DATE_SUB( CURDATE( ) , INTERVAL 30 DAY)";
         $query4 = "select * from all_unsubscriber where `unsubscribed_date` between '" . date("Y-m-d", strtotime("-60 days")) . "' and '" . date("Y-m-d", strtotime("-30 days")) . "'";
 //        $query1 = "select count(id) from et_subscriber where CreatedDate >= DATEADD(MONTH, -1, GETDATE()) " ;
 
