@@ -36,7 +36,7 @@
                 <p class="row-stat-label">This Month</p>
                 <h3 class="row-stat-value"><?php echo $FilterSubscriber['month']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($FilterSubscriber['month'] !=0 ) { echo number_format((($FilterSubscriber['month']-$FilterSubscriber['last_thirty'])*100)/$FilterSubscriber['month'],2); } else{ echo '0';} ?>% from previous 30 days</span>
+                    <?php if($FilterSubscriber['month'] !=0 ) { echo number_format((($FilterSubscriber['month'])*100)/$FilterSubscriber['last_thirty'],2); } else{ echo '0';} ?>% from previous 30 days</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
 
@@ -88,7 +88,7 @@
                 <p class="row-stat-label">This Month</p>
                 <h3 class="row-stat-value"><?php echo $mcSubscriber['month']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($mcSubscriber['month'] !=0) { echo number_format((($mcSubscriber['month']-$mcSubscriber['last_thirty'])*100)/$mcSubscriber['month'],2);} else{ echo "0";} ?>% from previous 30 days</span>
+                    <?php if($mcSubscriber['month'] !=0) { echo number_format((($mcSubscriber['month'])*100)/$mcSubscriber['last_thirty'],2);} else{ echo "0";} ?>% from previous 30 days</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
 
@@ -140,7 +140,7 @@
                 <p class="row-stat-label">This Month</p>
                 <h3 class="row-stat-value"><?php echo $mount['month']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($mount['month'] !=0) { echo number_format((($mount['last_thirty']-$mount['month'])*100)/$mount['month'],2);} else{ echo "0";} ?>% from previous 30 days</span>
+                    <?php if($mount['month'] !=0) { echo number_format((($mount['month'])*100)/$mount['last_thirty'],2);} else{ echo "0";} ?>% from previous 30 days</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
 
@@ -194,7 +194,7 @@
                 <p class="row-stat-label">This Month</p>
                 <h3 class="row-stat-value"><?php echo $brandsSubscriber['month']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($brandsSubscriber['month'] !=0) { echo number_format((($brandsSubscriber['month']-$brandsSubscriber['last_thirty'])*100)/$brandsSubscriber['month'],2);} else{ echo "0";} ?>% from previous 30 days</span>
+                    <?php if($brandsSubscriber['month'] !=0) { echo number_format((($brandsSubscriber['month'])*100)/$brandsSubscriber['last_thirty'],2);} else{ echo "0";} ?>% from previous 30 days</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
 
@@ -246,7 +246,7 @@
                 <p class="row-stat-label">This Month</p>
                 <h3 class="row-stat-value"><?php echo $Evans['month']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($Evans['month'] !=0) { echo number_format((($Evans['last_thirty']-$Evans['month'])*100)/$Evans['month'],2);} else{ echo "0";} ?>% from previous 30 days</span>
+                    <?php if($Evans['month'] !=0) { echo number_format((($Evans['month'])*100)/$Evans['last_thirty'],2);} else{ echo "0";} ?>% from previous 30 days</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
 
