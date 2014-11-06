@@ -96,7 +96,7 @@ class Bb_model extends CI_Model {
     public function get_bbFilterCustomer() {
 
         $data = array();
-        $query = "select * from bb_customer where `created` between '" . date("Y", strtotime("-1 year")) . "-01-01' and '" . date("Y", strtotime("-0 year")) . "-01-01'";
+        $query = "select * from bb_customer where YEAR(created) = (YEAR(CURDATE())-1)";
         $query1 = "select * from bb_customer where  MONTH( CURDATE( ) ) = MONTH( created )";
         $query2 = "select * from bb_customer where MONTH(`created`) = (MONTH(CURDATE())-1)";
         $query3 = "select * from bb_customer where `created` between '" . date("Y-m-d", strtotime("-30 days")) . "' and '" . date("Y-m-d", strtotime("-0 days")) . "'";
@@ -131,7 +131,7 @@ class Bb_model extends CI_Model {
         $query = "select * from et_subscriber_list_rel 
                   JOIN master_subscriber ON master_subscriber.ET_UID = et_subscriber_list_rel.SubscriberID   
                   JOIN bb_customer ON bb_customer.BB_UID = master_subscriber.BB_UID 
-                  where et_subscriber_list_rel.`CreatedDate` between '" . date("Y", strtotime("-1 year")) . "-01-01' and '" . date("Y", strtotime("-0 year")) . "-01-01' and et_subscriber_list_rel.`ListID` = '" . $list_id . "' ";
+                  where YEAR(et_subscriber_list_rel.`CreatedDate`) = (YEAR(CURDATE())-1) and et_subscriber_list_rel.`ListID` = '" . $list_id . "' ";
         $query1 = "select * from et_subscriber_list_rel 
                    JOIN master_subscriber ON master_subscriber.ET_UID = et_subscriber_list_rel.SubscriberID   
                    JOIN bb_customer ON bb_customer.BB_UID = master_subscriber.BB_UID 
@@ -177,7 +177,7 @@ class Bb_model extends CI_Model {
         $data = array();
 
         $query6 = "SELECT * FROM et_subscriber_list_rel et1 JOIN et_subscriber_list_rel et2 ON et1.`SubscriberID` = et2.`SubscriberID` WHERE et1.`ListID` = '" . $list_id . "' AND et2.`ListID` = '352396'";
-        $query = "select * from et_subscriber_list_rel et1 JOIN et_subscriber_list_rel et2 ON et1.`SubscriberID` = et2.`SubscriberID` where et1.`CreatedDate` between '" . date("Y", strtotime("-1 year")) . "-01-01' and '" . date("Y", strtotime("-0 year")) . "-01-01' and et1.`ListID` = '352396' and et2.`ListID` = '" . $list_id . "' ";
+        $query = "select * from et_subscriber_list_rel et1 JOIN et_subscriber_list_rel et2 ON et1.`SubscriberID` = et2.`SubscriberID` where YEAR(et1.`CreatedDate`) = (YEAR(CURDATE())-1)  and et1.`ListID` = '352396' and et2.`ListID` = '" . $list_id . "' ";
         $query1 = "select * from et_subscriber_list_rel et1 JOIN et_subscriber_list_rel et2 ON et1.`SubscriberID` = et2.`SubscriberID` where MONTH( CURDATE( ) ) = MONTH(et1.CreatedDate) and et1.`ListID` = '352396'  and  et2.`ListID`  = '" . $list_id . "'";
         $query2 = "select * from et_subscriber_list_rel  et1 JOIN et_subscriber_list_rel et2 ON et1.`SubscriberID` = et2.`SubscriberID` where  MONTH(et1.`CreatedDate`) = (MONTH(CURDATE())-1) and et1.`ListID` = '352396' and et2.`ListID`  = '" . $list_id . "'";
         $query3 = "select * from et_subscriber_list_rel et1 JOIN et_subscriber_list_rel et2 ON et1.`SubscriberID` = et2.`SubscriberID` where et1.`CreatedDate` between '" . date("Y-m-d", strtotime("-30 days")) . "' and '" . date("Y-m-d", strtotime("-0 days")) . "' and et1.`ListID` = '352396' and et2.`ListID`  = '" . $list_id . "'";
@@ -316,7 +316,7 @@ class Bb_model extends CI_Model {
     public function get_bpallFilterSubscriber() {
 
         $data = array();
-        $query = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y", strtotime("-1 year")) . "-01-01' and '" . date("Y", strtotime("-0 year")) . "-01-01' and `ListID` = '352396' ";
+        $query = "select * from et_subscriber_list_rel where YEAR(`CreatedDate`) = (YEAR(CURDATE())-1)  and `ListID` = '352396' ";
         $query1 = "select * from et_subscriber_list_rel where MONTH( CURDATE( ) ) = MONTH(CreatedDate)  and `ListID` = '352396'";
         $query2 = "select * from et_subscriber_list_rel where MONTH(`CreatedDate`) = (MONTH(CURDATE())-1) and `ListID` = '352396'";
         $query3 = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y-m-d", strtotime("-30 days")) . "' and '" . date("Y-m-d", strtotime("-0 days")) . "' and `ListID` = '352396' ";
@@ -341,7 +341,7 @@ class Bb_model extends CI_Model {
     public function get_bpFilterSubscriber() {
 
         $data = array();
-        $query = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y", strtotime("-1 year")) . "-01-01' and '" . date("Y", strtotime("-0 year")) . "-01-01' and `ListID` IN('352396','351487', '351484', '351488', '351486') ";
+        $query = "select * from et_subscriber_list_rel where YEAR(`CreatedDate`) = (YEAR(CURDATE())-1) and `ListID` IN('352396','351487', '351484', '351488', '351486') ";
         $query1 = "select * from et_subscriber_list_rel  where MONTH( CURDATE( ) ) = MONTH(CreatedDate) and  `ListID` IN('352396','351487', '351484', '351488', '351486')";
         $query2 = "select * from et_subscriber_list_rel where MONTH(`CreatedDate`) = (MONTH(CURDATE())-1) and `ListID` IN('352396','351487', '351484', '351488', '351486')";
         $query3 = "select * from et_subscriber_list_rel where `CreatedDate` between '" . date("Y-m-d", strtotime("-30 days")) . "' and '" . date("Y-m-d", strtotime("-0 days")) . "' and `ListID` IN('352396','351487', '351484', '351488', '351486')";

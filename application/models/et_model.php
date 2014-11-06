@@ -129,7 +129,7 @@ class Et_model extends CI_Model {
 
     public function get_etFilterSubscriber() {
         $data = array();
-        $query = "select * from et_subscriber where `CreatedDate` between '" . date("Y", strtotime("-1 year")) . "-01-01' and '" . date("Y", strtotime("-0 year")) . "-01-01'";
+        $query = "select * from et_subscriber where YEAR(CreatedDate) = (YEAR(CURDATE())-1) ";
         $query1 = "select * from et_subscriber where  MONTH(CreatedDate) = (MONTH(CURDATE())-1) ";
         $query2 = "select * from et_subscriber where MONTH(CreatedDate) = (MONTH(CURDATE())-2) ";
         $query3 = "select * from et_subscriber where `CreatedDate` between '" . date("Y-m-d", strtotime("-30 days")) . "' and '" . date("Y-m-d", strtotime("-0 days")) . "'";
@@ -155,7 +155,7 @@ class Et_model extends CI_Model {
     public function get_etFilterUnSubscriber() {
 
         $data = array();
-        $query = "select * from all_unsubscriber where `unsubscribed_date` between '" . date("Y", strtotime("-1 year")) . "-01-01' and '" . date("Y", strtotime("-0 year")) . "-01-01'";
+        $query = "select * from all_unsubscriber where YEAR(unsubscribed_date) = (YEAR(CURDATE())-1)";
         $query1 = "select * from all_unsubscriber where `unsubscribed_date` between '" . date("Y-m", strtotime("-4 hour")) . "-01' and '" . date("Y-m", strtotime("-0 hour")) . "-01'";
         $query2 = "select * from all_unsubscriber where `unsubscribed_date` between '" . date("Y-m", strtotime("-4 hour")) . "-01' and '" . date("Y-m", strtotime("-2 hour")) . "-01'";
         $query3 = "select * from all_unsubscriber where `unsubscribed_date` between '" . date("Y-m-d", strtotime("-30 days")) . "' and '" . date("Y-m-d", strtotime("-0 days")) . "'";
