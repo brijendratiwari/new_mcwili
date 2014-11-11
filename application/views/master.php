@@ -13,11 +13,11 @@
 
           <div class="row">
 
-            <div class="col-sm-6 col-md-3">
+            <div class="col-sm-12 col-md-12">
               <div class="row-stat">
-                <p class="row-stat-label">Total Subscribers</p>
-                <h3 class="row-stat-value"><?php if($Subscriber !=0 ) {echo $Subscriber;}else{ echo "0";} ?></h3>
-                <span class="label label-success row-stat-badge">+
+                <p class="row-stat-label"></p>
+                <h3 class="row-stat-value">Total Subscribers in MDB to Date = <?php if($Subscriber !=0 ) {echo $Subscriber;}else{ echo "0";} ?></h3>
+                 <span class="label label-success row-stat-badge">+
                     <?php if($Subscriber !=0 ){ echo number_format((($Subscriber-$FilterSubscriber['year'])*100)/$Subscriber,2); }else{ echo '0';} ?>% from previous year</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
@@ -45,7 +45,16 @@
                 <p class="row-stat-label">Last 7 days</p>
                 <h3 class="row-stat-value"><?php echo $FilterSubscriber['last_seven']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-              <?php if($FilterSubscriber['last_seven'] !=0 ) { echo number_format((($FilterSubscriber['last_seven'])*100)/$Subscriber,2); } else{ echo '0';} ?>%                    
+              <?php if($FilterSubscriber['last_seven'] !=0 ) { echo number_format((($FilterSubscriber['last_seven'])*100)/$FilterSubscriber['previous_seven'],2); } else{ echo '0';} ?>%from previous 7 days                    
+                </span>
+              </div> <!-- /.row-stat -->
+            </div> <!-- /.col -->
+            <div class="col-sm-6 col-md-3">
+             <div class="row-stat">
+                <p class="row-stat-label">Today</p>
+                <h3 class="row-stat-value"><?php echo $FilterSubscriber['today']; ?></h3>
+                <span class="label label-success row-stat-badge">
+              <?php echo $FilterSubscriber['yesterday'];  ?> Yesterday                    
                 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->

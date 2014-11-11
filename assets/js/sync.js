@@ -294,7 +294,7 @@ function startmdbsync(id) {
     var percentVal = 0;
     var stopper;
     $.ajax({
-        url: base_url + "sync/mdbSync",
+        url: base_url + "sync/mdbManualSync",
         type: "GET",
         data: {sync: id, type: 'Manual'},
         beforeSend: function() {

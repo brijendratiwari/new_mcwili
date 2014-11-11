@@ -149,7 +149,7 @@ class Sync extends CI_Controller {
             $controller_et->et_mdb_update();
             $this->sync_model->delTempSync($storeid);
             $this->sync_model->insert_sync_updates($data);
-            $data['SyncTime'] = date_format(date_create(date("Y-m-d H:i:s")),'g:i A');
+            $data['SyncTime'] = date_format(date_create(date("Y-m-d H:i:s")), 'g:i A');
         } else {
 //            $type->sync_model->delTempSync($id);
             echo 'stop';
@@ -256,12 +256,12 @@ class Sync extends CI_Controller {
             $new_unsub = $this->et_model->get_count('all_unsubscriber', $storeid);
             $data['UnSubscribedCount'] = $new_unsub - $old_unsub;
             $data['type'] = $type;
-            $data['SyncTime'] =  date("Y-m-d H:i:s");
+            $data['SyncTime'] = date("Y-m-d H:i:s");
             $data['store_id'] = $storeid;
 
             $this->sync_model->delTempSync($storeid);
             $this->sync_model->insert_sync_updates($data);
-            $data['SyncTime'] = date_format(date_create(date("Y-m-d H:i:s")),'g:i A');
+            $data['SyncTime'] = date_format(date_create(date("Y-m-d H:i:s")), 'g:i A');
             if ($flag) {
                 return $data;
             } else {
@@ -363,12 +363,12 @@ class Sync extends CI_Controller {
             $new_unsub = $this->et_model->get_count('all_unsubscriber', $storeid);
             $data['UnSubscribedCount'] = $new_unsub - $old_unsub;
             $data['type'] = $type;
-            $data['SyncTime'] =  date("Y-m-d H:i:s");
+            $data['SyncTime'] = date("Y-m-d H:i:s");
             $data['store_id'] = $storeid;
 
             $this->sync_model->delTempSync($storeid);
             $this->sync_model->insert_sync_updates($data);
-            $data['SyncTime'] = date_format(date_create(date("Y-m-d H:i:s")),'g:i A');
+            $data['SyncTime'] = date_format(date_create(date("Y-m-d H:i:s")), 'g:i A');
             if ($flag) {
                 return $data;
             } else {
@@ -382,24 +382,135 @@ class Sync extends CI_Controller {
         }
     }
 
-    // syncing for MDB 
+    // syncing for auto sync 
     public function mdbSync() {
+        set_time_limit(0);
         $subs = $this->sync_model->get_master_subscriber();
         $unsubs = $this->sync_model->get_master_unsubscriber();
         $storeid = $this->input->get('sync');
         $type = $this->input->get('type');
+
+        $auto_detail = $this->db->get('autosyncdetail');
+
+//        var_dump($sync_flag);die;
+        if ($auto_detail->num_rows() > 0) {
+            $sync_flag = $auto_detail->result_array();
+            if ($sync_flag[0]['sync_flag'] == 1) {
+
+
+                $this->db->insert('cron', array('date' => date("Y-m-d H:i:s"), 'state' => 'First'));
+
+                $str_id = $this->sync_model->setTempSync(2);
+                $response = $this->BlackBoxxSync($str_id, $type, $storeid, $flag = 1);
+
+                if ($response) {
+//                $to = 'mcwilliamssendmail@gmail.com';
+//                $subject = 'Cron Informations';
+//                $message = 'Cron is executed successfully.';
+//                $headers = 'From: mcwilliamssendmail@gmail.com' . "\r\n" .
+//                        'Reply-To: webmaster@example.com' . "\r\n" .
+//                        'X-Mailer: PHP/' . phpversion();
+//
+//                mail($to, $subject, $message, $headers);
+                    $this->db->insert('cron', array('date' => date("Y-m-d H:i:s"), 'state' => '1'));
+
+                    $storeid = $this->input->get('sync');
+                    $str_id = $this->sync_model->setTempSync(1);
+                    $et_response = $this->ExactTargetSync($str_id, $type, $storeid, $flag = 1);
+                    if ($et_response) {
+//                    $to = 'mcwilliamssendmail@gmail.com';
+//                    $subject = 'Cron Informations';
+//                    $message = 'Cron is executed successfully.';
+//                    $headers = 'From: mcwilliamssendmail@gmail.com' . "\r\n" .
+//                            'Reply-To: webmaster@example.com' . "\r\n" .
+//                            'X-Mailer: PHP/' . phpversion();
+//
+//                    mail($to, $subject, $message, $headers);
+                        $this->db->insert('cron', array('date' => date("Y-m-d H:i:s"), 'state' => '2'));
+                        $storeid = $this->input->get('sync');
+                        $str_id = $this->sync_model->setTempSync(3);
+                        $bepoz_response = $this->BepozSync($str_id, $type, $storeid, $flag = 1);
+                    }
+                    if ($bepoz_response) {
+//                    $to = 'mcwilliamssendmail@gmail.com';
+//                    $subject = 'Cron Informations';
+//                    $message = 'Cron is executed successfully.';
+//                    $headers = 'From: mcwilliamssendmail@gmail.com' . "\r\n" .
+//                            'Reply-To: webmaster@example.com' . "\r\n" .
+//                            'X-Mailer: PHP/' . phpversion();
+//
+//                    mail($to, $subject, $message, $headers);
+                        $this->db->insert('cron', array('date' => date("Y-m-d H:i:s"), 'state' => '3'));
+                        $new_subs = $this->sync_model->get_master_subscriber();
+                        $new_unsubs = $this->sync_model->get_master_unsubscriber();
+                        $sub_diff = $new_subs - $subs;
+                        if ($sub_diff > 0) {
+                            $data['SubscribedCount'] = $sub_diff;
+                        } else {
+                            $data['SubscribedCount'] = 0;
+                        }
+
+                        $data['SyncTime'] = date('h:ma', time());
+                        $data['UnSubscribedCount'] = $new_unsubs - $unsubs;
+                        $data['type'] = $type;
+                        $data['SyncTime'] = date("Y-m-d H:i:s");
+                        $data['store_id'] = $storeid;
+                        $this->sync_model->delTempSync($storeid);
+                        $this->sync_model->insert_sync_updates($data);
+                        $data['SyncTime'] = date_format(date_create(date("Y-m-d H:i:s")), 'g:i A');
+                    }
+                    $login = new Login();
+                    $login->new_csv_upload();
+                    $to = 'ankit@ignisitsolutions.com';
+                    $from = 'McWilliams';
+                    $subject = 'Cron Informations';
+                    $message = 'Cron is executed successfully.';
+                    mymail($to, $subject, $message, FALSE, $from);
+                    $this->db->insert('cron', array('date' => date("Y-m-d H:i:s"), 'state' => '4'));
+                    echo json_encode($data);
+                    die;
+                }
+            } 
+//            else {
+//                $to = 'ankit@ignisitsolutions.com';
+//                $from = 'McWilliams';
+//                $subject = 'Cron Informations';
+//                $message = 'Autosync button is deactivated';
+////                $headers = 'From: mcwilliamssendmail@gmail.com' . "\r\n" .
+////                        'Reply-To: webmaster@example.com' . "\r\n" .
+////                        'X-Mailer: PHP/' . phpversion();
+//
+//                mymail($to, $subject, $message, FALSE, $from);
+//            }
+        }
+    }
+
+    // syncing for MDB 
+    public function mdbManualSync() {
+        set_time_limit(0);
+        $subs = $this->sync_model->get_master_subscriber();
+        $unsubs = $this->sync_model->get_master_unsubscriber();
+        $storeid = $this->input->get('sync');
+        $type = $this->input->get('type');
+
+
+
         $str_id = $this->sync_model->setTempSync(2);
         $response = $this->BlackBoxxSync($str_id, $type, $storeid, $flag = 1);
+
         if ($response) {
+
             $storeid = $this->input->get('sync');
             $str_id = $this->sync_model->setTempSync(1);
             $et_response = $this->ExactTargetSync($str_id, $type, $storeid, $flag = 1);
             if ($et_response) {
+
                 $storeid = $this->input->get('sync');
                 $str_id = $this->sync_model->setTempSync(3);
                 $bepoz_response = $this->BepozSync($str_id, $type, $storeid, $flag = 1);
             }
-            if($bepoz_response){
+            if ($bepoz_response) {
+
                 $new_subs = $this->sync_model->get_master_subscriber();
                 $new_unsubs = $this->sync_model->get_master_unsubscriber();
                 $sub_diff = $new_subs - $subs;
@@ -412,14 +523,15 @@ class Sync extends CI_Controller {
                 $data['SyncTime'] = date('h:ma', time());
                 $data['UnSubscribedCount'] = $new_unsubs - $unsubs;
                 $data['type'] = $type;
-                $data['SyncTime'] =  date("Y-m-d H:i:s");
+                $data['SyncTime'] = date("Y-m-d H:i:s");
                 $data['store_id'] = $storeid;
                 $this->sync_model->delTempSync($storeid);
                 $this->sync_model->insert_sync_updates($data);
-                $data['SyncTime'] = date_format(date_create(date("Y-m-d H:i:s")),'g:i A');
+                $data['SyncTime'] = date_format(date_create(date("Y-m-d H:i:s")), 'g:i A');
             }
-             $login = new Login();
-             $login->new_csv_upload();
+            $login = new Login();
+            $login->new_csv_upload();
+
             echo json_encode($data);
             die;
         }
