@@ -5,9 +5,9 @@
 
               <div class="portlet">
 
-        <h4 class="portlet-title">
+<!--        <h4 class="portlet-title">
           <u>Total Subscribers - MDB</u>
-        </h4>
+        </h4>-->
 
         <div class="portlet-body">
 
@@ -45,7 +45,7 @@
                 <p class="row-stat-label">Last 7 days</p>
                 <h3 class="row-stat-value"><?php echo $FilterSubscriber['last_seven']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-              <?php if($FilterSubscriber['last_seven'] !=0 ) { echo number_format((($FilterSubscriber['last_seven'])*100)/$FilterSubscriber['previous_seven'],2); } else{ echo '0';} ?>%from previous 7 days                    
+              <?php if($FilterSubscriber['previous_seven'] !=0 ) { echo number_format((($FilterSubscriber['last_seven'])*100)/$FilterSubscriber['previous_seven'],2); } else{ echo '0';} ?>%from previous 7 days                    
                 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
@@ -66,19 +66,14 @@
       </div> <!-- /.portlet -->
       
             <div class="portlet">
-
-        <h4 class="portlet-title">
-          <u>Total UnSubscribers - MDB</u>
-        </h4>
-
         <div class="portlet-body">
 
           <div class="row">
 
-            <div class="col-sm-6 col-md-3">
+            <div class="col-sm-12 col-md-12">
               <div class="row-stat">
-                <p class="row-stat-label">Total UnSubscribed</p>
-                <h3 class="row-stat-value"><?php echo count($UnSubscriber); ?></h3>
+                <p class="row-stat-label"></p>
+                <h3 class="row-stat-value"> Total UnSubscribed in MDB to Date = <?php echo count($UnSubscriber); ?></h3>
                 <span class="label label-success row-stat-badge">+
                     <?php if(count($UnSubscriber) !=0){ echo number_format(((count($UnSubscriber)-$FilterUnSubscriber['year'])*100)/count($UnSubscriber),2);} else{ echo '0';} ?>% from previous year</span>
               </div> <!-- /.row-stat -->
@@ -107,7 +102,17 @@
                 <p class="row-stat-label">Last 7 days</p>
                 <h3 class="row-stat-value"><?php echo $FilterUnSubscriber['last_seven']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-              <?php if($FilterUnSubscriber['last_seven'] !=0 ) { echo number_format((($FilterUnSubscriber['last_seven'])*100)/count($UnSubscriber),2); } else{ echo '0';} ?>%                    
+              <?php if($FilterUnSubscriber['previous_seven'] !=0 ) { echo number_format((($FilterUnSubscriber['last_seven'])*100)/$FilterUnSubscriber['previous_seven'],2); } else{ echo '0';} ?>% from previous 7 days                    
+                </span>
+              </div> <!-- /.row-stat -->
+            </div> <!-- /.col -->
+            
+               <div class="col-sm-6 col-md-3">
+             <div class="row-stat">
+                <p class="row-stat-label">Today</p>
+                <h3 class="row-stat-value"><?php echo $FilterUnSubscriber['today']; ?></h3>
+                <span class="label label-success row-stat-badge">
+              <?php echo $FilterUnSubscriber['yesterday'];  ?> Yesterday                    
                 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->

@@ -21,6 +21,7 @@ class Mdb_model extends CI_Model {
             return NULL;
         }
     }
+
     public function get_mdbSubscriberCount() {
         $this->db->where("status", 1);
         $res = $this->db->get('master_subscriber');
@@ -116,7 +117,7 @@ FROM `master_subscriber` AS m1 WHERE m1.email NOT IN (SELECT email FROM csv_subs
     }
 
     public function get_mdbUnSubscriber() {
-          $query = "SELECT `all_unsubscriber`.`id`, `all_unsubscriber`.`email`, `all_unsubscriber`.`firstname`, `all_unsubscriber`.`lastname`, `all_unsubscriber`.`unsubscribed_date` FROM (`store`) JOIN `all_unsubscriber` ON `all_unsubscriber`.`unsubscriber_from` REGEXP `store`.`id` WHERE `store`.`name` = 'MDB' ";
+        $query = "SELECT `all_unsubscriber`.`id`, `all_unsubscriber`.`email`, `all_unsubscriber`.`firstname`, `all_unsubscriber`.`lastname`, `all_unsubscriber`.`unsubscribed_date` FROM (`store`) JOIN `all_unsubscriber` ON `all_unsubscriber`.`unsubscriber_from` REGEXP `store`.`id` WHERE `store`.`name` = 'MDB' ";
 
         $res = $this->db->query($query);
         if ($res->num_rows() > 0) {
@@ -170,6 +171,10 @@ FROM `master_subscriber` AS m1 WHERE m1.email NOT IN (SELECT email FROM csv_subs
         $query2 = "select * from all_unsubscriber where `unsubscribed_date` between '" . date("Y-m", strtotime("-4 hour")) . "-01' and '" . date("Y-m", strtotime("-2 hour")) . "-01'";
         $query3 = "select * from all_unsubscriber where unsubscribed_date >= DATE_SUB( CURDATE( ) , INTERVAL 30 DAY)";
         $query4 = "select * from all_unsubscriber where `unsubscribed_date` between '" . date("Y-m-d", strtotime("-60 days")) . "' and '" . date("Y-m-d", strtotime("-30 days")) . "'";
+        $query5 = "select * from all_unsubscriber where `unsubscribed_date` >= DATE_SUB( CURDATE( ) , INTERVAL 7 DAY) ";
+        $query6 = "select * from all_unsubscriber where `unsubscribed_date` between DATE_SUB( CURDATE( ) , INTERVAL 14 DAY) and DATE_SUB( CURDATE( ) , INTERVAL 7 DAY) ";
+        $query7 = "select * from all_unsubscriber where `unsubscribed_date` >= CURDATE( ) ";
+        $query8 = "select * from all_unsubscriber where `unsubscribed_date` >= CURDATE( ) - 1 ";
 //        $query1 = "select count(id) from et_subscriber where CreatedDate >= DATEADD(MONTH, -1, GETDATE()) " ;
 
         $res = $this->db->query($query);
@@ -177,11 +182,19 @@ FROM `master_subscriber` AS m1 WHERE m1.email NOT IN (SELECT email FROM csv_subs
         $res2 = $this->db->query($query2);
         $res3 = $this->db->query($query3);
         $res4 = $this->db->query($query4);
+        $res5 = $this->db->query($query5);
+        $res6 = $this->db->query($query6);
+        $res7 = $this->db->query($query7);
+        $res8 = $this->db->query($query8);
         $data['year'] = $res->num_rows();
         $data['hours'] = $res1->num_rows();
         $data['previous_hours'] = $res2->num_rows();
         $data['last_thirty'] = $res3->num_rows();
         $data['previous_thirty'] = $res4->num_rows();
+        $data['last_seven'] = $res5->num_rows();
+        $data['previous_seven'] = $res6->num_rows();
+        $data['today'] = $res7->num_rows();
+        $data['yesterday'] = $res8->num_rows();
         return $data;
     }
 

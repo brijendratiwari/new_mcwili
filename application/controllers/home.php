@@ -143,7 +143,7 @@ class Home extends CI_Controller {
             $data['Subscriber'] = $this->mdb_model->get_mdbSubscriberCount();
             $data['UnSubscriber'] = $this->mdb_model->get_mdbUnSubscriber();
             $data['FilterSubscriber'] = $this->mdb_model->get_mdbFilterSubscriber();
-            $data['FilterUnSubscriber'] = $this->et_model->get_etFilterUnSubscriber();
+            $data['FilterUnSubscriber'] = $this->mdb_model->get_mdbFilterUnSubscriber();
             $data['checkSystemSync'] = $this->et_model->checkSystemSync();
             $data['getLastSystemSyncsub'] = $this->mdb_model->getLastSystemSync();
 //            var_dump($data['UnSubscriber']);
