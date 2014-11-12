@@ -284,7 +284,7 @@ class Sync extends CI_Controller {
     }
 
     public function BepozSync($id, $type, $storeid, $flag = FALSE) {
-
+        
         $controller_et = new Exact_target();
 
         $data = array();
@@ -397,49 +397,29 @@ class Sync extends CI_Controller {
             $sync_flag = $auto_detail->result_array();
             if ($sync_flag[0]['sync_flag'] == 1) {
 
-
+                try
+                {
                 $this->db->insert('cron', array('date' => date("Y-m-d H:i:s"), 'state' => 'First'));
 
                 $str_id = $this->sync_model->setTempSync(2);
                 $response = $this->BlackBoxxSync($str_id, $type, $storeid, $flag = 1);
 
                 if ($response) {
-//                $to = 'mcwilliamssendmail@gmail.com';
-//                $subject = 'Cron Informations';
-//                $message = 'Cron is executed successfully.';
-//                $headers = 'From: mcwilliamssendmail@gmail.com' . "\r\n" .
-//                        'Reply-To: webmaster@example.com' . "\r\n" .
-//                        'X-Mailer: PHP/' . phpversion();
-//
-//                mail($to, $subject, $message, $headers);
+
                     $this->db->insert('cron', array('date' => date("Y-m-d H:i:s"), 'state' => '1'));
 
                     $storeid = $this->input->get('sync');
                     $str_id = $this->sync_model->setTempSync(1);
                     $et_response = $this->ExactTargetSync($str_id, $type, $storeid, $flag = 1);
                     if ($et_response) {
-//                    $to = 'mcwilliamssendmail@gmail.com';
-//                    $subject = 'Cron Informations';
-//                    $message = 'Cron is executed successfully.';
-//                    $headers = 'From: mcwilliamssendmail@gmail.com' . "\r\n" .
-//                            'Reply-To: webmaster@example.com' . "\r\n" .
-//                            'X-Mailer: PHP/' . phpversion();
-//
-//                    mail($to, $subject, $message, $headers);
+
                         $this->db->insert('cron', array('date' => date("Y-m-d H:i:s"), 'state' => '2'));
                         $storeid = $this->input->get('sync');
                         $str_id = $this->sync_model->setTempSync(3);
                         $bepoz_response = $this->BepozSync($str_id, $type, $storeid, $flag = 1);
                     }
                     if ($bepoz_response) {
-//                    $to = 'mcwilliamssendmail@gmail.com';
-//                    $subject = 'Cron Informations';
-//                    $message = 'Cron is executed successfully.';
-//                    $headers = 'From: mcwilliamssendmail@gmail.com' . "\r\n" .
-//                            'Reply-To: webmaster@example.com' . "\r\n" .
-//                            'X-Mailer: PHP/' . phpversion();
-//
-//                    mail($to, $subject, $message, $headers);
+
                         $this->db->insert('cron', array('date' => date("Y-m-d H:i:s"), 'state' => '3'));
                         $new_subs = $this->sync_model->get_master_subscriber();
                         $new_unsubs = $this->sync_model->get_master_unsubscriber();
@@ -469,6 +449,10 @@ class Sync extends CI_Controller {
                     $this->db->insert('cron', array('date' => date("Y-m-d H:i:s"), 'state' => '4'));
                     echo json_encode($data);
                     die;
+                }
+                }
+                catch ( Exception $e){
+                    $e->getMessage();
                 }
             } 
 //            else {

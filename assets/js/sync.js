@@ -92,13 +92,24 @@ function startsync(id) {
     }).done(function(msg) {
         if (msg != 'stop')
         {
+            try{
             var data = JSON.parse(msg);
             $('#et_subscribe').text(data.SubscribedCount);
             $('#et_unsubscribe').text(data.UnSubscribedCount);
             $('#et_lastsync').text(data.SyncTime);
 
             var n = noty({layout: 'topCenter', type: 'information', text: 'Manual Sync Successfully', timeout: 2000});
-
+            }
+            catch (e){
+              console.log(msg);
+              console.log(e);
+                $.ajax({
+                    url: base_url + "home/fail_message",
+                    type: "POST",
+                    data: {message: 'ExactTarget sync fail','res': msg}
+                })
+                var n = noty({layout: 'topCenter', type: 'error', text: 'Manual Sync Failed', timeout: 2000});
+             }
             $('#et_startsync').removeClass('disabled');
             $('#bp_startsync').removeClass('disabled');
             $('#bb_startsync').removeClass('disabled');
@@ -136,7 +147,7 @@ function startsync(id) {
 }
 
 function startblackboxxsync(id) {
-
+    alert(id);
     var base_url = $('#base_url').val();
     $('#bb_startsync').addClass('disabled');
     $('#bp_startsync').addClass('disabled');
@@ -168,12 +179,24 @@ function startblackboxxsync(id) {
     }).done(function(msg) {
         if (msg != 'stop')
         {
-            var data = JSON.parse(msg);
-            $('#bb_subscribe').text(data.SubscribedCount);
-            $('#bb_unsubscribe').text(data.UnSubscribedCount);
-            $('#bb_lastsync').text(data.SyncTime);
-
-            var n = noty({layout: 'topCenter', type: 'information', text: 'Manual Sync Successfully', timeout: 2000});
+             try{
+                var data = JSON.parse(msg);
+                $('#bb_subscribe').text(data.SubscribedCount);
+                $('#bb_unsubscribe').text(data.UnSubscribedCount);
+                $('#bb_lastsync').text(data.SyncTime);
+                 var n = noty({layout: 'topCenter', type: 'information', text: 'Manual Sync Successfully', timeout: 2000});
+             }
+            catch (e){
+              console.log(msg);
+              console.log(e);
+                $.ajax({
+                    url: base_url + "home/fail_message",
+                    type: "POST",
+                    data: {message: 'Blackboxx sync fail','res': msg}
+                })
+                var n = noty({layout: 'topCenter', type: 'error', text: 'Manual Sync Failed', timeout: 2000});
+             }
+           
 
             $('#bb_startsync').removeClass('disabled');
             $('#bp_startsync').removeClass('disabled');
@@ -242,13 +265,24 @@ function startbepozsync(id) {
     }).done(function(msg) {
         if (msg != 'stop')
         {
+            try{
             var data = JSON.parse(msg);
             $('#bp_subscribe').text(data.SubscribedCount);
             $('#bp_unsubscribe').text(data.UnSubscribedCount);
             $('#bp_lastsync').text(data.SyncTime);
 
             var n = noty({layout: 'topCenter', type: 'information', text: 'Manual Sync Successfully', timeout: 2000});
-
+            }
+            catch (e){
+              console.log(msg);
+              console.log(e);
+                $.ajax({
+                    url: base_url + "home/fail_message",
+                    type: "POST",
+                    data: {message: 'Bepoz sync fail','res': msg}
+                })
+                var n = noty({layout: 'topCenter', type: 'error', text: 'Manual Sync Failed', timeout: 2000});
+             }
             $('#bb_startsync').removeClass('disabled');
             $('#bp_startsync').removeClass('disabled');
             $('#et_startsync').removeClass('disabled');
@@ -316,13 +350,24 @@ function startmdbsync(id) {
     }).done(function(msg) {
         if (msg != 'stop')
         {
+            try{
             var data = JSON.parse(msg);
             $('#mdb_subscribe').text(data.SubscribedCount);
             $('#mdb_unsubscribe').text(data.UnSubscribedCount);
             $('#mdb_lastsync').text(data.SyncTime);
 
             var n = noty({layout: 'topCenter', type: 'information', text: 'Manual Sync Successfully', timeout: 2000});
-
+            }
+            catch (e){
+              console.log(msg);
+              console.log(e);
+                $.ajax({
+                    url: base_url + "home/fail_message",
+                    type: "POST",
+                    data: {message: 'MDB sync fail','res': msg}
+                })
+                var n = noty({layout: 'topCenter', type: 'error', text: 'Manual Sync Failed', timeout: 2000});
+             }
             $('#mdb_startsync').removeClass('disabled');
             $('#bp_startsync').removeClass('disabled');
             $('#bb_startsync').removeClass('disabled');
