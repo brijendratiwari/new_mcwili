@@ -47,7 +47,7 @@
                             <a class="btn btn-primary btn-small btn-block <?php if($autosync == 0) echo 'disabled'; ?>" href="javascript:stopsync(this);" id="syncstop"><i class="fa fa-exclamation-triangle"></i> Deactivate Sync </a>
                             <br>
                             <div class="col-sm-4 col-md-6">
-                            <p class="row-stat-label">Last Sync</p><h3 class="row-stat-value"><?php if(!empty($mdbSyncsub)){ echo date('h:ma', strtotime($mdbSyncsub[0]['SyncTime']));} else{ echo "00:00";}?></h3>
+                            <p class="row-stat-label">Last Sync</p><h3 class="row-stat-value"><?php if(!empty($mdbSyncsub)){ echo date_format(date_create($getLastSystemSyncsub[0]['SyncTime']),'g:i A'); } else{ echo "00:00";}?></h3>
                             </div>
                             <div class="col-sm-4 col-md-6">
                             <p class="row-stat-label">Next Sync</p><h3 class="row-stat-value">85Sec</h3>
