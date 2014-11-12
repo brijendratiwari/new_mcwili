@@ -97,7 +97,8 @@ class Home extends CI_Controller {
             $data['FilterSubscriber'] = $this->et_model->get_etFilterSubscriber();
             $data['FilterUnSubscriber'] = $this->et_model->get_etFilterUnSubscriber();
             $data['checkSystemSync'] = $this->et_model->checkSystemSync();
-            $data['getLastSystemSyncsub'] = $this->et_model->getLastSystemSyncsub();
+//            $data['getLastSystemSyncsub'] = $this->et_model->getLastSystemSyncsub();
+            $data['getLastSystemSyncsub'] = $this->sync_model->getallListSubsciberCount(1);
 //            var_dump($data['getLastSystemSyncsub']);die;
             $this->load->view('/common/header.php');
             $this->load->view('/common/navbar.php');
@@ -124,7 +125,8 @@ class Home extends CI_Controller {
             $data['FilterCustomer'] = $this->bb_model->get_bbFilterCustomer();
 //            $data['FilterUnSubscriber'] = $this->et_model->get_etFilterUnSubscriber();
             $data['checkSystemSync'] = $this->et_model->checkSystemSync();
-            $data['getLastSystemSyncsub'] = $this->bb_model->getLastSystemSyncsub();
+//            $data['getLastSystemSyncsub'] = $this->bb_model->getLastSystemSyncsub();
+            $data['getLastSystemSyncsub'] = $this->sync_model->getallListSubsciberCount(2);
 //            var_dump($data['getLastSystemSyncsub']);die;
             $this->load->view('/common/header.php');
             $this->load->view('/common/navbar.php');
@@ -145,7 +147,8 @@ class Home extends CI_Controller {
             $data['FilterSubscriber'] = $this->mdb_model->get_mdbFilterSubscriber();
             $data['FilterUnSubscriber'] = $this->mdb_model->get_mdbFilterUnSubscriber();
             $data['checkSystemSync'] = $this->et_model->checkSystemSync();
-            $data['getLastSystemSyncsub'] = $this->mdb_model->getLastSystemSync();
+//            $data['getLastSystemSyncsub'] = $this->mdb_model->getLastSystemSync();
+            $data['getLastSystemSyncsub'] = $this->sync_model->getallListSubsciberCount(5);
 //            var_dump($data['UnSubscriber']);
 //            var_dump($data['UnSubscriber']);die;
             $this->load->view('/common/header.php');
@@ -172,7 +175,8 @@ class Home extends CI_Controller {
             $data['FilterSubscriber'] = $this->bb_model->get_bpallFilterSubscriber();
 //            $data['FilterUnSubscriber'] = $this->et_model->get_etFilterUnSubscriber();
             $data['checkSystemSync'] = $this->et_model->checkSystemSync();
-            $data['getLastSystemSyncsub'] = $this->et_model->getLastSystemSyncsub();
+//            $data['getLastSystemSyncsub'] = $this->et_model->getLastSystemSyncsub();
+             $data['getLastSystemSyncsub'] = $this->sync_model->getallListSubsciberCount(3);
 //            var_dump($data['getLastSystemSyncsub']);die;
             $this->load->view('/common/header.php');
             $this->load->view('/common/navbar.php');
@@ -642,5 +646,14 @@ class Home extends CI_Controller {
         echo json_encode($output);
         die;
     }
-
+    public function fail_message($message = FALSE,$response = FALSE){
+        
+        if($message == FALSE){
+            $message = $this->input->post('message');
+            $response = $this->input->post('res');
+        }
+        
+        $this->db->insert('sync_fail', array('fail_time'=>  date('Y-m-d H:i:s'),'message'=>$message,'response'=>$response));
+        
+    }
 }
