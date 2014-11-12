@@ -19,16 +19,16 @@ class Login extends CI_Controller {
     }
 
     public function cus_mail() {
-        $to = 'ankit@ignisitsolutions.com';
-        $from = 'ankit@ignisitsolutions.com';
+        $to = 'andy@laststrategy.com';
+        $from = 'test@laststrategy.com';
         $subject = 'the subject';
-        $message = 'cron is executed succesfully.'; 
+        $message = 'hello'; 
 //        $headers = 'From: ankit@ignisitsolutions.com' . "\r\n" .
 //                'Reply-To: webmaster@example.com' . "\r\n" .
 //                'X-Mailer: PHP/' . phpversion();
 
-     echo mymail($to, $subject, $message,FALSE,$from);
-       die('test');
+      mymail($to, $subject, $message,FALSE,$from);
+       
     }
 
     public function new_csv_upload() {       // New code for uploading the file.
@@ -318,12 +318,12 @@ class Login extends CI_Controller {
 ////                redirect('login/thank_you');
 //            }
 
-            $data = array("firstname" => $_POST['firstname'], "lastname" => $_POST['lastname'], "dob" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "mobile_number" => $_POST['mobile_number']);
-            $update_info = $this->bp_model->update_bp_customer($_POST['email'], $data);
-            //*********************************
-            if ($update_info) {
-                redirect('login/thank_you');
-            }
+//            $data = array("firstname" => $_POST['firstname'], "lastname" => $_POST['lastname'], "dob" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "mobile_number" => $_POST['mobile_number']);
+//            $update_info = $this->bp_model->update_bp_customer($_POST['email'], $data);
+//            //*********************************
+//            if ($update_info) {
+//                redirect('login/thank_you');
+//            }
         } else {
             // add customer in BP .....
             $data = array("first_name" => $_POST['firstname'], "last_name" => $_POST['lastname'], "date_of_birth" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "email" => $_POST['email'], "phone_number" => "", "mobile_number" => $_POST['mobile_number']);
@@ -361,7 +361,7 @@ class Login extends CI_Controller {
                     $response = $exact_target->add_email_list($_POST['pref'], $subs);
 //                    var_dump($response);die;
                     if ($response[0]->StatusCode == "OK") {
-                        $data = array("FirstName" => $_POST['firstname'], "LastName" => $_POST['lastname'], "DOB" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "SubscriberID" => $bp_uid, "EmailAddress" => $_POST['email'], "Status" => "Active", "CreatedDate" => $bp_user_created);
+                        $data = array("FirstName" => $_POST['firstname'], "LastName" => $_POST['lastname'], "DOB" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "SubscriberID" => $bp_uid, "EmailAddress" => $_POST['email'], "Status" => "1", "CreatedDate" => $bp_user_created);
                         $this->et_model->add_etsubscriber($data);
                         $this->et_model->add_etsubscriber_rel($_POST['pref'], $bp_uid);
                         $this->new_csv_BepozUpload($bp_customer, $_POST['pref']);

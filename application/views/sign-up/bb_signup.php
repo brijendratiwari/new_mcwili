@@ -64,6 +64,9 @@
         <link rel="stylesheet" href="<?= base_url(); ?>assets/css/font-awesome.css">
         <link rel="stylesheet" href="<?= base_url(); ?>assets/css/sky-forms.css">
         <style>
+            .custom_button:disabled {
+    background: #dddddd;
+} 
             .sky-form{
                 box-shadow : none;
             }
@@ -148,8 +151,8 @@
                                 </li>
                                 <li id="account">
                                     <span class='fa fa-user'></span>
-                                    <a href='https://www.mcwilliamscellar.com.au/login/' class='sign_in tab'>Sign In</a>
-                                    <a class="create-account" href="/join/" title="Create Account">Create Account</a>
+                                    <a href='https://www.mcwilliamscellar.com.au/login/' class='sign_in tab' >Sign In</a>
+                                    <a class="create-account" href="/join/" title="Create Account">Create Account</a> 
                                 </li>
 
                             </ul>
@@ -481,7 +484,7 @@
                                     <label class="input">
                                         <i class="icon-append fa fa-envelope"></i>
                                         <input  id="customer_email" required="" maxlength="100" name="email" type="email" value="" placeholder="E-mail">
-                                    </label>
+                                    </label>         
                                 </section>
                             </div>
                               <div class="row">
@@ -494,7 +497,7 @@
                              
                               </div><div class="row">
                                   <section class="col" style="float: right">
-                                    <input type="submit" class="button" value="SIGN IN" > 
+                                      <input type="submit" class="custom_button button" value="SIGN IN" disabled="disabled" > 
                                 </section>
                                   
                               </div>
@@ -670,7 +673,18 @@
                             $('.checked').prop('checked', false);
                         }
                      });
-                    $.validator.addMethod("lessThan",
+                     
+                      
+    $.validator.addMethod("lessThanEqual",
+
+                            function (value, element, param) {
+                              var $min = $(param);
+                             
+                              return parseInt(value) <= 31 
+                                    
+                            }, "Please enter valid Date");
+                    
+    $.validator.addMethod("lessThan",
 
                             function (value, element, param) {
                               var $min = $(param);
@@ -678,7 +692,18 @@
                               return parseInt(value) < 13
                                     
                             }, "Please enter valid month");
-                            
+                  
+    $.validator.addMethod("greaterThan",
+
+                            function (value, element, param) {
+                           var d = new Date();
+                           var year = d.getFullYear();
+                            var age = year - parseInt(value); 
+                              var $min = $(param);
+                             
+                              return age > 18
+                                    
+                            }, "Your age must be greater than 18.");
 
             $(function ()
             {
@@ -696,13 +721,33 @@
                                         email:
                                                 {
                                                     required: true,
-                                                    email: true
+                                                    email: true 
                                                 },
                                         password:
                                                 {
                                                     required: true,
                                                     minlength: 8
                                                 },
+                                        mobile_number:
+                                                {
+                                                    required: true,
+                                                    number: true
+                                                },
+                                        birthDay:
+                                                {
+                                                    required: true,
+                                                    lessThanEqual : '#birthDay',
+                                                    
+                                                     
+                                                },       
+                                        birthYear:
+                                                {
+                                                    required: true,
+                                                    minlength: 4,
+                                                    greaterThan : '#birthYear',
+                                                    
+                                                     
+                                                }, 
                                         birthMonth:
                                         {
                                                     required: true,

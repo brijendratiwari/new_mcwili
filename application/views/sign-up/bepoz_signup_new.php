@@ -251,7 +251,12 @@
             <div class="body body-m">	
 
                 <form id="sky-form" class="sky-form" action="<?php echo base_url(); ?>index.php/login/createbpoz" method="post">
-                    <header>New User</header>
+                    <header>New User
+                    
+                                  <?php if ($this->session->flashdata('msg')) { ?>
+                                  <span style="font-size: 15px;color: red;font-weight:bold"><?php echo $this->session->flashdata('msg'); } ?></span>
+                        
+                    </header>
 
                     <fieldset>					
                         <div class="row">
@@ -310,7 +315,7 @@
                             <div style="color: lightgrey; float: left; font-size: 22px; font-weight: bold; position: relative; width: 0;">/</div>
                             <section class="col col-2">
                                 <label class="input">
-                                    <input required="" id="customer_date_of_birth_3i" name="birthYear" type="text" placeholder="YYYY">
+                                    <input required="" id="user_date_of_birth_3i" name="birthYear" type="text" placeholder="YYYY">
                                 </label>
                             </section>
                         </div>
@@ -431,6 +436,14 @@
                             $('.checked').prop('checked', false);
                         }
                      });
+                    $.validator.addMethod("lessThanEqual",
+
+                            function (value, element, param) {
+                              var $min = $(param);
+                             
+                              return parseInt(value) <= 31 
+                                    
+                            }, "Please enter valid Date");
                     $.validator.addMethod("lessThan",
 
                             function (value, element, param) {
@@ -439,6 +452,18 @@
                               return parseInt(value) < 13
                                     
                             }, "Please enter valid month");
+                            
+                    $.validator.addMethod("greaterThan",
+
+                            function (value, element, param) {
+                           var d = new Date();
+                           var year = d.getFullYear();
+                            var age = year - parseInt(value); 
+                              var $min = $(param);
+                             
+                              return age > 18
+                                    
+                            }, "Your age must be greater than 18.");
                             
 
             $(function ()
@@ -464,6 +489,26 @@
                                                     required: true,
                                                     minlength: 8
                                                 },
+                                         mobile_number:
+                                                {
+                                                    required: true,
+                                                    number: true
+                                                },        
+                                        birthDay:
+                                        {
+                                                    required: true,
+                                                    lessThanEqual : '#birthDay',
+                                                    
+                                                     
+                                                },       
+                                        birthYear:
+                                        {
+                                                    required: true,
+                                                    minlength: 4,
+                                                    greaterThan : '#birthYear',
+                                                    
+                                                     
+                                                },       
                                         birthMonth:
                                         {
                                                     required: true,
