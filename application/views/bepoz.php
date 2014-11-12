@@ -71,7 +71,7 @@
           <div class="row">
             <div class="col-sm-6 col-md-3">
               <div class="row-stat">
-                <p class="row-stat-label">This Month</p>
+                <p class="row-stat-label">Last Month</p>
                 <h3 class="row-stat-value"><?php echo $mcSubscriber['month']; ?></h3>
                 <span class="label label-success row-stat-badge">+
                     <?php if($mcSubscriber['month'] !=0) { echo number_format((($mcSubscriber['month'])*100)/$mcSubscriber['last_thirty'],2);} else{ echo "0";} ?>% from previous month</span>
@@ -134,21 +134,22 @@
               </div>  /.row-stat 
             </div>  /.col -->
 
+     <div class="col-sm-6 col-md-3">
+              <div class="row-stat">
+                <p class="row-stat-label">Last Month</p>
+                <h3 class="row-stat-value"><?php echo $mount['month']; ?></h3>
+                <span class="label label-success row-stat-badge">+
+                    <?php if($mount['month'] !=0) { echo number_format((($mount['month']-$mount['previous_month'])*100)/$mount['month'],2);} else{ echo "0";} ?>% from previous month</span>
+              </div> <!-- /.row-stat -->
+            </div> <!-- /.col -->            
+                    
+                    
             <div class="col-sm-6 col-md-3">
               <div class="row-stat">
                 <p class="row-stat-label">Last 30 Days</p>
                 <h3 class="row-stat-value"><?php echo $mount['last_thirty']; ?></h3>
                 <span class="label label-success row-stat-badge">+
                     <?php if($mount['last_thirty'] !=0) { echo number_format((($mount['last_thirty']-$mount['previous_thirty'])*100)/$mount['last_thirty'],2); }else{ echo '0';} ?> from previous 30 days</span>
-              </div> <!-- /.row-stat -->
-            </div> <!-- /.col -->
-
-            <div class="col-sm-6 col-md-3">
-              <div class="row-stat">
-                <p class="row-stat-label">Last Month</p>
-                <h3 class="row-stat-value"><?php echo $mount['month']; ?></h3>
-                <span class="label label-success row-stat-badge">+
-                    <?php if($mount['month'] !=0) { echo number_format((($mount['month']-$mount['previous_month'])*100)/$mount['month'],2);} else{ echo "0";} ?>% from previous month</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
 
