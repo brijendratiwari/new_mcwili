@@ -137,8 +137,8 @@ FROM `master_subscriber` AS m1 WHERE m1.email NOT IN (SELECT email FROM csv_subs
         $query4 = "select * from master_subscriber where `CreatedDate` between '" . date("Y-m-d", strtotime("-60 days")) . "' and '" . date("Y-m-d", strtotime("-30 days")) . "'";
         $query5 = "select * from master_subscriber where `CreatedDate` >= DATE_SUB( CURDATE( ) , INTERVAL 7 DAY) ";
         $query6 = "select * from master_subscriber where `CreatedDate` between DATE_SUB( CURDATE( ) , INTERVAL 14 DAY) and DATE_SUB( CURDATE( ) , INTERVAL 7 DAY) ";
-        $query7 = "select * from master_subscriber where `CreatedDate` >= CURDATE( ) ";
-        $query8 = "select * from master_subscriber where `CreatedDate` >= CURDATE( ) - 1 ";
+        $query7 = "select * from master_subscriber where DATE(`CreatedDate`) = DATE(CURDATE( )) ";
+        $query8 = "select * from master_subscriber where DATE(`CreatedDate`) = DATE(CURDATE( ) - 1) ";
 //   echo $query8;die;
 //        $query1 = "select count(id) from et_subscriber where CreatedDate >= DATEADD(MONTH, -1, GETDATE()) " ;
         $res = $this->db->query($query);
@@ -166,17 +166,17 @@ FROM `master_subscriber` AS m1 WHERE m1.email NOT IN (SELECT email FROM csv_subs
     public function get_mdbFilterUnSubscriber() {
 
         $data = array();
-        $query = "select * from all_unsubscriber where YEAR(unsubscribed_date) = (YEAR(CURDATE())-1) ";
-        $query1 = "select * from all_unsubscriber where `unsubscribed_date` between '" . date("Y-m", strtotime("-4 hour")) . "-01' and '" . date("Y-m", strtotime("-0 hour")) . "-01'";
-        $query2 = "select * from all_unsubscriber where `unsubscribed_date` between '" . date("Y-m", strtotime("-4 hour")) . "-01' and '" . date("Y-m", strtotime("-2 hour")) . "-01'";
-        $query3 = "select * from all_unsubscriber where unsubscribed_date >= DATE_SUB( CURDATE( ) , INTERVAL 30 DAY)";
+        $query = "select * from all_unsubscriber where YEAR(unsubscribed_date) = (YEAR(CURDATE())-1)";
+        $query1 = "select * from all_unsubscriber where MONTH(unsubscribed_date) = (MONTH(CURDATE())-1) ";
+        $query2 = "select * from all_unsubscriber where MONTH(unsubscribed_date) = (MONTH(CURDATE())-2) ";
+        $query3 = "select * from all_unsubscriber where unsubscribed_date >= DATE_SUB( CURDATE( ) , INTERVAL 30 DAY) ";
         $query4 = "select * from all_unsubscriber where `unsubscribed_date` between '" . date("Y-m-d", strtotime("-60 days")) . "' and '" . date("Y-m-d", strtotime("-30 days")) . "'";
         $query5 = "select * from all_unsubscriber where `unsubscribed_date` >= DATE_SUB( CURDATE( ) , INTERVAL 7 DAY) ";
         $query6 = "select * from all_unsubscriber where `unsubscribed_date` between DATE_SUB( CURDATE( ) , INTERVAL 14 DAY) and DATE_SUB( CURDATE( ) , INTERVAL 7 DAY) ";
-        $query7 = "select * from all_unsubscriber where `unsubscribed_date` >= CURDATE( ) ";
-        $query8 = "select * from all_unsubscriber where `unsubscribed_date` >= CURDATE( ) - 1 ";
+        $query7 = "select * from all_unsubscriber where DATE(`unsubscribed_date`) = DATE(CURDATE( )) ";
+        $query8 = "select * from all_unsubscriber where DATE(`unsubscribed_date`) = DATE(CURDATE( ) - 1) ";
+//   echo $query8;die;
 //        $query1 = "select count(id) from et_subscriber where CreatedDate >= DATEADD(MONTH, -1, GETDATE()) " ;
-
         $res = $this->db->query($query);
         $res1 = $this->db->query($query1);
         $res2 = $this->db->query($query2);
@@ -187,14 +187,15 @@ FROM `master_subscriber` AS m1 WHERE m1.email NOT IN (SELECT email FROM csv_subs
         $res7 = $this->db->query($query7);
         $res8 = $this->db->query($query8);
         $data['year'] = $res->num_rows();
-        $data['hours'] = $res1->num_rows();
-        $data['previous_hours'] = $res2->num_rows();
+        $data['month'] = $res1->num_rows();
+        $data['previous_month'] = $res2->num_rows();
         $data['last_thirty'] = $res3->num_rows();
         $data['previous_thirty'] = $res4->num_rows();
         $data['last_seven'] = $res5->num_rows();
         $data['previous_seven'] = $res6->num_rows();
         $data['today'] = $res7->num_rows();
         $data['yesterday'] = $res8->num_rows();
+
         return $data;
     }
 

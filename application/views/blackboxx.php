@@ -5,23 +5,27 @@
 
               <div class="portlet">
 
-        <h4 class="portlet-title">
-          <u>Total Customers All Stores</u>
-        </h4>
+        <div class="portlet-title">
+          <u><h4>Total Customers in BB to Date = <?php if($Customer !=0 ) {echo $Customer;} else{ echo "0";} ?></h4></u>
+        <span class="label label-success row-stat-badge">+
+                    <?php if($Customer !=0 ){ echo number_format((($Customer-$FilterCustomer['year'])*100)/$Customer,2); }else{ echo '0';} ?>% from previous year</span>
+
+        </div>
 
         <div class="portlet-body">
 
           <div class="row">
-
-            <div class="col-sm-6 col-md-3">
+  
+         <div class="col-sm-6 col-md-3">
               <div class="row-stat">
-                <p class="row-stat-label">Total Customers</p>
-                <h3 class="row-stat-value"><?php if($Customer !=0 ) {echo $Customer;} else{ echo "0";} ?></h3>
+                <p class="row-stat-label">Last Month</p>
+                <h3 class="row-stat-value"><?php echo $FilterCustomer['month']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($Customer !=0 ){ echo number_format((($Customer-$FilterCustomer['year'])*100)/$Customer,2); }else{ echo '0';} ?>% from previous year</span>
+                    <?php if($FilterCustomer['month'] !=0 ){ echo number_format((( $FilterCustomer['month'] - $FilterCustomer['previous_month'])*100)/$FilterCustomer['month'],2); } else{ echo '0';} ?>% from previous month</span>
               </div> <!-- /.row-stat -->
-            </div> <!-- /.col -->
-
+            </div> <!-- /.col -->         
+                    
+                    
             <div class="col-sm-6 col-md-3">
               <div class="row-stat">
                 <p class="row-stat-label">Last 30 Days</p>
@@ -31,21 +35,22 @@
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
 
-            <div class="col-sm-6 col-md-3">
-              <div class="row-stat">
-                <p class="row-stat-label">This Month</p>
-                <h3 class="row-stat-value"><?php echo $FilterCustomer['month']; ?></h3>
+          <div class="col-sm-6 col-md-3">
+             <div class="row-stat">
+                <p class="row-stat-label">Last 7 days</p>
+                <h3 class="row-stat-value"><?php echo $FilterCustomer['last_seven']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($FilterCustomer['month'] !=0 ) { echo number_format((($FilterCustomer['month'])*100)/$FilterCustomer['last_thirty'],2); } else{ echo '0';} ?>% from previous 30 days</span>
+              <?php if($FilterCustomer['previous_seven'] !=0 ) { echo number_format((($FilterCustomer['last_seven'])*100)/$FilterCustomer['previous_seven'],2); } else{ echo '0';} ?>%from previous 7 days                    
+                </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
 
-            <div class="col-sm-6 col-md-3">
-              <div class="row-stat">
+          <div class="col-sm-6 col-md-3">
+             <div class="row-stat">
                 <p class="row-stat-label">Today</p>
                 <h3 class="row-stat-value"><?php echo $FilterCustomer['today']; ?></h3>
-                <span class="label label-success row-stat-badge">+
-              <?php if($FilterCustomer['today'] !=0 ) { echo number_format((($FilterCustomer['today'])*100)/$Customer,2); } else{ echo '0';} ?>%                    
+                <span class="label label-success row-stat-badge">
+              <?php echo $FilterCustomer['yesterday'];  ?> Yesterday                    
                 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
@@ -58,50 +63,56 @@
       
             <div class="portlet">
 
-        <h4 class="portlet-title">
-          <u>McWilliams Online Store</u>
-        </h4>
+        <div class="portlet-title">
+          <u><h4>McWilliams Online Store to Date = <?php echo $mcSubscriber['total']; ?></h4></u>
+          <span class="label label-success row-stat-badge">+
+                    <?php if($mcSubscriber['total'] !=0){ echo number_format((($mcSubscriber['total']-$mcSubscriber['year'])*100)/$mcSubscriber['total'],2);} else{ echo '0';} ?>% from previous year</span>
+
+        </div>
 
         <div class="portlet-body">
           <div class="row">
 
             <div class="col-sm-6 col-md-3">
               <div class="row-stat">
-                <p class="row-stat-label">Total Customers</p>
-                <h3 class="row-stat-value"><?php echo $mcSubscriber['total']; ?></h3>
+                <p class="row-stat-label">Last Month</p>
+                <h3 class="row-stat-value"><?php echo $mcSubscriber['month']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($mcSubscriber['total'] !=0){ echo number_format((($mcSubscriber['total']-$mcSubscriber['year'])*100)/$mcSubscriber['total'],2);} else{ echo '0';} ?>% from previous year</span>
+                    <?php if($mcSubscriber['month'] !=0) { echo number_format((($mcSubscriber['month'] - $mcSubscriber['previous_month'])*100)/$mcSubscriber['month'],2);} else{ echo "0";} ?>% from previous month</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
-
-            <div class="col-sm-6 col-md-3">
+                    
+          <div class="col-sm-6 col-md-3">
               <div class="row-stat">
                 <p class="row-stat-label">Last 30 Days</p>
                 <h3 class="row-stat-value"><?php echo $mcSubscriber['last_thirty']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($mcSubscriber['last_thirty'] !=0) { echo number_format((($mcSubscriber['last_thirty']-$mcSubscriber['previous_month'])*100)/$mcSubscriber['last_thirty'],2); }else{ echo '0';} ?> from previous month</span>
+                    <?php if($mcSubscriber['last_thirty'] !=0) { echo number_format((($mcSubscriber['last_thirty']-$mcSubscriber['previous_thirty'])*100)/$mcSubscriber['last_thirty'],2); }else{ echo '0';} ?> from previous 30 days</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
 
-            <div class="col-sm-6 col-md-3">
-              <div class="row-stat">
-                <p class="row-stat-label">This Month</p>
-                <h3 class="row-stat-value"><?php echo $mcSubscriber['month']; ?></h3>
+          <div class="col-sm-6 col-md-3">
+             <div class="row-stat">
+                <p class="row-stat-label">Last 7 days</p>
+                <h3 class="row-stat-value"><?php echo $mcSubscriber['last_seven']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($mcSubscriber['month'] !=0) { echo number_format((($mcSubscriber['month'])*100)/$mcSubscriber['last_thirty'],2);} else{ echo "0";} ?>% from previous 30 days</span>
-              </div> <!-- /.row-stat -->
-            </div> <!-- /.col -->
-
-            <div class="col-sm-6 col-md-3">
-              <div class="row-stat">
-                <p class="row-stat-label">Today</p>
-                <h3 class="row-stat-value"><?php echo $mcSubscriber['today']; ?></h3>
-                <span class="label label-success row-stat-badge">+
-              <?php if($mcSubscriber['today'] !=0 ) { echo number_format((($mcSubscriber['today'])*100)/$mcSubscriber['total'],2); } else{ echo '0';} ?>%                    
+              <?php if($mcSubscriber['previous_seven'] !=0 ) { echo number_format((($mcSubscriber['last_seven'])*100)/$mcSubscriber['previous_seven'],2); } else{ echo '0';} ?>%from previous 7 days                    
                 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
             
+            
+            <div class="col-sm-6 col-md-3">
+             <div class="row-stat">
+                <p class="row-stat-label">Today</p>
+                <h3 class="row-stat-value"><?php echo $mcSubscriber['today']; ?></h3>
+                <span class="label label-success row-stat-badge">
+              <?php echo $mcSubscriber['yesterday'];  ?> Yesterday                    
+                </span>
+              </div> <!-- /.row-stat -->
+            </div> <!-- /.col -->
+            
+ 
           </div> <!-- /.row -->
 
         </div> <!-- /.portlet-body -->
@@ -109,51 +120,64 @@
       </div> <!-- /.portlet -->
             <div class="portlet">
 
-        <h4 class="portlet-title">
-          <u>Entertainment Book</u>
-        </h4>
+        <div class="portlet-title">
+          <u><h4>Entertainment Book to Date = <?php echo $brandsSubscriber['total']; ?></h4></u>
+           <span class="label label-success row-stat-badge">+
+                    <?php if($brandsSubscriber['total'] !=0){ echo number_format((($brandsSubscriber['total']-$brandsSubscriber['year'])*100)/$brandsSubscriber['total'],2);} else{ echo '0';} ?>% from previous year</span>
+
+        </div>
 
         <div class="portlet-body">
 
           <div class="row">
 
-            <div class="col-sm-6 col-md-3">
+<!--            <div class="col-sm-6 col-md-3">
               <div class="row-stat">
                 <p class="row-stat-label">Total Customers</p>
                 <h3 class="row-stat-value"><?php echo $brandsSubscriber['total']; ?></h3>
                 <span class="label label-success row-stat-badge">+
                     <?php if($brandsSubscriber['total'] !=0){ echo number_format((($brandsSubscriber['total']-$brandsSubscriber['year'])*100)/$brandsSubscriber['total'],2);} else{ echo '0';} ?>% from previous year</span>
-              </div> <!-- /.row-stat -->
-            </div> <!-- /.col -->
+              </div>  /.row-stat 
+            </div>  /.col -->
 
+                   <div class="col-sm-6 col-md-3">
+              <div class="row-stat">
+                <p class="row-stat-label">Last Month</p>
+                <h3 class="row-stat-value"><?php echo $brandsSubscriber['month']; ?></h3>
+                <span class="label label-success row-stat-badge">+
+                    <?php if($brandsSubscriber['month'] !=0) { echo number_format((($brandsSubscriber['month'] - $brandsSubscriber['previous_month'])*100)/$brandsSubscriber['month'],2);} else{ echo "0";} ?>% from previous month</span>
+              </div> <!-- /.row-stat -->
+            </div> <!-- /.col -->         
+                    
             <div class="col-sm-6 col-md-3">
               <div class="row-stat">
                 <p class="row-stat-label">Last 30 Days</p>
                 <h3 class="row-stat-value"><?php echo $brandsSubscriber['last_thirty']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($brandsSubscriber['last_thirty'] !=0) { echo number_format((($brandsSubscriber['last_thirty']-$brandsSubscriber['previous_month'])*100)/$brandsSubscriber['last_thirty'],2); }else{ echo '0';} ?> from previous Month</span>
+                    <?php if($brandsSubscriber['last_thirty'] !=0) { echo number_format((($brandsSubscriber['last_thirty']-$brandsSubscriber['previous_thirty'])*100)/$brandsSubscriber['last_thirty'],2); }else{ echo '0';} ?> from previous 30 days</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
 
-            <div class="col-sm-6 col-md-3">
-              <div class="row-stat">
-                <p class="row-stat-label">This Month</p>
-                <h3 class="row-stat-value"><?php echo $brandsSubscriber['month']; ?></h3>
+         <div class="col-sm-6 col-md-3">
+             <div class="row-stat">
+                <p class="row-stat-label">Last 7 days</p>
+                <h3 class="row-stat-value"><?php echo $brandsSubscriber['last_seven']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($brandsSubscriber['month'] !=0) { echo number_format((($brandsSubscriber['month'])*100)/$brandsSubscriber['last_thirty'],2);} else{ echo "0";} ?>% from previous 30 days</span>
-              </div> <!-- /.row-stat -->
-            </div> <!-- /.col -->
-
-            <div class="col-sm-6 col-md-3">
-              <div class="row-stat">
-                <p class="row-stat-label">Today</p>
-                <h3 class="row-stat-value"><?php echo $brandsSubscriber['today']; ?></h3>
-                <span class="label label-success row-stat-badge">+
-    <?php if($brandsSubscriber['today'] !=0 ) { echo number_format((($brandsSubscriber['today'])*100)/$brandsSubscriber['total'],2); } else{ echo '0';} ?>%                    
-</span>
+              <?php if($brandsSubscriber['previous_seven'] !=0 ) { echo number_format((($brandsSubscriber['last_seven'])*100)/$brandsSubscriber['previous_seven'],2); } else{ echo '0';} ?>%from previous 7 days                    
+                </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
             
+            <div class="col-sm-6 col-md-3">
+             <div class="row-stat">
+                <p class="row-stat-label">Today</p>
+                <h3 class="row-stat-value"><?php echo $brandsSubscriber['today']; ?></h3>
+                <span class="label label-success row-stat-badge">
+              <?php echo $brandsSubscriber['yesterday'];  ?> Yesterday                    
+                </span>
+              </div> <!-- /.row-stat -->
+            </div> <!-- /.col -->
+          
           </div> <!-- /.row -->
 
         </div> <!-- /.portlet-body -->
@@ -161,47 +185,61 @@
       </div> <!-- /.portlet -->
             <div class="portlet">
 
-        <h4 class="portlet-title">
-          <u>Family and Friends</u>
-        </h4>
+        <div class="portlet-title">
+          <u><h4>Family and Friends to Date = <?php echo $celldoorSubscriber['total']; ?></h4></u>
+          <span class="label label-success row-stat-badge">+
+                    <?php if($celldoorSubscriber['total'] !=0){ echo number_format((($celldoorSubscriber['total']-$celldoorSubscriber['year'])*100)/$celldoorSubscriber['total'],2);} else{ echo '0';} ?>% from previous year</span>
+
+        </div>
 
         <div class="portlet-body">
 
           <div class="row">
 
-            <div class="col-sm-6 col-md-3">
+<!--            <div class="col-sm-6 col-md-3">
               <div class="row-stat">
                 <p class="row-stat-label">Total Customers</p>
                 <h3 class="row-stat-value"><?php echo $celldoorSubscriber['total']; ?></h3>
                 <span class="label label-success row-stat-badge">+
                     <?php if($celldoorSubscriber['total'] !=0){ echo number_format((($celldoorSubscriber['total']-$celldoorSubscriber['year'])*100)/$celldoorSubscriber['total'],2);} else{ echo '0';} ?>% from previous year</span>
+              </div>  /.row-stat 
+            </div>  /.col -->
+
+            <div class="col-sm-6 col-md-3">
+              <div class="row-stat">
+                <p class="row-stat-label">Last Month</p>
+                <h3 class="row-stat-value"><?php echo $celldoorSubscriber['month']; ?></h3>
+                <span class="label label-success row-stat-badge">+
+                    <?php if($celldoorSubscriber['month'] !=0) { echo number_format((($celldoorSubscriber['month']-$celldoorSubscriber['previous_month'])*100)/$celldoorSubscriber['month'],2);} else{ echo "0";} ?>% from previous month</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
 
+    
             <div class="col-sm-6 col-md-3">
               <div class="row-stat">
                 <p class="row-stat-label">Last 30 Days</p>
                 <h3 class="row-stat-value"><?php echo $celldoorSubscriber['last_thirty']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($celldoorSubscriber['last_thirty'] !=0) { echo number_format((($celldoorSubscriber['last_thirty']-$celldoorSubscriber['previous_month'])*100)/$celldoorSubscriber['last_thirty'],2); }else{ echo '0';} ?> from previous Month</span>
+                    <?php if($celldoorSubscriber['last_thirty'] !=0) { echo number_format((($celldoorSubscriber['last_thirty']-$celldoorSubscriber['previous_thirty'])*100)/$celldoorSubscriber['last_thirty'],2); }else{ echo '0';} ?> from previous 30 days</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
-
-            <div class="col-sm-6 col-md-3">
-              <div class="row-stat">
-                <p class="row-stat-label">This Month</p>
-                <h3 class="row-stat-value"><?php echo $celldoorSubscriber['month']; ?></h3>
+            
+         <div class="col-sm-6 col-md-3">
+             <div class="row-stat">
+                <p class="row-stat-label">Last 7 days</p>
+                <h3 class="row-stat-value"><?php echo $celldoorSubscriber['last_seven']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($celldoorSubscriber['month'] !=0) { echo number_format((($celldoorSubscriber['month'])*100)/$celldoorSubscriber['last_thirty'],2);} else{ echo "0";} ?>% from previous 30 days</span>
+              <?php if($celldoorSubscriber['previous_seven'] !=0 ) { echo number_format((($celldoorSubscriber['last_seven'])*100)/$celldoorSubscriber['previous_seven'],2); } else{ echo '0';} ?>%from previous 7 days                    
+                </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
-
+            
             <div class="col-sm-6 col-md-3">
               <div class="row-stat">
                 <p class="row-stat-label">Today</p>
                 <h3 class="row-stat-value"><?php echo $celldoorSubscriber['today']; ?></h3>
-                <span class="label label-success row-stat-badge">+
-    <?php if($celldoorSubscriber['today'] !=0 ) { echo number_format((($celldoorSubscriber['today'])*100)/$celldoorSubscriber['total'],2); } else{ echo '0';} ?>%                    
+                <span class="label label-success row-stat-badge">
+    <?php echo $celldoorSubscriber['yesterday'] ?> Yesterday                    
                 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
