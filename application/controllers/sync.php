@@ -18,6 +18,7 @@ class Sync extends CI_Controller {
         require_once('exact_target.php');
         require_once('black_boxx.php');
         require_once('login.php');
+        require_once('home.php');
     }
 
     public function StartAutoSync() {
@@ -441,18 +442,26 @@ class Sync extends CI_Controller {
                     }
                     $login = new Login();
                     $login->new_csv_upload();
-                    $to = 'ankit@ignisitsolutions.com';
+                    $to = 'andy@laststrategy.com';
                     $from = 'McWilliams';
                     $subject = 'Cron Informations';
                     $message = 'Cron is executed successfully.';
-                    mymail($to, $subject, $message, FALSE, $from);
+                    mymail($to, $subject, $message,FALSE,$from);
+                    
                     $this->db->insert('cron', array('date' => date("Y-m-d H:i:s"), 'state' => '4'));
                     echo json_encode($data);
                     die;
                 }
                 }
                 catch ( Exception $e){
-                    $e->getMessage();
+                    
+                    $home = new Home();
+                    $home->fail_message('Auto sync Failed',$e->getMessage());
+                    $to = 'yogesh@ignisitsolutions.com';
+                    $from = 'McWilliams';
+                    $subject = 'Cron Informations';
+                    $message = 'Auto sync failed'.$e->getMessage();
+                    mymail($to, $subject, $message,FALSE,$from);
                 }
             } 
 //            else {
