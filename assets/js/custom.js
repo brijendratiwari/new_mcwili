@@ -45,7 +45,7 @@ $(document).ready(function(){
             {"sClass": "eamil_conform aligncenter", "aTargets": [2]},
             {"sClass": "hidden-phone", "aTargets": [3]},
             {"sClass": "hidden-phone", "aTargets": [4]},
-            {"sClass": "hidden-phone", "aTargets": [5]},
+            {"bSortable": false,"sClass": "hidden-phone", "aTargets": [5]},
             
         ]}
         );

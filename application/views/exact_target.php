@@ -8,7 +8,7 @@
         <div class="portlet-title">
           <u><h4>Total Subscribers in ET to Date = <?php if( $Subscriber !=0) {echo $Subscriber;} else{ echo "0";} ?></h4></u>
            <span class="label label-success row-stat-badge">+
-                    <?php if( $Subscriber !=0){ echo number_format((($Subscriber-$FilterSubscriber['year'])*100)/$Subscriber,2); }else{ echo '0';} ?>% from previous year</span>
+                    <?php if( $Subscriber !=0){ echo number_format((($Subscriber-$FilterSubscriber['year'])*100)/$Subscriber); }else{ echo '0';} ?>% from previous year</span>
 
         </div>
 
@@ -21,7 +21,7 @@
                 <p class="row-stat-label">Total Subscribers</p>
                 <h3 class="row-stat-value"><?php if( $Subscriber !=0) {echo $Subscriber;} else{ echo "0";} ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if( $Subscriber !=0){ echo number_format((($Subscriber-$FilterSubscriber['year'])*100)/$Subscriber,2); }else{ echo '0';} ?>% from previous year</span>
+                    <?php if( $Subscriber !=0){ echo number_format((($Subscriber-$FilterSubscriber['year'])*100)/$Subscriber); }else{ echo '0';} ?>% from previous year</span>
               </div>  /.row-stat 
             </div>  /.col -->
 
@@ -30,7 +30,7 @@
                 <p class="row-stat-label">Subscribers Last Month</p>
                 <h3 class="row-stat-value"><?php echo $FilterSubscriber['month']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($FilterSubscriber['month'] !=0 ){ echo number_format((( $FilterSubscriber['month'] - $FilterSubscriber['previous_month'])*100)/$FilterSubscriber['month'],2); } else{ echo '0';} ?>% from previous month</span>
+                    <?php if($FilterSubscriber['month'] !=0 ){ echo number_format((( $FilterSubscriber['month'] - $FilterSubscriber['previous_month'])*100)/$FilterSubscriber['month']); } else{ echo '0';} ?>% from previous month</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
 
@@ -39,7 +39,7 @@
                 <p class="row-stat-label">Last 30 Days</p>
                 <h3 class="row-stat-value"><?php echo $FilterSubscriber['last_thirty']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($FilterSubscriber['last_thirty'] !=0 ) { echo number_format((($FilterSubscriber['last_thirty']-$FilterSubscriber['previous_thirty'])*100)/$FilterSubscriber['last_thirty'],2); } else{ echo '0';} ?>% from previous 30 days</span>
+                    <?php if($FilterSubscriber['last_thirty'] !=0 ) { echo number_format((($FilterSubscriber['last_thirty']-$FilterSubscriber['previous_thirty'])*100)/$FilterSubscriber['last_thirty']); } else{ echo '0';} ?>% from previous 30 days</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
 
@@ -48,7 +48,7 @@
                 <p class="row-stat-label">Last 7 days</p>
                 <h3 class="row-stat-value"><?php echo $FilterSubscriber['last_seven']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-              <?php if($FilterSubscriber['last_seven'] !=0 ) { echo number_format((($FilterSubscriber['last_seven'])*100)/$FilterSubscriber['previous_seven'],2); } else{ echo '0';} ?>%from previous 7 days                   
+              <?php if($FilterSubscriber['last_seven'] !=0 ) { echo number_format((($FilterSubscriber['last_seven'])*100)/$FilterSubscriber['previous_seven']); } else{ echo '0';} ?>% from previous 7 days                   
                 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
@@ -88,7 +88,7 @@
                 <p class="row-stat-label">UnSubscribed Last Month</p>
                 <h3 class="row-stat-value"><?php echo $FilterUnSubscriber['month']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($FilterUnSubscriber['month'] !=0 ){ echo number_format((( $FilterUnSubscriber['month'] - $FilterUnSubscriber['previous_month'])*100)/$FilterUnSubscriber['month'],2); } else{ echo '0';} ?>% from previous month</span>
+                    <?php if($FilterUnSubscriber['month'] !=0 ){ echo number_format((( $FilterUnSubscriber['month'] - $FilterUnSubscriber['previous_month'])*100)/$FilterUnSubscriber['month']); } else{ echo '0';} ?>% from previous month</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->        
                     
@@ -97,7 +97,7 @@
                 <p class="row-stat-label">UnSubscribed Last 30 Days</p>
                 <h3 class="row-stat-value"><?php echo $FilterUnSubscriber['last_thirty']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($FilterUnSubscriber['last_thirty'] !=0) { echo number_format((($FilterUnSubscriber['last_thirty']-$FilterUnSubscriber['previous_thirty'])*100)/$FilterUnSubscriber['last_thirty'],2); }else{ echo '0';} ?> from previous 30 days</span>
+                    <?php if($FilterUnSubscriber['last_thirty'] !=0) { echo number_format((($FilterUnSubscriber['last_thirty']-$FilterUnSubscriber['previous_thirty'])*100)/$FilterUnSubscriber['last_thirty']); }else{ echo '0';} ?>% from previous 30 days</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
 
@@ -106,7 +106,7 @@
                 <p class="row-stat-label">Last 7 days</p>
                 <h3 class="row-stat-value"><?php echo $FilterUnSubscriber['last_seven']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-              <?php if($FilterUnSubscriber['last_seven'] !=0 ) { echo number_format((($FilterUnSubscriber['last_seven'])*100)/$FilterUnSubscriber['previous_seven'],2); } else{ echo '0';} ?>%from previous 7 days                    
+              <?php if($FilterUnSubscriber['last_seven'] !=0 ) { echo number_format((($FilterUnSubscriber['last_seven'])*100)/$FilterUnSubscriber['previous_seven']); } else{ echo '0';} ?>% from previous 7 days                    
                 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
@@ -369,7 +369,8 @@
                 <th style="width: 20%">Email</th>
                 <th style="width: 10%">Created At</th>
                 <th style="width: 15%">System Sync</th>
-                <th style="width: 5%">Status</th>
+               <th style="width: 20%"><div style="text-align: center;">Exact Target</div><div style="width: 200px;"><div class="subcol">MW</div><div class="subcol">MP</div><div class="subcol">BL</div><div class="subcol">EAT</div><div class="subcol">CD</div></div></th>
+
               </tr>
             </thead>
             <tbody>
@@ -382,7 +383,7 @@
                 <th style="width: 20%">Email</th>
                 <th style="width: 10%">Created At</th>
                 <th style="width: 15%">System Sync</th>
-                <th style="width: 10%">Status</th>
+                <th style="width: 20%"><div style="width: 200px;"><div class="subcol">MW</div><div class="subcol">MP</div><div class="subcol">BL</div><div class="subcol">EAT</div><div class="subcol">CD</div></div><div style="text-align: center;">Exact Target</div></th>
               </tr>
             </tfoot>
           </table>

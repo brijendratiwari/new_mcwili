@@ -262,14 +262,14 @@ class Home extends CI_Controller {
         $str_point = 0;
 
         $getLastSystemSyncsub = $this->et_model->getLastSystemSyncsub();
-
+     
         if (isset($getLastSystemSyncsub[0]['SyncTime'])) {
             $sync = $getLastSystemSyncsub[0]['SyncTime'];
         } else {
             $sync = 0;
         }
 
-        $col_sort = array("ID", "FirstName", "LastName", "EmailAddress", "CreatedDate");
+        $col_sort = array("ID", "FirstName", "LastName", "EmailAddress", "CreatedDate","SubscriberID");
 
         $order_by = "id";
         $temp = 'asc';
@@ -310,10 +310,85 @@ class Home extends CI_Controller {
 
         $i = 0;
         $final = array();
-        foreach ($result as $val) {
-
-            $output['aaData'][] = array("DT_RowId" => $val['FirstName'], $val['FirstName'], $val['LastName'], $val['EmailAddress'], $val['CreatedDate'], $sync, 'Active');
+        
+        ####################################################
+       $key = array(0);
+        for ($i = 0; $i < count($result); $i++) {
+            if ($result[$i]['SubscriberID'] != "")
+                $key[] = "'" . $result[$i]['SubscriberID'] . "'";
         }
+
+        $strkey = implode(',', $key);
+
+
+        //get specific list data for ET 
+        $mcSubscriber = $this->sync_model->getEt_SpecificListDataKey(351487, $strkey);
+        $brandsSubscriber = $this->sync_model->getEt_SpecificListDataKey(351484, $strkey);
+        $evans = $this->sync_model->getEt_SpecificListDataKey(351486, $strkey);
+        $mount = $this->sync_model->getEt_SpecificListDataKey(351488, $strkey);
+        $et_celldoorSubscriber = $this->sync_model->getEt_SpecificListDataKey(351485, $strkey);
+     
+        foreach ($result as $val) {
+            $mdb = "";
+            $bepoz = "";
+            $mdb = "y";
+            $exacttarget = '<div class="subcol">';
+            if (!empty($mcSubscriber)) {
+                if (in_array($val['EmailAddress'], $mcSubscriber)) {
+                    $exacttarget .= "y";
+                } else {
+                    $exacttarget .= "n";
+                }
+            } else {
+                $exacttarget .= "n";
+            }
+            $exacttarget .= '</div><div class="subcol">';
+            if (!empty($mount)) {
+                if (in_array($val['EmailAddress'], $mount)) {
+                    $exacttarget .= "y";
+                } else {
+                    $exacttarget .= "n";
+                }
+            } else {
+                $exacttarget .= "n";
+            }
+            $exacttarget .= '</div><div class="subcol">';
+            if (!empty($brandsSubscriber)) {
+                if (in_array($val['EmailAddress'], $brandsSubscriber)) {
+                    $exacttarget .= "y";
+                } else {
+                    $exacttarget .= "n";
+                }
+            } else {
+                $exacttarget .= "n";
+            }
+            $exacttarget .= '</div><div class="subcol">';
+            if (!empty($evans)) {
+                if (in_array($val['EmailAddress'], $evans)) {
+                    $exacttarget .= "y";
+                } else {
+                    $exacttarget .= "n";
+                }
+            } else {
+                $exacttarget .= "n";
+            }
+            $exacttarget .= '</div><div class="subcol">';
+            if (!empty($et_celldoorSubscriber)) {
+                if (in_array($val['EmailAddress'], $et_celldoorSubscriber)) {
+                    $exacttarget .= "y";
+                } else {
+                    $exacttarget .= "n";
+                }
+            } else {
+                $exacttarget .= "n";
+            }
+            $exacttarget .= '</div>';
+        ##############################################################################
+        
+      
+            $output['aaData'][] = array("DT_RowId" => $val['FirstName'], $val['FirstName'], $val['LastName'], $val['EmailAddress'], $val['CreatedDate'], $sync,$exacttarget);
+      
+      }
 
         echo json_encode($output);
         die;
@@ -441,7 +516,7 @@ class Home extends CI_Controller {
         $final = array();
         foreach ($result as $val) {
 
-            $output['aaData'][] = array("DT_RowId" => $val['FirstName'], $val['FirstName'], $val['LastName'], $val['EmailAddress'], $val['CreatedDate'], $sync, 'Active');
+            $output['aaData'][] = array("DT_RowId" => $val['FirstName'], $val['FirstName'], $val['LastName'], $val['EmailAddress'], $val['CreatedDate'], $sync, "Active");
         }
 
         echo json_encode($output);
