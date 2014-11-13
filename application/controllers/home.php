@@ -53,9 +53,10 @@ class Home extends CI_Controller {
             $data['bbSyncsub'] = $this->sync_model->getallListSubsciberCount(2);
             $data['mdbSyncsub'] = $this->sync_model->getallListSubsciberCount(5);
             $data['bpSyncsub'] = $this->sync_model->getallListSubsciberCount(3);
-
+ 
             // get last three subscriber
             $data['lastSubscriber'] = $this->sync_model->getLastSubscriber();
+            
             // get last three unsubscriber
             $data['lastUnSubscriber'] = $this->sync_model->getLastUnSubscriber();
 

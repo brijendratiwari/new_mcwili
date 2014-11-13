@@ -10,6 +10,9 @@ class Login extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
+        
+        ob_start();
+        
         $this->load->model('login_model');
         $this->load->model('bb_model');
         $this->load->model('bp_model');
@@ -22,13 +25,12 @@ class Login extends CI_Controller {
         $to = 'andy@laststrategy.com';
         $from = 'test@laststrategy.com';
         $subject = 'the subject';
-        $message = 'hello'; 
+        $message = 'hello';
 //        $headers = 'From: ankit@ignisitsolutions.com' . "\r\n" .
 //                'Reply-To: webmaster@example.com' . "\r\n" .
 //                'X-Mailer: PHP/' . phpversion();
 
-      mymail($to, $subject, $message,FALSE,$from);
-       
+        mymail($to, $subject, $message, FALSE, $from);
     }
 
     public function new_csv_upload() {       // New code for uploading the file.
@@ -50,7 +52,8 @@ class Login extends CI_Controller {
             curl_setopt($request, CURLOPT_POST, true);
             curl_setopt(
                     $request, CURLOPT_POSTFIELDS, array(
-                'data' => json_encode($list)
+                'data' => json_encode($list),
+                'action' => 'Export'
             ));
 
 // output the response
@@ -98,7 +101,8 @@ class Login extends CI_Controller {
             curl_setopt($request, CURLOPT_POST, true);
             curl_setopt(
                     $request, CURLOPT_POSTFIELDS, array(
-                'data' => json_encode($list)
+                'data' => json_encode($list),
+                'action' => 'Export'
             ));
 
 // output the response
@@ -317,7 +321,6 @@ class Login extends CI_Controller {
 //                $black_boxx->signin($signin);
 ////                redirect('login/thank_you');
 //            }
-
 //            $data = array("firstname" => $_POST['firstname'], "lastname" => $_POST['lastname'], "dob" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "mobile_number" => $_POST['mobile_number']);
 //            $update_info = $this->bp_model->update_bp_customer($_POST['email'], $data);
 //            //*********************************
@@ -379,27 +382,6 @@ class Login extends CI_Controller {
         $signin = array('email' => $_POST['email'], 'password' => $_POST['password'], 'ip_address' => $ip);
 //        $black_boxx->signin($signin);
         redirect('login/bepoz_thank');
-
-//        $res1 = $this->et_model->get_et_subscriber($_POST["email"]);
-//        if ($res1) {
-//            $data = array("EmailAddress" => $_POST['email'], "SubscriberKey" => $res1[0]['SubscriberID']);
-//            $response = $exact_target->add_email_list($_POST['pref'], $data);
-//            if ($response[0]->StatusCode == "OK") {
-//                $this->et_model->add_etsubscriber_rel($_POST['pref'], $res1[0]['SubscriberID']);
-//            }
-//        } else {
-//            $subkey = time();
-//            $subs[] = array("EmailAddress" => $_POST['email'], "SubscriberKey" => $subkey, "Attributes" => array(array("Name" => "First Name", "Value" => $_POST['firstname']), array("Name" => "Last Name", "Value" => $_POST['lastname'])));
-//            $response = $exact_target->add_email_list($_POST['pref'], $subs);
-////			var_dump($response);die;
-//            if ($response[0]->StatusCode == "OK") {
-//                $data = array("FirstName" => $_POST['firstname'], "LastName" => $_POST['lastname'], "DOB" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "SubscriberID" => $subkey, "EmailAddress" => $_POST['email'], "Status" => "Active", "CreatedDate" => date("Y-m-d h:m:s", time()));
-//                $this->et_model->add_etsubscriber($data);
-//                $this->et_model->add_etsubscriber_rel($_POST['pref'], $subkey);
-//                $this->createCSV();
-//            }
-//        }
-//        redirect('login/thank_you');
     }
 
     private function createCSV() {
@@ -449,6 +431,132 @@ class Login extends CI_Controller {
         // close this connection and file handler
         ftp_close($ftp_conn);
         fclose($fp);
+    }
+
+    public function getImportCsv() {
+
+        $fieldseparator = ",";
+        $lineseparator = "\n";
+
+        $request = curl_init('http://mcwilliams.dev-iis.com/api.php');
+
+// send a file
+        curl_setopt($request, CURLOPT_POST, true);
+        curl_setopt(
+                $request, CURLOPT_POSTFIELDS, array(
+            'action' => 'Import'
+        ));
+
+// output the response
+        curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($request);
+
+// close the session
+        curl_close($request);
+
+        $data = json_decode($response);
+
+//        var_dump($data);die;
+
+        $csvcontent = $data->csv;
+
+
+        $lines = 0;
+        $queries = "";
+        $linearray = array();
+
+        foreach (explode($lineseparator, $csvcontent) as $line) {
+            $lines++;
+            $line = trim($line, " \t");
+            $line = str_replace("\r", "", $line);
+
+            /*             * **********************************
+              /* This line escapes the special character.
+              /* Remove it if entries are already escaped in the csv file
+              /*********************************** */
+            $line = str_replace("'", "\'", $line);
+            /*             * ********************************** */
+
+            $linearray = explode($fieldseparator, $line);
+//            var_dump($linearray);
+            if(isset($linearray[67])){
+            if($lines)
+            {
+            $exact_target = new Exact_target();
+
+//            if (isset($_POST['pref'])) {
+//                array_push($_POST['pref'], '352396');
+//            } else {
+//                $_POST['pref'] = array('352396');
+//            }
+            
+            $pref = array('352396');
+            
+            if ($linearray[67] != 'n' || $linearray[67] != 'N') {
+                $pref[] = '351486';
+            } 
+            if ($linearray[68] != 'n' || $linearray[68] != 'N') {
+                $pref[] = "351488";
+            } 
+            if ($linearray[69] != 'n' || $linearray[69] != 'N') {
+                $pref[] = "351487";
+            }
+            if ($linearray[66] != 'n' || $linearray[66] != 'N') {
+                $pref[] = "351484";
+            }
+            
+            $res = $this->bp_model->get_where('bp_customer', array("email" => $linearray[22]));
+            if ($res) {
+
+            } else {
+                // add customer in BP .....
+                $data = array("first_name" => $linearray[6], "last_name" => $linearray[7], "date_of_birth" => '', "email" => $linearray[22], "phone_number" => "", "mobile_number" => $linearray[21]);
+                $bp_uid = time();
+//            $response = $black_boxx->add_user($data);
+                //********************** 
+//            $user_data = json_decode($response, TRUE);
+//            var_dump($user_data);
+                $bp_user_created = date('Y:m:d h:m:s', time());
+                $bp_customer = array(
+                    "BP_UID" => $bp_uid,
+                    "firstname" => $linearray[6],
+                    "lastname" => $linearray[7],
+                    "email" => $linearray[22],
+                    "dob" => '',
+                    "mobile_number" => $linearray[21],
+                    "created" => $bp_user_created,
+                    "Status" => "Active"
+                );
+                $res = $this->bp_model->insert_bp_customer($bp_customer);
+                if ($res) {
+//                $this->et_model->insert_mastersubscriber(array("email"=>$_POST["email"],"firstname"=>$_POST["firstname"],"lastname"=>$_POST["lastname"],"DOB" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'],"status"=>1,"CreatedDate" => $user_data["updated_at"]),$user_data["email"]);
+                    $this->bp_model->insert_bp_customer_rel($pref, $linearray[22], $bp_uid);
+                    // add subscriber in ET...... if exist then upadate status to "Active"
+                    $res1 = $this->et_model->get_et_subscriber($linearray[22]);
+                    if ($res1) {
+                        $data = array("EmailAddress" => $linearray[22], "SubscriberKey" => $res1[0]['SubscriberID']);
+                        $response = $exact_target->add_email_list($pref, $data);
+                        if ($response[0]->StatusCode == "OK") {
+                            $this->et_model->add_etsubscriber_rel($pref, $res1[0]['SubscriberID']);
+                        }
+                    } else {
+//                    $subkey = time();
+                        $subs[] = array("EmailAddress" => $linearray[22], "SubscriberKey" => $bp_uid, "Attributes" => array(array("Name" => "First Name", "Value" => $linearray[6]), array("Name" => "Last Name", "Value" => $linearray[7]), array("Name" => "Date of Birth", "Value" => '')));
+                        $response = $exact_target->add_email_list($pref, $subs);
+//                    var_dump($response);die;
+                        if ($response[0]->StatusCode == "OK") {
+                            $data = array("FirstName" => $linearray[6], "LastName" => $linearray[7], "DOB" => '', "SubscriberID" => $bp_uid, "EmailAddress" => $linearray[22], "Status" => "1", "CreatedDate" => $linearray[80]);
+                            $this->et_model->add_etsubscriber($data);
+                            $this->et_model->add_etsubscriber_rel($pref, $bp_uid);
+//                            $this->new_csv_BepozUpload($bp_customer, $pref);
+                        }
+                    }
+                }
+            }
+        }
+        }
+        
+                        }
     }
 
 }

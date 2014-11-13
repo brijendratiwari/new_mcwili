@@ -180,11 +180,17 @@ class Sync extends CI_Controller {
 
         if ($this->sync_model->check($id)) {
             $user = $bb->get_user_list();
-            $data_val = $this->bb_model->get_where('bb_customer');
-            $count = count($data_val);
-            $new_count = count($user);
+//            $data_val = $this->bb_model->get_where('bb_customer');
+//            $count = count($data_val);
+//            $new_count = count($user);
             $this->bb_model->update_bb($user);
             $this->bb_model->update_mdb($user);
+
+            $data_val = $this->bb_model->get_where('bb_customer', array('count_status' => 0));
+
+            $this->db->update('bb_customer', array('count_status' => 1), array('count_status' => 0));
+
+            $count = count($data_val);
 
             $bbUI = array();
             if ($user != NULL) {
@@ -194,7 +200,8 @@ class Sync extends CI_Controller {
                 }
             }
 
-            $sub_diff = $new_count - $count;
+            $sub_diff = $count;
+
             if ($sub_diff > 0) {
                 $data['SubscribedCount'] = $sub_diff;
             } else {
@@ -285,7 +292,7 @@ class Sync extends CI_Controller {
     }
 
     public function BepozSync($id, $type, $storeid, $flag = FALSE) {
-        
+
         $controller_et = new Exact_target();
 
         $data = array();
@@ -295,13 +302,18 @@ class Sync extends CI_Controller {
 
             $user = $maindata['list'];
 
-            $data_val = $this->bp_model->get_where('bp_customer');
-            $count = count($data_val);
-            $new_count = count($user);
+
+//            $new_count = count($user);
             $this->bp_model->update_bp($user);
             $this->bp_model->update_mdb($user);
 
-            $sub_diff = $new_count - $count;
+            $data_val = $this->bp_model->get_where('bp_customer', array('count_status' => 0));
+
+            $this->db->update('bp_customer', array('count_status' => 1), array('count_status' => 0));
+
+            $count = count($data_val);
+
+            $sub_diff = $count;
             if ($sub_diff > 0) {
                 $data['SubscribedCount'] = $sub_diff;
             } else {
@@ -386,7 +398,7 @@ class Sync extends CI_Controller {
     // syncing for auto sync 
     public function mdbSync() {
         set_time_limit(0);
-        $subs = $this->sync_model->get_master_subscriber();
+//        $subs = $this->sync_model->get_master_subscriber();
         $unsubs = $this->sync_model->get_master_unsubscriber();
         $storeid = $this->input->get('sync');
         $type = $this->input->get('type');
@@ -398,72 +410,73 @@ class Sync extends CI_Controller {
             $sync_flag = $auto_detail->result_array();
             if ($sync_flag[0]['sync_flag'] == 1) {
 
-                try
-                {
-                $this->db->insert('cron', array('date' => date("Y-m-d H:i:s"), 'state' => 'First'));
+                try {
+                    $this->db->insert('cron', array('date' => date("Y-m-d H:i:s"), 'state' => 'First'));
 
-                $str_id = $this->sync_model->setTempSync(2);
-                $response = $this->BlackBoxxSync($str_id, $type, $storeid, $flag = 1);
+                    $str_id = $this->sync_model->setTempSync(2);
+                    $response = $this->BlackBoxxSync($str_id, $type, $storeid, $flag = 1);
 
-                if ($response) {
+                    if ($response) {
 
-                    $this->db->insert('cron', array('date' => date("Y-m-d H:i:s"), 'state' => '1'));
+                        $this->db->insert('cron', array('date' => date("Y-m-d H:i:s"), 'state' => '1'));
 
-                    $storeid = $this->input->get('sync');
-                    $str_id = $this->sync_model->setTempSync(1);
-                    $et_response = $this->ExactTargetSync($str_id, $type, $storeid, $flag = 1);
-                    if ($et_response) {
-
-                        $this->db->insert('cron', array('date' => date("Y-m-d H:i:s"), 'state' => '2'));
                         $storeid = $this->input->get('sync');
-                        $str_id = $this->sync_model->setTempSync(3);
-                        $bepoz_response = $this->BepozSync($str_id, $type, $storeid, $flag = 1);
-                    }
-                    if ($bepoz_response) {
+                        $str_id = $this->sync_model->setTempSync(1);
+                        $et_response = $this->ExactTargetSync($str_id, $type, $storeid, $flag = 1);
+                        if ($et_response) {
 
-                        $this->db->insert('cron', array('date' => date("Y-m-d H:i:s"), 'state' => '3'));
-                        $new_subs = $this->sync_model->get_master_subscriber();
-                        $new_unsubs = $this->sync_model->get_master_unsubscriber();
-                        $sub_diff = $new_subs - $subs;
-                        if ($sub_diff > 0) {
-                            $data['SubscribedCount'] = $sub_diff;
-                        } else {
-                            $data['SubscribedCount'] = 0;
+                            $this->db->insert('cron', array('date' => date("Y-m-d H:i:s"), 'state' => '2'));
+                            $storeid = $this->input->get('sync');
+                            $str_id = $this->sync_model->setTempSync(3);
+                            $bepoz_response = $this->BepozSync($str_id, $type, $storeid, $flag = 1);
                         }
+                        if ($bepoz_response) {
 
-                        $data['SyncTime'] = date('h:ma', time());
-                        $data['UnSubscribedCount'] = $new_unsubs - $unsubs;
-                        $data['type'] = $type;
-                        $data['SyncTime'] = date("Y-m-d H:i:s");
-                        $data['store_id'] = $storeid;
-                        $this->sync_model->delTempSync($storeid);
-                        $this->sync_model->insert_sync_updates($data);
-                        $data['SyncTime'] = date_format(date_create(date("Y-m-d H:i:s")), 'g:i A');
+                            $this->db->insert('cron', array('date' => date("Y-m-d H:i:s"), 'state' => '3'));
+
+                            $data_val = $this->bb_model->get_where('master_subscriber', array('count_status' => 0));
+                            $this->db->update('master_subscriber', array('count_status' => 1), array('count_status' => 0));
+
+                            $new_unsubs = $this->sync_model->get_master_unsubscriber();
+                            $sub_diff = count($data_val);
+                            if ($sub_diff > 0) {
+                                $data['SubscribedCount'] = $sub_diff;
+                            } else {
+                                $data['SubscribedCount'] = 0;
+                            }
+
+                            $data['SyncTime'] = date('h:ma', time());
+                            $data['UnSubscribedCount'] = $new_unsubs - $unsubs;
+                            $data['type'] = $type;
+                            $data['SyncTime'] = date("Y-m-d H:i:s");
+                            $data['store_id'] = $storeid;
+                            $this->sync_model->delTempSync($storeid);
+                            $this->sync_model->insert_sync_updates($data);
+                            $data['SyncTime'] = date_format(date_create(date("Y-m-d H:i:s")), 'g:i A');
+                        }
+                        $login = new Login();
+                        $login->new_csv_upload();
+                        $to = 'andy@laststrategy.com';
+                        $from = 'McWilliams';
+                        $subject = 'Cron Informations';
+                        $message = 'Cron is executed successfully.';
+                        mymail($to, $subject, $message, FALSE, $from);
+
+                        $this->db->insert('cron', array('date' => date("Y-m-d H:i:s"), 'state' => '4'));
+                        echo json_encode($data);
+                        die;
                     }
-                    $login = new Login();
-                    $login->new_csv_upload();
-                    $to = 'andy@laststrategy.com';
-                    $from = 'McWilliams';
-                    $subject = 'Cron Informations';
-                    $message = 'Cron is executed successfully.';
-                    mymail($to, $subject, $message,FALSE,$from);
-                    
-                    $this->db->insert('cron', array('date' => date("Y-m-d H:i:s"), 'state' => '4'));
-                    echo json_encode($data);
-                    die;
-                }
-                }
-                catch ( Exception $e){
-                    
+                } catch (Exception $e) {
+
                     $home = new Home();
-                    $home->fail_message('Auto sync Failed',$e->getMessage());
+                    $home->fail_message('Auto sync Failed', $e->getMessage());
                     $to = 'yogesh@ignisitsolutions.com';
                     $from = 'McWilliams';
                     $subject = 'Cron Informations';
-                    $message = 'Auto sync failed'.$e->getMessage();
-                    mymail($to, $subject, $message,FALSE,$from);
+                    $message = 'Auto sync failed' . $e->getMessage();
+                    mymail($to, $subject, $message, FALSE, $from);
                 }
-            } 
+            }
 //            else {
 //                $to = 'ankit@ignisitsolutions.com';
 //                $from = 'McWilliams';
@@ -481,7 +494,7 @@ class Sync extends CI_Controller {
     // syncing for MDB 
     public function mdbManualSync() {
         set_time_limit(0);
-        $subs = $this->sync_model->get_master_subscriber();
+//        $subs = $this->sync_model->get_master_subscriber();
         $unsubs = $this->sync_model->get_master_unsubscriber();
         $storeid = $this->input->get('sync');
         $type = $this->input->get('type');
@@ -504,9 +517,11 @@ class Sync extends CI_Controller {
             }
             if ($bepoz_response) {
 
-                $new_subs = $this->sync_model->get_master_subscriber();
+                $data_val = $this->bb_model->get_where('master_subscriber', array('count_status' => 0));
+                $this->db->update('master_subscriber', array('count_status' => 1), array('count_status' => 0));
+
                 $new_unsubs = $this->sync_model->get_master_unsubscriber();
-                $sub_diff = $new_subs - $subs;
+                $sub_diff = count($data_val);
                 if ($sub_diff > 0) {
                     $data['SubscribedCount'] = $sub_diff;
                 } else {
