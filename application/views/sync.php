@@ -17,9 +17,9 @@
                         <div class="well">
 
                             <ul class="icons-list text-md">
-                                <li><i class="icon-li fa fa-exchange text-success"></i>Sync <?php if(!empty($getLastSystemSyncsub)){ echo $getLastSystemSyncsub[0]['SubscribedCount'];} else{ echo '0';}  ?> subscribers,<?php if(!empty($getLastSystemSyncsub)){ echo date_format(date_create($getLastSystemSyncsub[0]['SyncTime']),'Y-m-d g:i A');} else{ echo "00:00";}?></li>
-                                <li><i class="icon-li fa fa-exchange text-success"></i>Sync <?php if(!empty($getLastSystemSyncsub)){ echo $getLastSystemSyncsub[0]['UnSubscribedCount'];} else{ echo '0';}  ?> Unsubscribers,<?php if(!empty($getLastSystemSyncsub)){ echo date_format(date_create($getLastSystemSyncsub[0]['SyncTime']),'Y-m-d g:i A');} else{ echo "00:00";}?></li>
-                                <li><i class="icon-li fa fa-exchange text-success"></i>Sync Successful <?php if(!empty($getLastSystemSyncsub)){ echo date_format(date_create($getLastSystemSyncsub[0]['SyncTime']),'Y-m-d g:i A'); } else{ echo '00:00';}?></li>
+                                <li><i class="icon-li fa fa-exchange text-success"></i>Sync <?php if(!empty($getLastSystemSyncsub)){ echo $getLastSystemSyncsub[0]['SubscribedCount'];} else{ echo '0';}  ?> subscribers,<?php if(!empty($getLastSystemSyncsub)){ echo date_format(date_create($getLastSystemSyncsub[0]['SyncTime']),'d-m-Y G:i');} else{ echo "00:00";}?></li>
+                                <li><i class="icon-li fa fa-exchange text-success"></i>Sync <?php if(!empty($getLastSystemSyncsub)){ echo $getLastSystemSyncsub[0]['UnSubscribedCount'];} else{ echo '0';}  ?> Unsubscribers,<?php if(!empty($getLastSystemSyncsub)){ echo date_format(date_create($getLastSystemSyncsub[0]['SyncTime']),'d-m-Y G:i');} else{ echo "00:00";}?></li>
+                                <li><i class="icon-li fa fa-exchange text-success"></i>Sync Successful <?php if(!empty($getLastSystemSyncsub)){ echo date_format(date_create($getLastSystemSyncsub[0]['SyncTime']),'d-m-Y G:i'); } else{ echo '00:00';}?></li>
                             </ul>
                         </div> <!-- /.well -->
 
@@ -47,7 +47,7 @@
                             <a class="btn btn-primary btn-small btn-block <?php if($autosync == 0) echo 'disabled'; ?>" href="javascript:stopsync(this);" id="syncstop"><i class="fa fa-exclamation-triangle"></i> Deactivate Sync </a>
                             <br>
                             <div class="col-sm-4 col-md-6">
-                            <p class="row-stat-label">Last Sync</p><h3 class="row-stat-value"><?php if(!empty($mdbSyncsub)){ echo date_format(date_create($getLastSystemSyncsub[0]['SyncTime']),'g:i A'); } else{ echo "00:00";}?></h3>
+                            <p class="row-stat-label">Last Sync</p><h3 class="row-stat-value"><?php if(!empty($mdbSyncsub)){ echo date_format(date_create($getLastSystemSyncsub[0]['SyncTime']),'g:i A');} else{ echo "00:00";}?></h3>
                             </div>
                             <div class="col-sm-4 col-md-6">
                             <p class="row-stat-label">Next Sync</p><h3 class="row-stat-value">85Sec</h3>
@@ -76,7 +76,7 @@
                                            <?php if(!empty($lastSubscriber)){ 
      foreach ($lastSubscriber as $last_subscriber)  {
                       ?>
-                                <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $last_subscriber['firstname']." ".$last_subscriber['lastname'].",".$last_subscriber['email'].",".  date_format(date_create($last_subscriber['CreatedDate']),'Y-m-d g:i A');  ?> </li>
+                                <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $last_subscriber['firstname']."  ".$last_subscriber['lastname']." , ".$last_subscriber['email']." , ".  date_format(date_create($last_subscriber['CreatedDate']),'d-m-Y G:i');  ?> </li>
                      <?php  } }else{ ?>
                                 <li><i class="icon-li fa fa-exchange text-success"></i>No New Subscriber Found</li>
                                 <?php } ?>
@@ -93,13 +93,10 @@
               <ul class="icons-list text-md">
                      <?php if(!empty($lastUnSubscriber)){
                         foreach ($lastUnSubscriber as $last_unsubscriber)  { ?>
-                  <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $last_unsubscriber['firstname']." ".$last_unsubscriber['lastname'].",".$last_unsubscriber['email'].",".  date_format(date_create($last_unsubscriber['unsubscribed_date']),'Y-m-d g:i A');  ?> </li>
+                  <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $last_unsubscriber['firstname']."  ".$last_unsubscriber['lastname']." , ".$last_unsubscriber['email']." , ".  date_format(date_create($last_unsubscriber['unsubscribed_date']),'d-m-Y G:i');  ?> </li>
                         <?php   } }else{ ?>
                                 <li><i class="icon-li fa fa-exchange text-success"></i>UnSubscriber Not Found</li>
-                                <li><i class="icon-li fa fa-exchange text-success"></i></i>UnSubscriber Not Found</li>
-                                <li><i class="icon-li fa fa-exchange text-success"></i></i>UnSubscriber Not Found</li>
- 
-                                <?php } ?>
+                           <?php } ?>
                             </ul>
                         </div> <!-- /.well -->
 

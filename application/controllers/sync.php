@@ -186,11 +186,11 @@ class Sync extends CI_Controller {
             $this->bb_model->update_bb($user);
             $this->bb_model->update_mdb($user);
 
-            $data_val = $this->bb_model->get_where('bb_customer', array('count_status' => 0));
+            $data_val = $this->bb_model->get_where_count('bb_customer', array('count_status' => 0));
 
             $this->db->update('bb_customer', array('count_status' => 1), array('count_status' => 0));
 
-            $count = count($data_val);
+            $count = $data_val;
 
             $bbUI = array();
             if ($user != NULL) {
@@ -307,11 +307,11 @@ class Sync extends CI_Controller {
             $this->bp_model->update_bp($user);
             $this->bp_model->update_mdb($user);
 
-            $data_val = $this->bp_model->get_where('bp_customer', array('count_status' => 0));
+            $data_val = $this->bb_model->get_where_count('bp_customer', array('count_status' => 0));
 
             $this->db->update('bp_customer', array('count_status' => 1), array('count_status' => 0));
 
-            $count = count($data_val);
+            $count = $data_val;
 
             $sub_diff = $count;
             if ($sub_diff > 0) {
@@ -434,11 +434,11 @@ class Sync extends CI_Controller {
 
                             $this->db->insert('cron', array('date' => date("Y-m-d H:i:s"), 'state' => '3'));
 
-                            $data_val = $this->bb_model->get_where('master_subscriber', array('count_status' => 0));
+                            $data_val = $this->bb_model->get_where_count('master_subscriber', array('count_status' => 0));
                             $this->db->update('master_subscriber', array('count_status' => 1), array('count_status' => 0));
 
                             $new_unsubs = $this->sync_model->get_master_unsubscriber();
-                            $sub_diff = count($data_val);
+                            $sub_diff = $data_val;
                             if ($sub_diff > 0) {
                                 $data['SubscribedCount'] = $sub_diff;
                             } else {
@@ -517,11 +517,11 @@ class Sync extends CI_Controller {
             }
             if ($bepoz_response) {
 
-                $data_val = $this->bb_model->get_where('master_subscriber', array('count_status' => 0));
+                $data_val = $this->bb_model->get_where_count('master_subscriber', array('count_status' => 0));
                 $this->db->update('master_subscriber', array('count_status' => 1), array('count_status' => 0));
 
                 $new_unsubs = $this->sync_model->get_master_unsubscriber();
-                $sub_diff = count($data_val);
+                $sub_diff = $data_val;
                 if ($sub_diff > 0) {
                     $data['SubscribedCount'] = $sub_diff;
                 } else {

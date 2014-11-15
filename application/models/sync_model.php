@@ -336,7 +336,7 @@ class Sync_model extends CI_Model {
                         $res3 = $this->db->get('bb_customer');
                     }
                     if ($sync_table[0]['name'] == "BP") {
-                        $this->db->order_by('CreatedDate', 'DESC');
+                        $this->db->order_by('id', 'DESC');
                         if ($store_id[0]['SubscribedCount'] >= 3) {
                             $this->db->limit('3');
                         } else {

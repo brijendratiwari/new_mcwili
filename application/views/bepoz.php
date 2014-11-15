@@ -6,9 +6,9 @@
               <div class="portlet">
 
         <div class="portlet-title">
-          <u><h4>Total Customers in Bepoz to Date = <?php if($Subscriber !=0 ){ echo $Subscriber; }else{ echo "0";} ?></h4></u>
+          <u><h4>Total Customers in Bepoz to Date = <?php echo $FilterSubscriber['total'];?></h4></u>
            <span class="label label-success row-stat-badge">+
-                    <?php if($Subscriber !=0 ){ echo number_format((($Subscriber-$FilterSubscriber['year'])*100)/$Subscriber); }else{ echo '0';} ?>% from previous year</span>
+                    <?php if($FilterSubscriber['total'] !=0 ){ echo number_format((($FilterSubscriber['total']-$FilterSubscriber['year'])*100)/$FilterSubscriber['total']); }else{ echo '0';} ?>% from previous year</span>
         </div>
      
         <div class="portlet-body">

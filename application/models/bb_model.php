@@ -54,6 +54,17 @@ class Bb_model extends CI_Model {
         }
     }
 
+    public function get_where_count($table_name, $where = FALSE) {
+//          $this->blank_tab('bb_customer');
+        $this->db->from($table_name);
+//         $this->db->from($table_name);
+        if ($where != FALSE) {
+            $this->db->where($where);
+        }
+        $res = $this->db->get();
+        return $res->num_rows();
+    }
+
     public function update_bb_customer($email, $data) {
         $this->db->where('email', $email);
         $res = $this->db->update('bb_customer', $data);
@@ -357,8 +368,8 @@ class Bb_model extends CI_Model {
     public function get_bpallFilterSubscriber() {
 
         $data = array();
-        
-          $query = "select * from bp_customer where YEAR(created) = (YEAR(CURDATE())-1)";
+
+        $query = "select * from bp_customer where YEAR(created) = (YEAR(CURDATE())-1)";
         $query1 = "select * from bp_customer where MONTH(created) = (MONTH(CURDATE())-1) ";
         $query2 = "select * from bp_customer where MONTH(created) = (MONTH(CURDATE())-2) ";
         $query3 = "select * from bp_customer where created >= DATE_SUB( CURDATE( ) , INTERVAL 30 DAY) ";
@@ -367,6 +378,7 @@ class Bb_model extends CI_Model {
         $query6 = "select * from bp_customer where `created` between DATE_SUB( CURDATE( ) , INTERVAL 14 DAY) and DATE_SUB( CURDATE( ) , INTERVAL 7 DAY) ";
         $query7 = "select * from bp_customer where DATE(`created`) = CURDATE( ) ";
         $query8 = "select * from bp_customer where DATE(`created`) = DATE_SUB( CURDATE( ) , INTERVAL 1 DAY) ";
+        $query9 = "select * from bp_customer";
 //   echo $query8;die;
 //        $query1 = "select count(id) from et_subscriber where CreatedDate >= DATEADD(MONTH, -1, GETDATE()) " ;
         $res = $this->db->query($query);
@@ -378,6 +390,7 @@ class Bb_model extends CI_Model {
         $res6 = $this->db->query($query6);
         $res7 = $this->db->query($query7);
         $res8 = $this->db->query($query8);
+        $res9 = $this->db->query($query9);
         $data['year'] = $res->num_rows();
         $data['month'] = $res1->num_rows();
         $data['previous_month'] = $res2->num_rows();
@@ -387,10 +400,10 @@ class Bb_model extends CI_Model {
         $data['previous_seven'] = $res6->num_rows();
         $data['today'] = $res7->num_rows();
         $data['yesterday'] = $res8->num_rows();
+        $data['total'] = $res9->num_rows();
 
         return $data;
-        
-   }
+    }
 
     public function get_bpFilterSubscriber() {
 

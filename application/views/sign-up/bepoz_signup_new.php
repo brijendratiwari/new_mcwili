@@ -254,7 +254,7 @@
                     <header>New User
                     
                                   <?php if ($this->session->flashdata('msg')) { ?>
-                                  <span style="font-size: 15px;color: red;font-weight:bold"><?php echo $this->session->flashdata('msg'); } ?></span>
+                                  <span style="font-size: 15px;color: red;font-weight:bold;float:right"><?php echo $this->session->flashdata('msg'); } ?></span>
                         
                     </header>
 

@@ -53,10 +53,9 @@ class Home extends CI_Controller {
             $data['bbSyncsub'] = $this->sync_model->getallListSubsciberCount(2);
             $data['mdbSyncsub'] = $this->sync_model->getallListSubsciberCount(5);
             $data['bpSyncsub'] = $this->sync_model->getallListSubsciberCount(3);
- 
+
             // get last three subscriber
             $data['lastSubscriber'] = $this->sync_model->getLastSubscriber();
-            
             // get last three unsubscriber
             $data['lastUnSubscriber'] = $this->sync_model->getLastUnSubscriber();
 
@@ -471,7 +470,7 @@ class Home extends CI_Controller {
             $sync = 0;
         }
 
-        $col_sort = array("et_subscriber.ID", "et_subscriber.FirstName", "et_subscriber.LastName", "et_subscriber.EmailAddress", "et_subscriber.CreatedDate");
+        $col_sort = array("id", "firstname", "lastname", "email", "created");
 
         $order_by = "id";
         $temp = 'asc';
@@ -483,8 +482,8 @@ class Home extends CI_Controller {
         }
         $this->mdb_model->db->select("*");
 //        $this->mdb_model->db->from("*");
-        $this->mdb_model->db->where('et_subscriber_list_rel.ListID', '352396');
-        $this->mdb_model->db->join('et_subscriber', 'et_subscriber.SubscriberID=et_subscriber_list_rel.SubscriberID');
+//        $this->mdb_model->db->where('et_subscriber_list_rel.ListID', '352396');
+//        $this->mdb_model->db->join('et_subscriber', 'et_subscriber.SubscriberID=et_subscriber_list_rel.SubscriberID');
         if (isset($_GET['sSearch']) && $_GET['sSearch'] != "") {
             $words = $_GET['sSearch'];
             for ($i = 0; $i < count($col_sort); $i++) {
@@ -498,12 +497,12 @@ class Home extends CI_Controller {
         if (isset($_GET['iDisplayStart']) && $_GET['iDisplayLength'] != '-1') {
             $str_point = intval($_GET['iDisplayStart']);
             $lenght = intval($_GET['iDisplayLength']);
-            $records = $this->mdb_model->db->get("et_subscriber_list_rel", $lenght, $str_point);
+            $records = $this->mdb_model->db->get("bp_customer", $lenght, $str_point);
         } else {
-            $records = $this->mdb_model->db->get("et_subscriber_list_rel");
+            $records = $this->mdb_model->db->get("bp_customer");
         }
-        $this->db->where('ListID', '352396');
-        $total_record = $this->db->count_all_results('et_subscriber_list_rel');
+//        $this->db->where('ListID', '352396');
+        $total_record = $this->db->count_all_results('bp_customer');
         $output = array(
             "sEcho" => intval($_GET['sEcho']),
             "iTotalRecords" => $total_record,
@@ -517,7 +516,7 @@ class Home extends CI_Controller {
         $final = array();
         foreach ($result as $val) {
 
-            $output['aaData'][] = array("DT_RowId" => $val['FirstName'], $val['FirstName'], $val['LastName'], $val['EmailAddress'], $val['CreatedDate'], $sync, "Active");
+            $output['aaData'][] = array("DT_RowId" => $val['firstname'], $val['firstname'], $val['lastname'], $val['email'], $val['created'], $sync, "Active");
         }
 
         echo json_encode($output);

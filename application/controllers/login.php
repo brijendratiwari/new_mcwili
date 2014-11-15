@@ -211,7 +211,7 @@ class Login extends CI_Controller {
         $this->load->view('sign-up/thankyou_new.php');
     }
 
-    public function createuser() {
+   public function createuser() {
         $black_boxx = new Black_boxx();
         $exact_target = new Exact_target();
         if (isset($_POST['pref'])) {
@@ -225,7 +225,7 @@ class Login extends CI_Controller {
             $this->session->set_flashdata('msg', "Email has already been taken");
             redirect('login/sign_up');
             //update subscriber if exist in BB..
-//            $data = array("firstname" => $_POST['firstname'], "lastname" => $_POST['lastname'], "dob" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "mobile_number" => $_POST['mobile_number']);
+//            $data = array("firstname" => $_POST['firstname'], "lastname" => $_POST['lastname'], "dob" => $_POST['birthDay'] . " . $_POST['birthMonth'] . " . $_POST['birthYear'], "mobile_number" => $_POST['mobile_number']);
 //            $update_info = $this->bb_model->update_bb_customer($_POST['email'], $data);
 //            //*********************************
 //            if ($update_info) {
@@ -234,7 +234,7 @@ class Login extends CI_Controller {
 ////                redirect('login/thank_you');
 //            }
 
-            $data = array("firstname" => $_POST['firstname'], "lastname" => $_POST['lastname'], "dob" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "mobile_number" => $_POST['mobile_number']);
+            $data = array("firstname" => $_POST['firstname'], "lastname" => $_POST['lastname'], "dob" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] ."/" . $_POST['birthYear'], "mobile_number" => $_POST['mobile_number']);
             $update_info = $this->bb_model->update_bb_customer($_POST['email'], $data);
             //*********************************
             if ($update_info) {
@@ -242,7 +242,7 @@ class Login extends CI_Controller {
             }
         } else {
             // add customer in BB .....
-            $data = array("first_name" => $_POST['firstname'], "last_name" => $_POST['lastname'], "date_of_birth" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "password" => $_POST['password'], "email" => $_POST['email'], "phone_number" => "", "mobile_number" => $_POST['mobile_number']);
+            $data = array("first_name" => $_POST['firstname'], "last_name" => $_POST['lastname'], "date_of_birth" => $_POST['birthDay'] ."/". $_POST['birthMonth'] ."/". $_POST['birthYear'], "password" => $_POST['password'], "email" => $_POST['email'], "phone_number" => "", "mobile_number" => $_POST['mobile_number']);
             $response = $black_boxx->add_user($data);
             //********************** 
             $user_data = json_decode($response, TRUE);
@@ -253,18 +253,14 @@ class Login extends CI_Controller {
                 "lastname" => $user_data["last_name"],
                 "merchant_id" => $user_data["merchant_id"],
                 "email" => $user_data["email"],
-                "dob" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'],
+                "dob" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] ."/". $_POST['birthYear'],
                 "mobile_number" => $_POST['mobile_number'],
                 "created" => $user_data["updated_at"],
                 "bb_id" => 2,
                 "Status" => "Active"
             );
-            $res = $this->bb_model->insert_bb_customer($bb_customer);
-            if ($res) {
-//                $this->et_model->insert_mastersubscriber(array("email"=>$_POST["email"],"firstname"=>$_POST["firstname"],"lastname"=>$_POST["lastname"],"DOB" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'],"status"=>1,"CreatedDate" => $user_data["updated_at"]),$user_data["email"]);
-                $this->bb_model->insert_bb_customer_rel($_POST['pref'], $user_data["email"], $user_data["id"]);
-                // add subscriber in ET...... if exist then upadate status to "Active"
-                $res1 = $this->et_model->get_et_subscriber($user_data["email"]);
+            
+               $res1 = $this->et_model->get_et_subscriber($user_data["email"]);
                 if ($res1) {
                     $data = array("EmailAddress" => $_POST['email'], "SubscriberKey" => $res1[0]['SubscriberID']);
                     $response = $exact_target->add_email_list($_POST['pref'], $data);
@@ -277,11 +273,23 @@ class Login extends CI_Controller {
                     $response = $exact_target->add_email_list($_POST['pref'], $subs);
 //                    var_dump($response);die;
                     if ($response[0]->StatusCode == "OK") {
-                        $data = array("FirstName" => $_POST['firstname'], "LastName" => $_POST['lastname'], "DOB" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "SubscriberID" => $subkey, "EmailAddress" => $_POST['email'], "Status" => "Active", "CreatedDate" => date("Y-m-d h:m:s", time()));
+                        $data = array("FirstName" => $_POST['firstname'], "LastName" => $_POST['lastname'], "DOB" => $_POST['birthDay'] . "/". $_POST['birthMonth'] ."/". $_POST['birthYear'], "SubscriberID" => $subkey, "EmailAddress" => $_POST['email'], "Status" => "Active", "CreatedDate" => date("Y-m-d h:m:s", time()));
                         $this->et_model->add_etsubscriber($data);
                         $this->et_model->add_etsubscriber_rel($_POST['pref'], $subkey);
                     }
+                    else{
+                        $this->session->set_flashdata('msg', "Please enter a valid email address");
+                        redirect('login/bepoz_sign_up');
+                        die;
+                    }
                 }
+            
+            $res = $this->bb_model->insert_bb_customer($bb_customer);
+            if ($res) {
+//                $this->et_model->insert_mastersubscriber(array("email"=>$_POST["email"],"firstname"=>$_POST["firstname"],"lastname"=>$_POST["lastname"],"DOB" => $_POST['birthDay'] . " . $_POST['birthMonth'] . " . $_POST['birthYear'],"status"=>1,"CreatedDate" => $user_data["updated_at"]),$user_data["email"]);
+                $this->bb_model->insert_bb_customer_rel($_POST['pref'], $user_data["email"], $user_data["id"]);
+                // add subscriber in ET...... if exist then upadate status to "Active"
+             
             }
         }
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
@@ -296,7 +304,8 @@ class Login extends CI_Controller {
         redirect('login/thank_you');
     }
 
-    public function createbpoz() {
+
+ public function createbpoz() {
 //        var_dump($_POST);
 //        die;
         $exact_target = new Exact_target();
@@ -313,7 +322,7 @@ class Login extends CI_Controller {
             $this->session->set_flashdata('msg', "Email has already been taken");
             redirect('login/bepoz_sign_up');
             //update subscriber if exist in BB..
-//            $data = array("firstname" => $_POST['firstname'], "lastname" => $_POST['lastname'], "dob" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "mobile_number" => $_POST['mobile_number']);
+//            $data = array("firstname" => $_POST['firstname'], "lastname" => $_POST['lastname'], "dob" => $_POST['birthDay'] . " . $_POST['birthMonth'] . " . $_POST['birthYear'], "mobile_number" => $_POST['mobile_number']);
 //            $update_info = $this->bb_model->update_bb_customer($_POST['email'], $data);
 //            //*********************************
 //            if ($update_info) {
@@ -321,7 +330,7 @@ class Login extends CI_Controller {
 //                $black_boxx->signin($signin);
 ////                redirect('login/thank_you');
 //            }
-//            $data = array("firstname" => $_POST['firstname'], "lastname" => $_POST['lastname'], "dob" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "mobile_number" => $_POST['mobile_number']);
+//            $data = array("firstname" => $_POST['firstname'], "lastname" => $_POST['lastname'], "dob" => $_POST['birthDay'] . " . $_POST['birthMonth'] . " . $_POST['birthYear'], "mobile_number" => $_POST['mobile_number']);
 //            $update_info = $this->bp_model->update_bp_customer($_POST['email'], $data);
 //            //*********************************
 //            if ($update_info) {
@@ -341,16 +350,14 @@ class Login extends CI_Controller {
                 "firstname" => $_POST['firstname'],
                 "lastname" => $_POST['lastname'],
                 "email" => $_POST["email"],
-                "dob" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'],
+                "dob" => $_POST['birthDay'] . "/". $_POST['birthMonth'] . "/" . $_POST['birthYear'],
                 "mobile_number" => $_POST['mobile_number'],
                 "created" => $bp_user_created,
                 "Status" => "Active"
             );
-            $res = $this->bp_model->insert_bp_customer($bp_customer);
-            if ($res) {
-//                $this->et_model->insert_mastersubscriber(array("email"=>$_POST["email"],"firstname"=>$_POST["firstname"],"lastname"=>$_POST["lastname"],"DOB" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'],"status"=>1,"CreatedDate" => $user_data["updated_at"]),$user_data["email"]);
-                $this->bp_model->insert_bp_customer_rel($_POST['pref'], $_POST["email"], $bp_uid);
-                // add subscriber in ET...... if exist then upadate status to "Active"
+            
+            
+             // add subscriber in ET...... if exist then upadate status to "Active"
                 $res1 = $this->et_model->get_et_subscriber($_POST["email"]);
                 if ($res1) {
                     $data = array("EmailAddress" => $_POST['email'], "SubscriberKey" => $res1[0]['SubscriberID']);
@@ -360,16 +367,27 @@ class Login extends CI_Controller {
                     }
                 } else {
 //                    $subkey = time();
-                    $subs[] = array("EmailAddress" => $_POST['email'], "SubscriberKey" => $bp_uid, "Attributes" => array(array("Name" => "First Name", "Value" => $_POST['firstname']), array("Name" => "Last Name", "Value" => $_POST['lastname']), array("Name" => "Date of Birth", "Value" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'])));
+                    $subs[] = array("EmailAddress" => $_POST['email'], "SubscriberKey" => $bp_uid, "Attributes" => array(array("Name" => "First Name", "Value" => $_POST['firstname']), array("Name" => "Last Name", "Value" => $_POST['lastname']), array("Name" => "Date of Birth", "Value" => $_POST['birthDay'] . "/". $_POST['birthMonth'] . "/" . $_POST['birthYear'])));
                     $response = $exact_target->add_email_list($_POST['pref'], $subs);
 //                    var_dump($response);die;
                     if ($response[0]->StatusCode == "OK") {
-                        $data = array("FirstName" => $_POST['firstname'], "LastName" => $_POST['lastname'], "DOB" => $_POST['birthDay'] . "/" . $_POST['birthMonth'] . "/" . $_POST['birthYear'], "SubscriberID" => $bp_uid, "EmailAddress" => $_POST['email'], "Status" => "1", "CreatedDate" => $bp_user_created);
+                        $data = array("FirstName" => $_POST['firstname'], "LastName" => $_POST['lastname'], "DOB" => $_POST['birthDay'] . "/". $_POST['birthMonth'] . "/". $_POST['birthYear'], "SubscriberID" => $bp_uid, "EmailAddress" => $_POST['email'], "Status" => "1", "CreatedDate" => $bp_user_created);
                         $this->et_model->add_etsubscriber($data);
                         $this->et_model->add_etsubscriber_rel($_POST['pref'], $bp_uid);
                         $this->new_csv_BepozUpload($bp_customer, $_POST['pref']);
                     }
+                    else{
+                        $this->session->set_flashdata('msg', "Please enter a valid email address");
+                        redirect('login/bepoz_sign_up');
+                        die;
+                    }
                 }
+            
+            $res = $this->bp_model->insert_bp_customer($bp_customer);
+            if ($res) {
+//                $this->et_model->insert_mastersubscriber(array("email"=>$_POST["email"],"firstname"=>$_POST["firstname"],"lastname"=>$_POST["lastname"],"DOB" => $_POST['birthDay'] . " . $_POST['birthMonth'] . " . $_POST['birthYear'],"status"=>1,"CreatedDate" => $user_data["updated_at"]),$user_data["email"]);
+                $this->bp_model->insert_bp_customer_rel($_POST['pref'], $_POST["email"], $bp_uid);
+               
             }
         }
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
