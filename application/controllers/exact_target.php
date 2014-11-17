@@ -596,12 +596,12 @@ class Exact_target extends CI_Controller {
     $unsubevent->authStub = $myclient;
 //    $unsubevent->props = array('SendID', 'EventDate','SubscriberKey','BatchID');
 //    echo date('Y-m-dT13 G:i:s ',mktime(0,0,0,10,3,1975));
-//    $unsubevent->filter = array('Property' => 'EventDate','SimpleOperator' => 'lessThan','Value' =>date('Y-m-d G:i:s ',time()));
-    $unsubevent->filter = array('Property' => 'EventDate','SimpleOperator' => 'greaterThan','Value' =>date('Y-m-d G:i:s ',mktime(0,0,0,10,3,1975)));
+    $unsubevent->filter = array('Property' => 'EventDate','SimpleOperator' => 'lessThan','Value' =>date('Y-m-d G:i:s ',time()));
+//    $unsubevent->filter = array('Property' => 'EventDate','SimpleOperator' => 'greaterThan','Value' =>date('Y-m-d G:i:s ',mktime(0,0,0,10,3,1975)));
 //    $unsubevent->filter = array('Property' => 'SubscriberKey','SimpleOperator' => 'equals','Value' => '');
     $response = $unsubevent->get();
     
-    return $response;
+    return $response->results;
     }
 }
 

@@ -93,7 +93,7 @@
               <ul class="icons-list text-md">
                      <?php if(!empty($lastUnSubscriber)){
                         foreach ($lastUnSubscriber as $last_unsubscriber)  { ?>
-                  <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $last_unsubscriber['firstname']."  ".$last_unsubscriber['lastname']." , ".$last_unsubscriber['email']." , ".  date_format(date_create($last_unsubscriber['unsubscribed_date']),'d-m-Y G:i');  ?> </li>
+                  <li><i class="icon-li fa fa-exchange text-success"></i><?php echo $last_unsubscriber['firstname']."  ".$last_unsubscriber['lastname']." , ".$last_unsubscriber['email']." , ".  date_format(date_create($last_unsubscriber['CreatedDate']),'d-m-Y G:i');  ?> </li>
                         <?php   } }else{ ?>
                                 <li><i class="icon-li fa fa-exchange text-success"></i>UnSubscriber Not Found</li>
                            <?php } ?>

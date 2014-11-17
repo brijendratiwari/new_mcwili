@@ -77,13 +77,68 @@ class Sync extends CI_Controller {
             die;
         }
 
-        if ($this->sync_model->check($id))
+        if ($this->sync_model->check($id)) {
             $get_unSubscribe_list = $controller_et->get_unSubscribe_list();
-        else {
+            $unsublist = $controller_et->get_SpecificUnSubscribe_list();
+        } else {
 //            $type->sync_model->delTempSync($id);
             echo 'stop';
             die;
         }
+
+        if (count($unsublist) && is_array($unsublist)) {
+            foreach ($unsublist as $key => $value) {
+
+                $this->db->select('ET_UID,	BB_UID,	BP_UID');
+                $this->db->where('ET_UID', $value->SubscriberKey);
+                $this->db->or_where('BP_UID', $value->SubscriberKey);
+                $data_res = $this->db->get('master_subscriber');
+
+                if ($data_res->num_rows() > 0) {
+                    $res = $data_res->result_array();
+                    $mdb = 0;
+                    if (strlen($res[0]['ET_UID']) > 0) {
+                        $et = 0;
+                    } else {
+                        $et = 2;
+                    }
+                    if (strlen($res[0]['BB_UID']) > 0) {
+                        $bb = 0;
+                    } else {
+                        $bb = 2;
+                    }
+                    if (strlen($res[0]['BP_UID']) > 0) {
+                        $bp = 0;
+                    } else {
+                        $bp = 2;
+                    }
+                } else {
+                    $bp = 2;
+                    $bb = 2;
+                    $et = 2;
+                    $mdb = 2;
+                }
+
+                $unsub = array();
+                $unsub['SubscriberKey'] = $value->SubscriberKey;
+                $unsub['ListId'] = $value->List->ID;
+                $unsub['CreatedDate'] = $value->CreatedDate;
+                $unsub['IsMasterUnsubscribed'] = $value->IsMasterUnsubscribed;
+                $unsub['created'] = date("Y-m-d H:i:s");
+                $unsub['BB'] = $bb;
+                $unsub['BP'] = $bp;
+                $unsub['ET'] = $et;
+                $unsub['MDB'] = $mdb;
+
+
+                $result_count = $this->bb_model->get_where_count('unsub_record', array('SubscriberKey' => $value->SubscriberKey, 'ListId' => $value->List->ID));
+
+                if (!$result_count) {
+                    $this->db->insert('unsub_record', $unsub);
+                }
+            }
+        }
+
 
         if ($this->sync_model->check($id)) {
             $this->et_model->insertList($et_list);  // updating the list
@@ -135,14 +190,24 @@ class Sync extends CI_Controller {
                 }
             }
 
+            $this->db->select('SubscriberKey');
+            $this->db->where('ET', 0);
+            $unsub_count = $this->db->get('unsub_record');
+            if ($unsub_count->num_rows() > 0) {
+                $data['UnSubscribedCount'] = $unsub_count->num_rows();
+
+//               $subs_key = $unsub_count->result_array();
+                $this->db->where('ET', 0)->update('unsub_record', array('ET' => 1));
+            }
+
             $old_unsub = $this->et_model->get_count('all_unsubscriber', $storeid);    // counting the old sub data
 //            $this->et_model->blank_tab('all_unsubscriber');
             $this->et_model->insert_all_unsubscriber($arr);
-            if (count($arr) > 0) {
-                $data['UnSubscribedCount'] = count($arr) - $old_unsub;
-            } else {
-                $data['UnSubscribedCount'] = 0;
-            }
+//            if (count($arr) > 0) {
+//                $data['UnSubscribedCount'] = count($arr) - $old_unsub;
+//            } else {
+//                $data['UnSubscribedCount'] = 0;
+//            }
             $data['type'] = $type;
             $data['SyncTime'] = date("Y-m-d H:i:s");
             $data['store_id'] = $storeid;
@@ -211,12 +276,66 @@ class Sync extends CI_Controller {
             $old_unsub = $this->et_model->get_count('all_unsubscriber', $storeid);    // counting the old sub data
 //            $this->et_model->blank_tab('all_unsubscriber');
 
-            if ($this->sync_model->check($id))
+            if ($this->sync_model->check($id)) {
                 $get_unSubscribe_list = $controller_et->get_unSubscribe_list();
-            else {
+                $unsublist = $controller_et->get_SpecificUnSubscribe_list();
+            } else {
                 $type->sync_model->delTempSync($id);
                 echo 'stop';
                 die;
+            }
+
+            if (count($unsublist) && is_array($unsublist)) {
+                foreach ($unsublist as $key => $value) {
+
+                    $this->db->select('ET_UID,	BB_UID,	BP_UID');
+                    $this->db->where('ET_UID', $value->SubscriberKey);
+                    $this->db->or_where('BP_UID', $value->SubscriberKey);
+                    $data_res = $this->db->get('master_subscriber');
+
+                    if ($data_res->num_rows() > 0) {
+                        $res = $data_res->result_array();
+                        $mdb = 0;
+                        if (strlen($res[0]['ET_UID']) > 0) {
+                            $et = 0;
+                        } else {
+                            $et = 2;
+                        }
+                        if (strlen($res[0]['BB_UID']) > 0) {
+                            $bb = 0;
+                        } else {
+                            $bb = 2;
+                        }
+                        if (strlen($res[0]['BP_UID']) > 0) {
+                            $bp = 0;
+                        } else {
+                            $bp = 2;
+                        }
+                    } else {
+                        $bp = 2;
+                        $bb = 2;
+                        $et = 2;
+                        $mdb = 2;
+                    }
+
+                    $unsub = array();
+                    $unsub['SubscriberKey'] = $value->SubscriberKey;
+                    $unsub['ListId'] = $value->List->ID;
+                    $unsub['CreatedDate'] = $value->CreatedDate;
+                    $unsub['IsMasterUnsubscribed'] = $value->IsMasterUnsubscribed;
+                    $unsub['created'] = date("Y-m-d H:i:s");
+                    $unsub['BB'] = $bb;
+                    $unsub['BP'] = $bp;
+                    $unsub['ET'] = $et;
+                    $unsub['MDB'] = $mdb;
+
+
+                    $result_count = $this->bb_model->get_where_count('unsub_record', array('SubscriberKey' => $value->SubscriberKey, 'ListId' => $value->List->ID));
+
+                    if (!$result_count) {
+                        $this->db->insert('unsub_record', $unsub);
+                    }
+                }
             }
 
             if (count($get_unSubscribe_list) && is_array($get_unSubscribe_list)) {
@@ -258,11 +377,20 @@ class Sync extends CI_Controller {
                 }
             }
 
+            $this->db->select('SubscriberKey');
+            $this->db->where('BB', 0);
+            $unsub_count = $this->db->get('unsub_record');
+            if ($unsub_count->num_rows() > 0) {
+                $data['UnSubscribedCount'] = $unsub_count->num_rows();
+
+//               $subs_key = $unsub_count->result_array();
+                $this->db->where('BB', 0)->update('unsub_record', array('BB' => 1));
+            }
 
             $this->et_model->insert_all_unsubscriber($arr);
             $this->bb_model->bb_mdb_update();
             $new_unsub = $this->et_model->get_count('all_unsubscriber', $storeid);
-            $data['UnSubscribedCount'] = $new_unsub - $old_unsub;
+//            $data['UnSubscribedCount'] = $new_unsub - $old_unsub;
             $data['type'] = $type;
             $data['SyncTime'] = date("Y-m-d H:i:s");
             $data['store_id'] = $storeid;
@@ -293,10 +421,11 @@ class Sync extends CI_Controller {
 
     public function BepozSync($id, $type, $storeid, $flag = FALSE) {
 
+
         $controller_et = new Exact_target();
 
         $data = array();
-
+        $data['SyncTime'] = date("Y-m-d H:i:s");
         if ($this->sync_model->check($id)) {
             $maindata = $controller_et->syncBepoz();
 
@@ -323,14 +452,71 @@ class Sync extends CI_Controller {
             $old_unsub = $this->et_model->get_count('all_unsubscriber', $storeid);    // counting the old sub data
 //            $this->et_model->blank_tab('all_unsubscriber');
 
-            if ($this->sync_model->check($id))
+            if ($this->sync_model->check($id)) {
                 $get_unSubscribe_list = $controller_et->get_unSubscribe_list('352396');
-            else {
+                $unsublist = $controller_et->get_SpecificUnSubscribe_list();
+            } else {
                 $type->sync_model->delTempSync($id);
                 echo 'stop';
                 die;
             }
             $arr = array();
+
+
+            if (count($unsublist) && is_array($unsublist)) {
+                foreach ($unsublist as $key => $value) {
+
+                    $this->db->select('ET_UID,	BB_UID,	BP_UID');
+                    $this->db->where('ET_UID', $value->SubscriberKey);
+                    $this->db->or_where('BP_UID', $value->SubscriberKey);
+                    $data_res = $this->db->get('master_subscriber');
+
+                    if ($data_res->num_rows() > 0) {
+                        $res = $data_res->result_array();
+                        $mdb = 0;
+                        if (strlen($res[0]['ET_UID']) > 0) {
+                            $et = 0;
+                        } else {
+                            $et = 2;
+                        }
+                        if (strlen($res[0]['BB_UID']) > 0) {
+                            $bb = 0;
+                        } else {
+                            $bb = 2;
+                        }
+                        if (strlen($res[0]['BP_UID']) > 0) {
+                            $bp = 0;
+                        } else {
+                            $bp = 2;
+                        }
+                    } else {
+                        $bp = 2;
+                        $bb = 2;
+                        $et = 2;
+                        $mdb = 2;
+                    }
+
+                    $unsub = array();
+                    $unsub['SubscriberKey'] = $value->SubscriberKey;
+                    $unsub['ListId'] = $value->List->ID;
+                    $unsub['CreatedDate'] = $value->CreatedDate;
+                    $unsub['IsMasterUnsubscribed'] = $value->IsMasterUnsubscribed;
+                    $unsub['created'] = date("Y-m-d H:i:s");
+                    $unsub['BB'] = $bb;
+                    $unsub['BP'] = $bp;
+                    $unsub['ET'] = $et;
+                    $unsub['MDB'] = $mdb;
+
+
+                    $result_count = $this->bb_model->get_where_count('unsub_record', array('SubscriberKey' => $value->SubscriberKey, 'ListId' => $value->List->ID));
+
+                    if (!$result_count) {
+                        $this->db->insert('unsub_record', $unsub);
+                    }
+                }
+            }
+
+
             if (count($get_unSubscribe_list) && is_array($get_unSubscribe_list)) {
                 foreach ($get_unSubscribe_list as $key => $value) {
 
@@ -370,13 +556,23 @@ class Sync extends CI_Controller {
                 }
             }
 
+            $this->db->select('SubscriberKey');
+            $this->db->where('BP', 0);
+            $unsub_count = $this->db->get('unsub_record');
+            if ($unsub_count->num_rows() > 0) {
+                $data['UnSubscribedCount'] = $unsub_count->num_rows();
+
+//               $subs_key = $unsub_count->result_array();
+                $this->db->where('BP', 0)->update('unsub_record', array('BP' => 1));
+            }
+
 
             $this->et_model->insert_all_unsubscriber($arr);
             $this->bp_model->bp_mdb_update();
             $new_unsub = $this->et_model->get_count('all_unsubscriber', $storeid);
-            $data['UnSubscribedCount'] = $new_unsub - $old_unsub;
+//            $data['UnSubscribedCount'] = $new_unsub - $old_unsub;
             $data['type'] = $type;
-            $data['SyncTime'] = date("Y-m-d H:i:s");
+
             $data['store_id'] = $storeid;
 
             $this->sync_model->delTempSync($storeid);
@@ -399,7 +595,7 @@ class Sync extends CI_Controller {
     public function mdbSync() {
         set_time_limit(0);
 //        $subs = $this->sync_model->get_master_subscriber();
-        $unsubs = $this->sync_model->get_master_unsubscriber();
+//        $unsubs = $this->sync_model->get_master_unsubscriber();
         $storeid = $this->input->get('sync');
         $type = $this->input->get('type');
 
@@ -437,16 +633,26 @@ class Sync extends CI_Controller {
                             $data_val = $this->bb_model->get_where_count('master_subscriber', array('count_status' => 0));
                             $this->db->update('master_subscriber', array('count_status' => 1), array('count_status' => 0));
 
-                            $new_unsubs = $this->sync_model->get_master_unsubscriber();
-                            $sub_diff = $data_val;
-                            if ($sub_diff > 0) {
-                                $data['SubscribedCount'] = $sub_diff;
-                            } else {
-                                $data['SubscribedCount'] = 0;
+                            $this->db->select('SubscriberKey');
+                            $this->db->where('MDB', 0);
+                            $unsub_count = $this->db->get('unsub_record');
+                            if ($unsub_count->num_rows() > 0) {
+                                $data['UnSubscribedCount'] = $unsub_count->num_rows();
+
+//               $subs_key = $unsub_count->result_array();
+                                $this->db->where('MDB', 0)->update('unsub_record', array('MDB' => 1));
                             }
 
+//                            $new_unsubs = $this->sync_model->get_master_unsubscriber();
+//                            $sub_diff = $data_val;
+//                            if ($sub_diff > 0) {
+//                                $data['SubscribedCount'] = $sub_diff;
+//                            } else {
+//                                $data['SubscribedCount'] = 0;
+//                            }
+
                             $data['SyncTime'] = date('h:ma', time());
-                            $data['UnSubscribedCount'] = $new_unsubs - $unsubs;
+//                            $data['UnSubscribedCount'] = $new_unsubs - $unsubs;
                             $data['type'] = $type;
                             $data['SyncTime'] = date("Y-m-d H:i:s");
                             $data['store_id'] = $storeid;
@@ -495,7 +701,7 @@ class Sync extends CI_Controller {
     public function mdbManualSync() {
         set_time_limit(0);
 //        $subs = $this->sync_model->get_master_subscriber();
-        $unsubs = $this->sync_model->get_master_unsubscriber();
+//        $unsubs = $this->sync_model->get_master_unsubscriber();
         $storeid = $this->input->get('sync');
         $type = $this->input->get('type');
 
@@ -520,16 +726,26 @@ class Sync extends CI_Controller {
                 $data_val = $this->bb_model->get_where_count('master_subscriber', array('count_status' => 0));
                 $this->db->update('master_subscriber', array('count_status' => 1), array('count_status' => 0));
 
-                $new_unsubs = $this->sync_model->get_master_unsubscriber();
-                $sub_diff = $data_val;
-                if ($sub_diff > 0) {
-                    $data['SubscribedCount'] = $sub_diff;
-                } else {
-                    $data['SubscribedCount'] = 0;
+                $this->db->select('SubscriberKey');
+                $this->db->where('MDB', 0);
+                $unsub_count = $this->db->get('unsub_record');
+                if ($unsub_count->num_rows() > 0) {
+                    $data['UnSubscribedCount'] = $unsub_count->num_rows();
+
+//               $subs_key = $unsub_count->result_array();
+                    $this->db->where('MDB', 0)->update('unsub_record', array('MDB' => 1));
                 }
 
+//                $new_unsubs = $this->sync_model->get_master_unsubscriber();
+//                $sub_diff = $data_val;
+//                if ($sub_diff > 0) {
+//                    $data['SubscribedCount'] = $sub_diff;
+//                } else {
+//                    $data['SubscribedCount'] = 0;
+//                }
+
                 $data['SyncTime'] = date('h:ma', time());
-                $data['UnSubscribedCount'] = $new_unsubs - $unsubs;
+//                $data['UnSubscribedCount'] = $new_unsubs - $unsubs;
                 $data['type'] = $type;
                 $data['SyncTime'] = date("Y-m-d H:i:s");
                 $data['store_id'] = $storeid;

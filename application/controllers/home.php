@@ -57,7 +57,7 @@ class Home extends CI_Controller {
             // get last three subscriber
             $data['lastSubscriber'] = $this->sync_model->getLastSubscriber();
             // get last three unsubscriber
-            $data['lastUnSubscriber'] = $this->sync_model->getLastUnSubscriber();
+            $data['lastUnSubscriber'] = $this->sync_model->getLastLatsetUnSubscriber();
 
             $data['UnSubscriber'] = $this->sync_model->get_UnSubscriber();
 
