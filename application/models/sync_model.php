@@ -275,7 +275,7 @@ class Sync_model extends CI_Model {
 
         $query = "select master_subscriber.email from et_subscriber_list_rel 
             JOIN master_subscriber ON master_subscriber.ET_UID = et_subscriber_list_rel.SubscriberID   
-            where et_subscriber_list_rel.`ListID` = '" . $list_id . "' and master_subscriber.status = 1 and et_subscriber_list_rel.SubscriberID in (" . $key . ")";
+            where et_subscriber_list_rel.`ListID` = '" . $list_id . "' and (master_subscriber.status = 1 and et_subscriber_list_rel.Status = 'Active') and et_subscriber_list_rel.SubscriberID in (" . $key . ")";
 
         $res = $this->db->query($query);
         if ($res->num_rows() > 0) {

@@ -20,7 +20,7 @@
                 <p class="row-stat-label">Last Month</p>
                 <h3 class="row-stat-value"><?php echo $FilterSubscriber['month']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($FilterSubscriber['month'] !=0 ) { echo number_format((($FilterSubscriber['month']-$FilterSubscriber['previous_month'])*100)/$FilterSubscriber['month']); } else{ echo '0';} ?>% from previous month</span>
+                    <?php if($FilterSubscriber['month'] !=0 ) { echo round($FilterSubscriber['month']/($FilterSubscriber['previous_month']+$FilterSubscriber['month'])*100); } else{ echo '0';} ?>% from previous month</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->             
                   
@@ -29,7 +29,7 @@
                 <p class="row-stat-label">Last 30 Days</p>
                 <h3 class="row-stat-value"><?php echo $FilterSubscriber['last_thirty']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($FilterSubscriber['last_thirty'] !=0 ){ echo number_format((( $FilterSubscriber['last_thirty'] - $FilterSubscriber['previous_thirty'])*100)/$FilterSubscriber['last_thirty'] ); } else{ echo '0';} ?>% from previous 30 days</span>
+                    <?php if($FilterSubscriber['last_thirty'] !=0 ){ echo round($FilterSubscriber['last_thirty']/($FilterSubscriber['previous_thirty']+$FilterSubscriber['last_thirty'])*100); } else{ echo '0';} ?>% from previous 30 days</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
 
@@ -38,7 +38,7 @@
                 <p class="row-stat-label">Last 7 days</p>
                 <h3 class="row-stat-value"><?php echo $FilterSubscriber['last_seven']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-              <?php if($FilterSubscriber['previous_seven'] !=0 ) { echo number_format((($FilterSubscriber['last_seven'])*100)/$FilterSubscriber['previous_seven']); } else{ echo '0';} ?>% from previous 7 days                    
+              <?php if($FilterSubscriber['previous_seven'] !=0 ) { echo round($FilterSubscriber['last_seven']/($FilterSubscriber['last_seven']+$FilterSubscriber['previous_seven'])*100); } else{ echo '0';} ?>% from previous 7 days                    
                 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
@@ -64,7 +64,7 @@
         <div class="portlet-title">
           <u><h4>McWilliams Cellar Door to Date = <?php echo $mcSubscriber['total']; ?></h4></u>
              <span class="label label-success row-stat-badge">+
-                    <?php if($mcSubscriber['total'] !=0){ echo number_format((($mcSubscriber['total']-$mcSubscriber['year'])*100)/$mcSubscriber['total']);} else{ echo '0';} ?>% from previous year</span>
+                    <?php if($mcSubscriber['total'] !=0){ echo round($mcSubscriber['year']/($mcSubscriber['year']+$mcSubscriber['total'])*100);} else{ echo '0';} ?>% from previous year</span>
         </div>
 
         <div class="portlet-body">
@@ -74,7 +74,7 @@
                 <p class="row-stat-label">Last Month</p>
                 <h3 class="row-stat-value"><?php echo $mcSubscriber['month']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($mcSubscriber['month'] !=0) { echo number_format((($mcSubscriber['month'])*100)/$mcSubscriber['last_thirty']);} else{ echo "0";} ?>% from previous month</span>
+                    <?php if($mcSubscriber['month'] !=0) { echo round($mcSubscriber['month']/($mcSubscriber['month']+$mcSubscriber['previous_month'])*100);} else{ echo "0";} ?>% from previous month</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->         
 
@@ -83,7 +83,7 @@
                 <p class="row-stat-label">Last 30 Days</p>
                 <h3 class="row-stat-value"><?php echo $mcSubscriber['last_thirty']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($mcSubscriber['last_thirty'] !=0) { echo number_format((($mcSubscriber['last_thirty']-$mcSubscriber['previous_thirty'])*100)/$mcSubscriber['last_thirty']); }else{ echo '0';} ?>% from previous 30 days</span>
+                    <?php if($mcSubscriber['last_thirty'] !=0) { echo round($mcSubscriber['last_thirty']/($mcSubscriber['previous_thirty']+$mcSubscriber['last_thirty'])*100); }else{ echo '0';} ?>% from previous 30 days</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
 
@@ -92,7 +92,7 @@
                 <p class="row-stat-label">Last 7 days</p>
                 <h3 class="row-stat-value"><?php echo $mcSubscriber['last_seven']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-              <?php if($mcSubscriber['previous_seven'] !=0 ) { echo number_format((($mcSubscriber['last_seven'])*100)/$mcSubscriber['previous_seven']); } else{ echo '0';} ?>% from previous 7 days                    
+              <?php if($mcSubscriber['previous_seven'] !=0 ) { echo round($mcSubscriber['last_seven']/($mcSubscriber['last_seven']+$mcSubscriber['previous_seven'])*100); } else{ echo '0';} ?>% from previous 7 days                    
                 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
@@ -117,7 +117,7 @@
         <div class="portlet-title">
           <u><h4>Mount Pleaser Cellar Door to Date = <?php echo $mount['total']; ?></h4></u>
             <span class="label label-success row-stat-badge">+
-                    <?php if($mount['total'] !=0){ echo number_format((($mount['total']-$mount['year'])*100)/$mount['total']);} else{ echo '0';} ?>% from previous year</span>
+                    <?php if($mount['total'] !=0){ echo round($mount['year']/($mount['year']+$mount['total'])*100);} else{ echo '0';} ?>% from previous year</span>
 
         </div>
 
@@ -139,7 +139,7 @@
                 <p class="row-stat-label">Last Month</p>
                 <h3 class="row-stat-value"><?php echo $mount['month']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($mount['month'] !=0) { echo number_format((($mount['month']-$mount['previous_month'])*100)/$mount['month']);} else{ echo "0";} ?>% from previous month</span>
+                    <?php if($mount['month'] !=0) { echo round($mount['month']/($mount['previous_month']+$mount['month'])*100);} else{ echo "0";} ?>% from previous month</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->            
                     
@@ -149,7 +149,7 @@
                 <p class="row-stat-label">Last 30 Days</p>
                 <h3 class="row-stat-value"><?php echo $mount['last_thirty']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($mount['last_thirty'] !=0) { echo number_format((($mount['last_thirty']-$mount['previous_thirty'])*100)/$mount['last_thirty']); }else{ echo '0';} ?>% from previous 30 days</span>
+                    <?php if($mount['last_thirty'] !=0) { echo round($mount['last_thirty']/($mount['previous_thirty']+$mount['last_thirty'])*100); }else{ echo '0';} ?>% from previous 30 days</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
 
@@ -158,7 +158,7 @@
                 <p class="row-stat-label">Last 7 days</p>
                 <h3 class="row-stat-value"><?php echo $mount['last_seven']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-              <?php if($mount['previous_seven'] !=0 ) { echo number_format((($mount['last_seven'])*100)/$mount['previous_seven']); } else{ echo '0';} ?>%from previous 7 days                    
+              <?php if($mount['previous_seven'] !=0 ) { echo round($mount['last_seven']/($mount['last_seven']+$mount['previous_seven'])*100); } else{ echo '0';} ?>%from previous 7 days                    
                 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col --> 
@@ -185,7 +185,7 @@
         <div class="portlet-title">
           <u><h4>Brands Laira Cellar Door to Date = <?php echo $brandsSubscriber['total']; ?></h4></u>
             <span class="label label-success row-stat-badge">+
-                    <?php if($brandsSubscriber['total'] !=0){ echo number_format((($brandsSubscriber['total']-$brandsSubscriber['year'])*100)/$brandsSubscriber['total']);} else{ echo '0';} ?>% from previous year</span>
+                    <?php if($brandsSubscriber['total'] !=0){ echo round($brandsSubscriber['year']/($brandsSubscriber['year']+$brandsSubscriber['total'])*100);} else{ echo '0';} ?>% from previous year</span>
 
         </div>
 
@@ -208,7 +208,7 @@
                 <p class="row-stat-label">Last Month</p>
                 <h3 class="row-stat-value"><?php echo $brandsSubscriber['month']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($brandsSubscriber['month'] !=0) { echo number_format((($brandsSubscriber['month']-$brandsSubscriber['previous_month'])*100)/$brandsSubscriber['month']);} else{ echo "0";} ?>% from previous month</span>
+                    <?php if($brandsSubscriber['month'] !=0) { echo round($brandsSubscriber['month']/($brandsSubscriber['previous_month']+$brandsSubscriber['month'])*100);} else{ echo "0";} ?>% from previous month</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->    
             
@@ -217,7 +217,7 @@
                 <p class="row-stat-label">Last 30 Days</p>
                 <h3 class="row-stat-value"><?php echo $brandsSubscriber['last_thirty']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($brandsSubscriber['last_thirty'] !=0) { echo number_format((($brandsSubscriber['last_thirty']-$brandsSubscriber['previous_thirty'])*100)/$brandsSubscriber['last_thirty']); }else{ echo '0';} ?>% from previous 30 days</span>
+                    <?php if($brandsSubscriber['last_thirty'] !=0) { echo round($brandsSubscriber['last_thirty']/($brandsSubscriber['previous_thirty']+$brandsSubscriber['last_thirty'])*100); }else{ echo '0';} ?>% from previous 30 days</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
 
@@ -227,7 +227,7 @@
                 <p class="row-stat-label">Last 7 days</p>
                 <h3 class="row-stat-value"><?php echo $brandsSubscriber['last_seven']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-              <?php if($brandsSubscriber['previous_seven'] !=0 ) { echo number_format((($brandsSubscriber['last_seven'])*100)/$brandsSubscriber['previous_seven']); } else{ echo '0';} ?>% from previous 7 days                    
+              <?php if($brandsSubscriber['previous_seven'] !=0 ) { echo round($brandsSubscriber['last_seven']/($brandsSubscriber['last_seven']+$brandsSubscriber['previous_seven'])*100); } else{ echo '0';} ?>% from previous 7 days                    
                 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
@@ -252,7 +252,7 @@
         <div class="portlet-title">
           <u><h4>Evans And Tate Cellar Door to Date = <?php echo $Evans['total']; ?></h4></u>
          <span class="label label-success row-stat-badge">+
-                    <?php if($Evans['total'] !=0){ echo number_format((($Evans['total']-$Evans['year'])*100)/$Evans['total']);} else{ echo '0';} ?>% from previous year</span>
+                    <?php if($Evans['total'] !=0){ echo round($Evans['year']/($Evans['year']+$Evans['total'])*100);} else{ echo '0';} ?>% from previous year</span>
 
         </div>
 
@@ -275,7 +275,7 @@
                 <p class="row-stat-label">Last Month</p>
                 <h3 class="row-stat-value"><?php echo $Evans['month']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($Evans['month'] !=0) { echo number_format((($Evans['month']-$Evans['previous_month'])*100)/$Evans['month']);} else{ echo "0";} ?>% from previous month</span>
+                    <?php if($Evans['month'] !=0) { echo round($Evans['month']/($Evans['previous_month']+$Evans['month'])*100);} else{ echo "0";} ?>% from previous month</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
           
@@ -285,7 +285,7 @@
                 <p class="row-stat-label">Last 30 Days</p>
                 <h3 class="row-stat-value"><?php echo $Evans['last_thirty']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-                    <?php if($Evans['last_thirty'] !=0) { echo number_format((($Evans['last_thirty']-$Evans['previous_thirty'])*100)/$Evans['last_thirty']); }else{ echo '0';} ?>% from previous 30 days</span>
+                    <?php if($Evans['last_thirty'] !=0) { echo round($Evans['last_thirty']/($Evans['previous_thirty']+$Evans['last_thirty'])*100); }else{ echo '0';} ?>% from previous 30 days</span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
 
@@ -294,7 +294,7 @@
                 <p class="row-stat-label">Last 7 days</p>
                 <h3 class="row-stat-value"><?php echo $Evans['last_seven']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-              <?php if($Evans['previous_seven'] !=0 ) { echo number_format((($Evans['last_seven'])*100)/$Evans['previous_seven']); } else{ echo '0';} ?>% from previous 7 days                    
+              <?php if($Evans['previous_seven'] !=0 ) { echo round($Evans['last_seven']/($Evans['last_seven']+$Evans['previous_seven'])*100); } else{ echo '0';} ?>% from previous 7 days                    
                 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->   
