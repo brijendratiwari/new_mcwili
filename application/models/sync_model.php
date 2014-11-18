@@ -71,7 +71,7 @@ class Sync_model extends CI_Model {
 
     public function getLastSystemSyncsub() {
         $this->db->select('max(id) as id');
-        $res = $this->db->get('sync_updates');
+        $res = $this->db->get_where('sync_updates',array("type"=>"Manual"));
         if ($res->num_rows() > 0) {
             $id = $res->result_array();
             $this->db->select('store_id,SubscribedCount,UnSubscribedCount,SyncTime');
