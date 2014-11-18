@@ -147,7 +147,6 @@ function startsync(id) {
 }
 
 function startblackboxxsync(id) {
-    alert(id);
     var base_url = $('#base_url').val();
     $('#bb_startsync').addClass('disabled');
     $('#bp_startsync').addClass('disabled');

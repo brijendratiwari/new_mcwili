@@ -139,9 +139,17 @@ class Sync_model extends CI_Model {
     }
 
     public function get_getAutoSyncUpdate() {
-        $res = $this->db->get('autosyncdetail');
+        $this->db->select('max(id) as id');
+        $res = $this->db->get_where('sync_updates', array('type' => 'Auto'));
         if ($res->num_rows() > 0) {
-            return $res->result_array();
+            $max_id = $res->result_array();
+            $this->db->select('SyncTime');
+            $res1 = $this->db->get_where('sync_updates', array('id' => $max_id[0]['id']));
+            if ($res1->num_rows() > 0) {
+                return $res1->result_array();
+            } else {
+                return FALSE;
+            }
         } else {
             return FALSE;
         }
@@ -415,10 +423,10 @@ class Sync_model extends CI_Model {
                 $this->db->select('master_subscriber.firstname,master_subscriber.lastname,master_subscriber.email,unsub_record.CreatedDate');
                 $this->db->from('unsub_record');
 //                $this->db->distinct();
-                $this->db->order_by('unsub_record.created','desc');
+                $this->db->order_by('unsub_record.created', 'desc');
                 if ($store_id[0]['UnSubscribedCount'] >= 3) {
-                $this->db->limit(3);
-                }else{
+                    $this->db->limit(3);
+                } else {
                     $this->db->limit($store_id[0]['UnSubscribedCount']);
                 }
                 $this->db->join('master_subscriber', 'master_subscriber.ET_UID = unsub_record.SubscriberKey or master_subscriber.BP_UID = unsub_record.SubscriberKey');
