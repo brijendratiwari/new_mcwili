@@ -40,7 +40,7 @@
                 <p class="row-stat-label">Last 7 days</p>
                 <h3 class="row-stat-value"><?php echo $FilterCustomer['last_seven']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-              <?php if($FilterCustomer['previous_seven'] !=0 ) { echo round($FilterCustomer['last_seven']/($FilterCustomer['last_seven']+$FilterCustomer['previous_seven'])*100); } else{ echo '0';} ?>% from previous 7 days                    
+              <?php if($FilterCustomer['last_seven'] !=0 ) { echo round($FilterCustomer['last_seven']/($FilterCustomer['last_seven']+$FilterCustomer['previous_seven'])*100); } else{ echo '0';} ?>% from previous 7 days                    
                 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
@@ -96,7 +96,7 @@
                 <p class="row-stat-label">Last 7 days</p>
                 <h3 class="row-stat-value"><?php echo $mcSubscriber['last_seven']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-              <?php if($mcSubscriber['previous_seven'] !=0 ) { echo round($mcSubscriber['last_seven']/($mcSubscriber['last_seven']+$mcSubscriber['previous_seven'])*100); } else{ echo '0';} ?>% from previous 7 days                    
+              <?php if($mcSubscriber['last_seven'] !=0 ) { echo round($mcSubscriber['last_seven']/($mcSubscriber['last_seven']+$mcSubscriber['previous_seven'])*100); } else{ echo '0';} ?>% from previous 7 days                    
                 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
@@ -163,7 +163,7 @@
                 <p class="row-stat-label">Last 7 days</p>
                 <h3 class="row-stat-value"><?php echo $brandsSubscriber['last_seven']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-              <?php if($brandsSubscriber['previous_seven'] !=0 ) { echo round($brandsSubscriber['last_seven']/($brandsSubscriber['last_seven']+$brandsSubscriber['previous_seven'])*100); } else{ echo '0';} ?>% from previous 7 days                    
+              <?php if($brandsSubscriber['last_seven'] !=0 ) { echo round($brandsSubscriber['last_seven']/($brandsSubscriber['last_seven']+$brandsSubscriber['previous_seven'])*100); } else{ echo '0';} ?>% from previous 7 days                    
                 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
@@ -229,7 +229,7 @@
                 <p class="row-stat-label">Last 7 days</p>
                 <h3 class="row-stat-value"><?php echo $celldoorSubscriber['last_seven']; ?></h3>
                 <span class="label label-success row-stat-badge">+
-              <?php if($celldoorSubscriber['previous_seven'] !=0 ) { echo round($celldoorSubscriber['last_seven']/($celldoorSubscriber['last_seven']+$celldoorSubscriber['previous_seven'])*100); } else{ echo '0';} ?>% from previous 7 days                    
+              <?php if($celldoorSubscriber['last_seven'] !=0 ) { echo round($celldoorSubscriber['last_seven']/($celldoorSubscriber['last_seven']+$celldoorSubscriber['previous_seven'])*100); } else{ echo '0';} ?>% from previous 7 days                    
                 </span>
               </div> <!-- /.row-stat -->
             </div> <!-- /.col -->
