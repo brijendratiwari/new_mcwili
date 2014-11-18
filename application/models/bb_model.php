@@ -241,7 +241,7 @@ class Bb_model extends CI_Model {
         $res5 = $this->db->query($query5);
         $res6 = $this->db->query($query6);
         $res7 = $this->db->query($query7);
-        $res8 = $this->db->query($query7);
+        $res8 = $this->db->query($query8);
         $res9 = $this->db->query($query9);
 
         $data['year'] = $res->num_rows();
