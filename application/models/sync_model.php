@@ -71,7 +71,7 @@ class Sync_model extends CI_Model {
 
     public function getLastSystemSyncsub() {
         $this->db->select('max(id) as id');
-        $res = $this->db->get_where('sync_updates',array("type"=>"Manual"));
+        $res = $this->db->get_where('sync_updates');
         if ($res->num_rows() > 0) {
             $id = $res->result_array();
             $this->db->select('store_id,SubscribedCount,UnSubscribedCount,SyncTime');
@@ -90,7 +90,7 @@ class Sync_model extends CI_Model {
 //                        join `sync_updates` on `store`.`id` = `sync_updates`.`store_id` where `store`.`name` = '" . $name . "' ";
         $this->db->select('max(id) as latest_id');
         $this->db->where('store_id', $store_id);
-        $res = $this->db->get('sync_updates');
+        $res = $this->db->get_where('sync_updates',array("Type"=>"Manual"));
         if ($res->num_rows() > 0) {
             $id = $res->result_array();
             $this->db->select('UnSubscribedCount,SubscribedCount,SyncTime');
@@ -140,7 +140,7 @@ class Sync_model extends CI_Model {
 
     public function get_getAutoSyncUpdate() {
         $this->db->select('max(id) as id');
-        $res = $this->db->get_where('sync_updates', array('type' => 'Auto'));
+        $res = $this->db->get_where('sync_updates', array('Type' => 'Auto'));
         if ($res->num_rows() > 0) {
             $max_id = $res->result_array();
             $this->db->select('SyncTime');
